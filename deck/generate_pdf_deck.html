@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Swasth - Presentation Slides</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  @page {
+    size: 1920px 1080px;
+    margin: 0;
+  }
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+  body {
+    background: #0B0F19;
+    color: #1E293B;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .slide {
+    width: 1920px;
+    height: 1080px;
+    page-break-after: always;
+    position: relative;
+    background: #FFFFFF;
+    overflow: hidden;
+    padding: 70px 90px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  :root {
+    --primary: #E93B67;
+    --primary-light: #FDF2F4;
+    --secondary: #4A6FA5;
+    --dark: #0F172A;
+    --muted: #64748B;
+    --light-bg: #F8FAFC;
+    --border: #E2E8F0;
+    --green: #16A34A;
+  }
+
+  .slide-header {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--border);
+  }
+  .track-tag {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 6px;
+  }
+  .slide-title {
+    font-size: 38px;
+    font-weight: 800;
+    color: var(--dark);
+    letter-spacing: -0.5px;
+  }
+  .slide-footer {
+    position: absolute;
+    bottom: 25px;
+    left: 90px;
+    right: 90px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    padding-top: 12px;
+  }
+
+  /* SLIDE 1: COVER */
+  .slide-cover {
+    background: radial-gradient(circle at 80% 20%, #2A173B 0%, #0F172A 70%);
+    color: white;
+    justify-content: center;
+    padding: 100px 120px;
+  }
+  .brand-badge {
+    background: rgba(233, 59, 103, 0.2);
+    border: 1px solid rgba(233, 59, 103, 0.5);
+    color: #FF7597;
+    padding: 8px 20px;
+    border-radius: 999px;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    display: inline-block;
+  }
+  .cover-title {
+    font-size: 68px;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 18px;
+  }
+  .cover-title span { color: var(--primary); }
+  .cover-subtitle {
+    font-size: 26px;
+    color: #E2E8F0;
+    font-weight: 500;
+    max-width: 1200px;
+    line-height: 1.4;
+    margin-bottom: 35px;
+  }
+  .cover-meta-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    width: 100%;
+    max-width: 1300px;
+  }
+  .meta-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(10px);
+    border-radius: 18px;
+    padding: 20px;
+  }
+  .meta-card .label { font-size: 12px; text-transform: uppercase; color: #94A3B8; font-weight: 700; letter-spacing: 1px; }
+  .meta-card .val { font-size: 18px; color: white; font-weight: 700; margin-top: 4px; }
+
+  /* SLIDE 2: THE PROBLEM */
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    flex: 1;
+  }
+  .problem-card {
+    background: var(--light-bg);
+    border-radius: 20px;
+    padding: 35px 28px;
+    border: 2px solid var(--border);
+    display: flex;
+    flex-direction: column;
+  }
+  .problem-card.highlight { border-color: var(--primary); background: var(--primary-light); }
+  .card-icon { font-size: 44px; margin-bottom: 16px; }
+  .card-title { font-size: 24px; font-weight: 800; color: var(--dark); margin-bottom: 14px; }
+  .card-text { font-size: 17px; color: #475569; line-height: 1.55; }
+
+  /* SLIDE 3: HOOK & BRIDGE */
+  .hook-bridge-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 35px;
+    flex: 1;
+  }
+  .hb-box {
+    border-radius: 24px;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+  }
+  .hb-box.hook { background: #FFF5F7; border: 2.5px solid #FFCCD8; }
+  .hb-box.bridge { background: #F0F7FF; border: 2.5px solid #BAE0FD; }
+  .hb-tag { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .hb-box.hook .hb-tag { color: var(--primary); }
+  .hb-box.bridge .hb-tag { color: var(--secondary); }
+  .hb-title { font-size: 28px; font-weight: 800; color: var(--dark); margin-bottom: 20px; }
+  .bullet-list { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+  .bullet-item { display: flex; gap: 12px; font-size: 17px; line-height: 1.45; color: #334155; }
+  .bullet-icon { font-size: 20px; flex-shrink: 0; }
+
+  /* SLIDE 4: 6 PILLARS */
+  .pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 20px;
+    flex: 1;
+  }
+  .pillar-card {
+    background: var(--light-bg);
+    border: 1.5px solid var(--border);
+    border-radius: 18px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+  }
+  .pillar-num { font-size: 13px; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; }
+  .pillar-title { font-size: 20px; font-weight: 800; color: var(--dark); margin: 4px 0 8px; }
+  .pillar-desc { font-size: 15px; color: var(--muted); line-height: 1.45; }
+
+  /* SLIDE 5: APP DESIGN */
+  .design-showcase {
+    display: flex;
+    gap: 40px;
+    flex: 1;
+    align-items: center;
+  }
+  .design-preview-img {
+    flex: 1.5;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+    border: 1px solid var(--border);
+    max-height: 650px;
+    object-fit: contain;
+  }
+  .design-features {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .df-item {
+    background: var(--light-bg);
+    border-radius: 16px;
+    padding: 18px;
+    border-left: 5px solid var(--primary);
+  }
+  .df-title { font-size: 18px; font-weight: 800; color: var(--dark); }
+  .df-sub { font-size: 14.5px; color: var(--muted); margin-top: 4px; line-height: 1.35; }
+
+  /* SLIDE 6: ARCHITECTURE */
+  .arch-flow {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+    flex: 1;
+  }
+  .arch-col {
+    background: var(--light-bg);
+    border-radius: 18px;
+    padding: 25px 18px;
+    border: 2px solid var(--border);
+    display: flex;
+    flex-direction: column;
+  }
+  .arch-col.primary { border-color: var(--primary); }
+  .arch-col.secondary { border-color: var(--secondary); }
+  .arch-badge { font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--primary); margin-bottom: 6px; }
+  .arch-name { font-size: 19px; font-weight: 800; color: var(--dark); margin-bottom: 12px; }
+  .arch-bullets { font-size: 14px; color: #475569; line-height: 1.5; display: flex; flex-direction: column; gap: 6px; }
+
+  /* SLIDE 7: SAFETY */
+  .safety-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    flex: 1;
+  }
+  .safety-card {
+    background: var(--light-bg);
+    border-radius: 20px;
+    padding: 30px 24px;
+    border: 2px solid var(--border);
+    display: flex;
+    flex-direction: column;
+  }
+  .safety-card.safe-green { border-color: var(--green); background: #F0FDF4; }
+  .safety-card.safe-red { border-color: #EF4444; background: #FEF2F2; }
+  .safety-card.safe-blue { border-color: var(--secondary); background: #F0F7FF; }
+  .safety-card h3 { font-size: 22px; font-weight: 800; margin-bottom: 14px; }
+
+  /* SLIDE 8: IMPACT */
+  .metrics-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+  .metric-card {
+    background: var(--light-bg);
+    border-radius: 18px;
+    padding: 25px 20px;
+    border: 2px solid var(--primary);
+    text-align: center;
+  }
+  .metric-val { font-size: 42px; font-weight: 800; color: var(--primary); line-height: 1; }
+  .metric-lbl { font-size: 16px; font-weight: 700; color: var(--dark); margin: 8px 0 4px; }
+  .metric-sub { font-size: 13px; color: var(--muted); }
+
+  .timeline-bar {
+    background: #F1F5F9;
+    border-radius: 20px;
+    padding: 30px 35px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .timeline-title { font-size: 20px; font-weight: 800; color: var(--dark); margin-bottom: 16px; }
+  .timeline-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
+  .t-step { background: white; border-radius: 14px; padding: 18px; border-left: 5px solid var(--green); }
+  .t-step .day { font-size: 13px; font-weight: 800; color: var(--green); text-transform: uppercase; }
+  .t-step .heading { font-size: 16px; font-weight: 700; color: var(--dark); margin: 4px 0; }
+  .t-step .detail { font-size: 13px; color: var(--muted); line-height: 1.35; }
+</style>
+</head>
+<body>
+
+  <!-- SLIDE 1: COVER -->
+  <div class="slide slide-cover">
+    <div class="brand-badge">SWASTH · ROUND 1 SUBMISSION</div>
+    <h1 class="cover-title">SWASTH <span>(मातृ-स्वास्थ्य)</span></h1>
+    <div class="cover-subtitle">
+      AI-Powered Multilingual Long-Term Care Companion, Hyperlocal Birth Clubs & Frontline Continuity Platform
+    </div>
+
+    <div class="cover-meta-grid">
+      <div class="meta-card">
+        <div class="label">Challenge Track</div>
+        <div class="val">Maternal & Women's Health</div>
+      </div>
+      <div class="meta-card">
+        <div class="label">Primary User</div>
+        <div class="val">Patient & Family Caregivers</div>
+      </div>
+      <div class="meta-card">
+        <div class="label">Core Use Case</div>
+        <div class="val">Long-Term Care Engagement</div>
+      </div>
+    </div>
+    
+    <div class="slide-footer" style="color: #64748B; border-color: rgba(255,255,255,0.1);">
+      <span>Confidential · Hackathon Presentation</span>
+      <span>Enterprise Open-Source Architecture · Zero Diagnostic Risk</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: THE PROBLEM -->
+  <div class="slide">
+    <div class="slide-header">
+      <div class="track-tag">01 · The Problem Context</div>
+      <div class="slide-title">The Unseen Crisis: Why Long-Term Maternal Care Breaks Down</div>
+    </div>
+
+    <div class="grid-3">
+      <div class="problem-card highlight">
+        <div class="card-icon">📉</div>
+        <div class="card-title">The Post-Discharge Drop-Off Cliff</div>
+        <div class="card-text">
+          Managing maternal care requires <strong>1,000+ days</strong> across pregnancy, institutional delivery, and 7 infant vaccine cohorts. 
+          <br><br>
+          Yet, over <strong>25–30% of mothers and infants drop out</strong> of scheduled milestones within months after hospital discharge.
+        </div>
+      </div>
+
+      <div class="problem-card">
+        <div class="card-icon">📋</div>
+        <div class="card-title">Administrative Burden & Isolation</div>
+        <div class="card-text">
+          Dropouts are rarely due to medical negligence—they stem from <strong>administrative friction and emotional isolation</strong>.
+          <br><br>
+          Caregivers struggle with fragile paper MCP cards, confusing clinic schedules, and lack peer circles in their neighborhood.
+        </div>
+      </div>
+
+      <div class="problem-card">
+        <div class="card-icon">📱</div>
+        <div class="card-title">The "Cold Clinical App" Failure Mode</div>
+        <div class="card-text">
+          Conventional healthcare apps suffer <strong>80%+ abandonment in 30 days</strong> because they are cold and transactional—opening only when an alert fires.
+          <br><br>
+          Without <strong>daily cultural rituals and peer community</strong>, patients and caregivers disengage entirely.
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <span>Swasth · Long-Term Care Engagement</span>
+      <span>Slide 2 of 8</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: HOOK & BRIDGE -->
+  <div class="slide">
+    <div class="slide-header">
+      <div class="track-tag">02 · Solution Innovation</div>
+      <div class="slide-title">The "Hook & Bridge" Model: Sustaining Daily Engagement</div>
+    </div>
+
+    <div class="hook-bridge-wrap">
+      <div class="hb-box hook">
+        <div class="hb-tag">The Daily Engagement Hook</div>
+        <div class="hb-title">Garbh Sanskar Rituals & Hyperlocal Birth Clubs</div>
+        <ul class="bullet-list">
+          <li class="bullet-item">
+            <span class="bullet-icon">🪷</span>
+            <div><strong>4Q Holistic Activities:</strong> 12 daily micro-habits across IQ (mind), EQ (emotion), PQ (prenatal mobility), and SQ (spiritual calming).</div>
+          </li>
+          <li class="bullet-item">
+            <span class="bullet-icon">👥</span>
+            <div><strong>Hyperlocal Birth Clubs:</strong> Connecting mothers in the same delivery month & PHC radius for peer empathy, recipes, and comfort routines.</div>
+          </li>
+          <li class="bullet-item">
+            <span class="bullet-icon">🎵</span>
+            <div><strong>Garbh Samvaad & Raga Music:</strong> Calming lullabies, baby bonding talks, and partner affirmations in Hindi, Malayalam, and Tamil.</div>
+          </li>
+          <li class="bullet-item">
+            <span class="bullet-icon">🛡️</span>
+            <div><strong>Guardrail Moderation:</strong> NeMo Guardrails filter out harmful medical misinformation in peer circles, routing warning signs to doctors.</div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="hb-box bridge">
+        <div class="hb-tag">The Healthcare Continuity Bridge</div>
+        <div class="hb-title">Vaccine Milestones, Diet Charts & Caregiver Sync</div>
+        <ul class="bullet-list">
+          <li class="bullet-item">
+            <span class="bullet-icon">💉</span>
+            <div><strong>Smart Vaccine Tracker:</strong> Automates 6, 10, 14-week and 9-month immunization scheduling with vernacular voice reminders.</div>
+          </li>
+          <li class="bullet-item">
+            <span class="bullet-icon">🥣</span>
+            <div><strong>Doctor-Approved Weaning Diet:</strong> Month-by-month infant food plans and maternal lactation nutrition.</div>
+          </li>
+          <li class="bullet-item">
+            <span class="bullet-icon">👨‍👩‍👧</span>
+            <div><strong>Caregiver Multi-User Sync:</strong> Partners and grandmothers receive audio/WhatsApp reminders in their native dialect.</div>
+          </li>
+          <li class="bullet-item">
+            <span class="bullet-icon">📶</span>
+            <div><strong>24/7 Offline Sync:</strong> Full functionality without internet; background synchronization to PostgreSQL.</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <span>Swasth · The Hook & Bridge Engine</span>
+      <span>Slide 3 of 8</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: 6 PILLARS -->
+  <div class="slide">
+    <div class="slide-header">
+      <div class="track-tag">03 · SWASTH Criteria Mapping</div>
+      <div class="slide-title">Full Alignment with SWASTH's 6 Core Pillars</div>
+    </div>
+
+    <div class="pillars-grid">
+      <div class="pillar-card">
+        <div class="pillar-num">01 · Care Journey Companion</div>
+        <div class="pillar-title">Stage-Aware Guidance</div>
+        <div class="pillar-desc">Week-by-week guidance adapted across pregnancy, delivery preparation, and 0-24 month infancy. Clear instruction on what to prepare and when to visit.</div>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-num">02 · Long-Term Care Engagement</div>
+        <div class="pillar-title">Sustained Multi-Year Adherence</div>
+        <div class="pillar-desc">Maintains high adherence over months & years through culturally resonant Garbh Sanskar routines, birth club peer communities, and milestone streaks.</div>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-num">03 · Family & Caregiver Support</div>
+        <div class="pillar-title">Caregiver Synchronization</div>
+        <div class="pillar-desc">Multi-user syncing for spouses and family elders with consent, clarity, and vernacular voice alerts, reducing the cognitive burden on the mother.</div>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-num">04 · Healthcare Navigation & Access</div>
+        <div class="pillar-title">Clinic & Facility Guidance</div>
+        <div class="pillar-desc">Clear next steps across clinic token counters, blood tests, ultrasound schedules, and seamless PHC-to-District referral handoffs.</div>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-num">05 · Financial & Admin Support</div>
+        <div class="pillar-title">Maternity Scheme Navigator</div>
+        <div class="pillar-desc">Simplifies government schemes (PMMVY, JSY, JSSK) and hospital documentation so financial paperwork never delays maternal care.</div>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-num">06 · Patient Health Journey Progress</div>
+        <div class="pillar-title">Longitudinal Milestone View</div>
+        <div class="pillar-desc">A unified visual timeline displaying completed, pending, and upcoming clinical and developmental milestones at a single glance.</div>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <span>Swasth · Strategic Hackathon Pillars</span>
+      <span>Slide 4 of 8</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: APP DESIGN -->
+  <div class="slide">
+    <div class="slide-header">
+      <div class="track-tag">04 · Experience & UI/UX</div>
+      <div class="slide-title">App Design Showcase: Daily Rituals, Tools & Birth Clubs</div>
+    </div>
+
+    <div class="design-showcase">
+      <img src="file:///Volumes/DiskD/HACKATHONS/Swasth/assets/app_design/swasth_app_design_preview.png" class="design-preview-img" alt="Swasth App Design Preview">
+      
+      <div class="design-features">
+        <div class="df-item">
+          <div class="df-title">1. Daily 4Q Schedule (Garbh Sanskar)</div>
+          <div class="df-sub">Structured tracking across IQ (cognitive), EQ (emotional), PQ (physical mobility), and SQ (spiritual) with 12 daily micro-activities.</div>
+        </div>
+
+        <div class="df-item">
+          <div class="df-title">2. Smart Tools & MCP Scanner</div>
+          <div class="df-sub">1-tap pastel tool grid: Pregnancy Tracker, Water Calculator, Steps, Om Chanter, MCP Card Photo Scanner, and Scheme Benefits.</div>
+        </div>
+
+        <div class="df-item">
+          <div class="df-title">3. Hyperlocal Birth Clubs & Community</div>
+          <div class="df-sub">Peer circles connecting mothers in the same PHC radius, with AI guardrails protecting against unsafe medical home advice.</div>
+        </div>
+
+        <div class="df-item">
+          <div class="df-title">4. Vaccine Cohorts & Weaning Diet</div>
+          <div class="df-sub">Automated 6/10/14-week immunization schedules and doctor-approved month-by-month infant food meal plans.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <span>Swasth · Complete Mobile Experience</span>
+      <span>Slide 5 of 8</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: ENTERPRISE ARCHITECTURE -->
+  <div class="slide">
+    <div class="slide-header">
+      <div class="track-tag">05 · Technical Deep-Dive</div>
+      <div class="slide-title">Enterprise Open-Source Architecture: Speed & Reliability</div>
+    </div>
+
+    <div class="arch-flow">
+      <div class="arch-col primary">
+        <div class="arch-badge">Client Layer</div>
+        <div class="arch-name">Flutter & React</div>
+        <div class="arch-bullets">
+          <div>• <strong>Flutter Mobile:</strong> 60–120 FPS iOS & Android app</div>
+          <div>• <strong>React/TypeScript:</strong> Clinic web backup portal</div>
+          <div>• <strong>Encrypted Cache:</strong> 24/7 offline local data sync</div>
+        </div>
+      </div>
+
+      <div class="arch-col secondary">
+        <div class="arch-badge">Unified Backend</div>
+        <div class="arch-name">Python FastAPI</div>
+        <div class="arch-bullets">
+          <div>• <strong>Single Service:</strong> Unified REST & WebSockets</div>
+          <div>• <strong>High Throughput:</strong> Pydantic v2 & Starlette async</div>
+          <div>• <strong>ABHA Auth:</strong> Secure national health ID login</div>
+        </div>
+      </div>
+
+      <div class="arch-col primary">
+        <div class="arch-badge">Agent Engine</div>
+        <div class="arch-name">LangChain + vLLM</div>
+        <div class="arch-bullets">
+          <div>• <strong>LangGraph:</strong> State-aware milestone workflow</div>
+          <div>• <strong>Nemotron / Llama 3:</strong> Open-weights models</div>
+          <div>• <strong>Sub-Second TTFT:</strong> vLLM PagedAttention serving</div>
+        </div>
+      </div>
+
+      <div class="arch-col secondary">
+        <div class="arch-badge">Speech & NLP</div>
+        <div class="arch-name">Indic NLP AI</div>
+        <div class="arch-bullets">
+          <div>• <strong>Whisper Open-Source:</strong> Vernacular speech-to-text</div>
+          <div>• <strong>AI4Bharat IndicTrans2:</strong> 10+ Indic languages</div>
+          <div>• <strong>Audio Nudges:</strong> Text-to-speech voice notes</div>
+        </div>
+      </div>
+
+      <div class="arch-col primary">
+        <div class="arch-badge">Data & Audit</div>
+        <div class="arch-name">PostgreSQL</div>
+        <div class="arch-bullets">
+          <div>• <strong>Row-Level Security:</strong> HIPAA/ABHA compliance</div>
+          <div>• <strong>Sub-5ms Latency:</strong> Asyncpg pool connections</div>
+          <div>• <strong>Immutable Ledger:</strong> Complete audit trail logging</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <span>Swasth · Enterprise Architecture</span>
+      <span>Slide 6 of 8</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: SAFETY -->
+  <div class="slide">
+    <div class="slide-header">
+      <div class="track-tag">06 · Safety & Human Oversight</div>
+      <div class="slide-title">Clinical Safety: Zero Diagnostic Risk & Guardrail Moderation</div>
+    </div>
+
+    <div class="safety-grid">
+      <div class="safety-card safe-red">
+        <h3 style="color: #DC2626;">Strict Non-Clinical Scope</h3>
+        <ul class="bullet-list" style="font-size: 15.5px;">
+          <li class="bullet-item">
+            <span>❌</span>
+            <div><strong>0% Diagnostic Advice:</strong> Never provides medical risk scores, diagnostic labels, or lab test interpretations.</div>
+          </li>
+          <li class="bullet-item">
+            <span>❌</span>
+            <div><strong>0% Treatment Prescriptions:</strong> Never suggests medications, dosage changes, or clinical therapies.</div>
+          </li>
+          <li class="bullet-item">
+            <span>✅</span>
+            <div><strong>Assistive Only:</strong> Limited strictly to administrative scheduling, nutrition reminders, non-strenuous lifestyle, and welfare schemes.</div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="safety-card safe-blue">
+        <h3 style="color: var(--secondary);">NVIDIA NeMo Guardrails</h3>
+        <ul class="bullet-list" style="font-size: 15.5px;">
+          <li class="bullet-item">
+            <span>🛡️</span>
+            <div><strong>In-Memory Guardrails:</strong> Every user prompt, AI response, and community post passes through semantic filters.</div>
+          </li>
+          <li class="bullet-item">
+            <span>🚨</span>
+            <div><strong>Symptom Interception:</strong> If clinical symptoms (bleeding, severe pain, fever) are mentioned, automation immediately halts.</div>
+          </li>
+          <li class="bullet-item">
+            <span>📞</span>
+            <div><strong>Emergency Routing:</strong> Instantly connects to the nearest PHC emergency desk and national ambulance helpline.</div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="safety-card safe-green">
+        <h3 style="color: var(--green);">Human-in-the-Loop & Audit</h3>
+        <ul class="bullet-list" style="font-size: 15.5px;">
+          <li class="bullet-item">
+            <span>👩‍⚕️</span>
+            <div><strong>Clinician & ANM Oversight:</strong> Frontline staff review milestone rosters and due-lists with 1-click approvals.</div>
+          </li>
+          <li class="bullet-item">
+            <span>📜</span>
+            <div><strong>Immutable PostgreSQL Audit Log:</strong> Every AI recommendation, user confirmation, and override is permanently logged.</div>
+          </li>
+          <li class="bullet-item">
+            <span>🔒</span>
+            <div><strong>Caregiver Consent:</strong> Family synchronization requires explicit patient opt-in and consent management.</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <span>Swasth · Safety & Governance</span>
+      <span>Slide 7 of 8</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 8: IMPACT -->
+  <div class="slide">
+    <div class="slide-header">
+      <div class="track-tag">07 · Measurable Impact & Roadmap</div>
+      <div class="slide-title">Measurable Operational Outcomes within 60–90 Days</div>
+    </div>
+
+    <div class="metrics-row">
+      <div class="metric-card">
+        <div class="metric-val">85% Drop</div>
+        <div class="metric-lbl">Frontline Admin Burden</div>
+        <div class="metric-sub">Reduces manual paper due-list compilation from 10 hrs to <1.5 hrs/week.</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-val">90%+</div>
+        <div class="metric-lbl">Vaccine Adherence</div>
+        <div class="metric-sub">Cuts 6 to 14-week infant immunization dropouts via localized voice reminders.</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-val">4x Higher</div>
+        <div class="metric-lbl">Family & Peer Activity</div>
+        <div class="metric-sub">Birth Clubs & caregiver WhatsApp synchronization drive community support.</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-val">100%</div>
+        <div class="metric-lbl">Auditable Compliance</div>
+        <div class="metric-sub">Zero unreviewed clinical actions with complete append-only event logging.</div>
+      </div>
+    </div>
+
+    <div class="timeline-bar">
+      <div class="timeline-title">Execution & Rollout Roadmap (60–90 Days)</div>
+      <div class="timeline-steps">
+        <div class="t-step">
+          <div class="day">Day 1 – 30</div>
+          <div class="heading">MVP & Guardrail Validation</div>
+          <div class="detail">Deploy Flutter mobile client + Python backend; benchmark open-source Nemotron on vLLM; validate NeMo non-clinical safety boundaries.</div>
+        </div>
+        <div class="t-step">
+          <div class="day">Day 31 – 60</div>
+          <div class="heading">Pilot with 5 PHCs & Birth Clubs</div>
+          <div class="detail">Onboard 500 expectant mothers & caregivers; launch 5 localized Birth Clubs; track daily Garbh Sanskar engagement and vaccine adherence.</div>
+        </div>
+        <div class="t-step">
+          <div class="day">Day 61 – 90</div>
+          <div class="heading">Scale & HMIS Integration</div>
+          <div class="detail">Synchronize with state RCH registers; export verified administrative audit reports; expand vernacular voice models into 10+ dialects.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <span>Swasth · Measurable Impact</span>
+      <span>Slide 8 of 8</span>
+    </div>
+  </div>
+
+</body>
+</html>

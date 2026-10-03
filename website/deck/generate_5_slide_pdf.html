@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Swasth - App Design & Experience (5 Pages)</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  @page {
+    size: 1920px 1080px;
+    margin: 0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+  body { background: #0B0F19; color: #1E293B; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  .slide {
+    width: 1920px;
+    height: 1080px;
+    page-break-after: always;
+    position: relative;
+    background: #FFFFFF;
+    overflow: hidden;
+    padding: 65px 85px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  :root {
+    --primary: #E93B67;
+    --primary-light: #FDF2F4;
+    --secondary: #6366F1;
+    --dark: #0F172A;
+    --muted: #64748B;
+    --light-bg: #F8FAFC;
+    --border: #E2E8F0;
+    --green: #10B981;
+  }
+
+  .slide-header {
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--border);
+  }
+  .track-tag {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 4px;
+    font-family: 'Outfit', sans-serif;
+  }
+  .slide-title {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--dark);
+    font-family: 'Outfit', sans-serif;
+  }
+  .slide-footer {
+    position: absolute;
+    bottom: 22px;
+    left: 85px;
+    right: 85px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+  }
+
+  /* SLIDE 1: COVER */
+  .slide-cover {
+    background: radial-gradient(circle at 80% 20%, #2A173B 0%, #0F172A 70%);
+    color: white;
+    justify-content: center;
+    padding: 85px 105px;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 50px;
+    align-items: center;
+  }
+  .brand-badge {
+    background: rgba(233, 59, 103, 0.2);
+    border: 1px solid rgba(233, 59, 103, 0.5);
+    color: #FF7597;
+    padding: 6px 18px;
+    border-radius: 999px;
+    font-size: 15px;
+    font-weight: 800;
+    margin-bottom: 18px;
+    display: inline-block;
+    font-family: 'Outfit', sans-serif;
+  }
+  .cover-title {
+    font-size: 64px;
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    font-family: 'Outfit', sans-serif;
+  }
+  .cover-title span { color: var(--primary); }
+  .cover-subtitle {
+    font-size: 24px;
+    color: #E2E8F0;
+    font-weight: 500;
+    line-height: 1.4;
+    margin-bottom: 28px;
+  }
+  .cover-bullets {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-size: 16px;
+    color: #CBD5E1;
+  }
+  .cover-hero-img {
+    width: 100%;
+    max-height: 720px;
+    object-fit: contain;
+    border-radius: 28px;
+    filter: drop-shadow(0 25px 40px rgba(0,0,0,0.6));
+  }
+
+  /* SLIDE 2: ARCHITECTURE TREE */
+  .slide2-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr 0.75fr;
+    gap: 25px;
+    flex: 1;
+    align-items: center;
+  }
+  .img-card-fit {
+    width: 100%;
+    max-height: 720px;
+    object-fit: contain;
+    border-radius: 18px;
+    border: 1px solid var(--border);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+    background: #FFF;
+  }
+  .flow-col {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .flow-box {
+    background: var(--light-bg);
+    border-radius: 14px;
+    padding: 16px;
+    border-left: 5px solid var(--primary);
+  }
+  .flow-box.sec { border-left-color: var(--secondary); }
+  .flow-box.green { border-left-color: var(--green); }
+  .fb-title { font-size: 16px; font-weight: 800; color: var(--dark); font-family: 'Outfit', sans-serif; }
+  .fb-sub { font-size: 13px; color: var(--muted); margin-top: 3px; line-height: 1.35; }
+
+  /* SLIDE 3: DESIGN SYSTEM */
+  .slide3-grid {
+    display: grid;
+    grid-template-columns: 0.95fr 0.95fr 0.85fr;
+    gap: 25px;
+    flex: 1;
+    align-items: center;
+  }
+
+  /* SLIDE 4: AI CHAT + 4 SIGNATURE MOBILE EXPERIENCES */
+  .slide4-grid {
+    display: grid;
+    grid-template-columns: 0.85fr 1.35fr 0.8fr;
+    gap: 25px;
+    flex: 1;
+    align-items: center;
+  }
+
+  /* SLIDE 5: ARCHITECTURE, SETTINGS & IMPACT */
+  .slide5-grid {
+    display: grid;
+    grid-template-columns: 0.75fr 1fr 1fr;
+    gap: 25px;
+    flex: 1;
+    align-items: center;
+  }
+  .arch-box {
+    background: var(--light-bg);
+    border-radius: 20px;
+    padding: 26px 22px;
+    border: 2px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+  }
+  .arch-box.p1 { border-color: var(--primary); }
+  .arch-box.p2 { border-color: var(--secondary); }
+  .ab-title { font-size: 20px; font-weight: 800; margin-bottom: 10px; font-family: 'Outfit', sans-serif; }
+  .ab-bullets { font-size: 13.5px; color: #334155; line-height: 1.5; display: flex; flex-direction: column; gap: 6px; }
+</style>
+</head>
+<body>
+
+  <!-- SLIDE 1: COVER -->
+  <div class="slide slide-cover">
+    <div>
+      <div class="brand-badge">SWASTH · APP DESIGN SHOWCASE</div>
+      <h1 class="cover-title">SWASTH <span>(मातृ-स्वास्थ्य)</span></h1>
+      <div class="cover-subtitle">
+        AI-Powered Long-Term Care Companion: 3D Stage Progress, Garbh Sanskar Routines & Hyperlocal Birth Clubs
+      </div>
+      <div class="cover-bullets">
+        <div>🌸 <strong>Maternal & Women's Health Track</strong> · Long-Term Care Engagement</div>
+        <div>📱 <strong>Dual Experience:</strong> Flutter Mobile (Mothers/Caregivers) + React Web Portal</div>
+        <div>🛡️ <strong>Zero Clinical Diagnosis:</strong> Strictly assistive with NVIDIA NeMo Guardrails</div>
+        <div>📶 <strong>24/7 Offline Sync:</strong> Encrypted local cache for rural/peri-urban clinics</div>
+      </div>
+    </div>
+    <div>
+      <img src="file:///Volumes/DiskD/HACKATHONS/Swasth/assets/reference/15_momly_hero_mockup.png" class="cover-hero-img" alt="Hero Mockup">
+    </div>
+    <div class="slide-footer" style="color: #94A3B8; border-color: rgba(255,255,255,0.1);">
+      <span>Swasth Mobile App Design System</span>
+      <span>Slide 1 of 5</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: APP INFORMATION ARCHITECTURE -->
+  <div class="slide">
+    <div class="slide-header">
+      <div class="track-tag">01 · User Journey & Architecture</div>
+      <div class="slide-title">App Information Architecture & Intent Selection</div>
+    </div>
+
+    <div class="slide2-grid">
+      <div>
+        <img src="file:///Volumes/DiskD/HACKATHONS/Swasth/assets/reference/21_app_information_architecture_tree.png" class="img-card-fit" alt="App Architecture Tree">
+      </div>
+      <div>
+        <img src="file:///Volumes/DiskD/HACKATHONS/Swasth/assets/reference/28_feature_personalized_journey_intent.png" class="img-card-fit" alt="Personalized Intent">
+      </div>
+      <div class="flow-col">
+        <div class="flow-box">
+          <div class="fb-title">1. Stage Intent</div>
+          <div class="fb-sub">Mothers choose their focus: track baby growth, learn tips, and plan weekly appointments.</div>
+        </div>
+        <div class="flow-box sec">
+          <div class="fb-title">2. Home Hub</div>
+          <div class="fb-sub">3D baby development, trimesters, daily 4Q tasks, and upcoming ultrasound slots.</div>
+        </div>
+        <div class="flow-box">
+          <div class="fb-title">3. Smart Tools</div>
+          <div class="fb-sub">Contraction timer, kick counter, MCP card photo scan, and water tracker.</div>
+        </div>
+        <div class="flow-box sec">
+          <div class="fb-title">4. Birth Clubs</div>
+          <div class="fb-sub">Hyperlocal circles with NeMo Guardrails safety moderation.</div>
+        </div>
+        <div class="flow-box green">
+          <div class="fb-title">5. Partner Sync</div>
+          <div class="fb-sub">WhatsApp & voice reminders for fathers and family elders in local dialects.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <span>Swasth · Information Architecture</span>
+      <span>Slide 2 of 5</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: MODERN DESIGN SYSTEM -->
+  <div class="slide">
+    <div class="slide-header">
+      <div class="track-tag">02 · Design System & UI Components</div>
+      <div class="slide-title">Modern Design System: 3D Micro-Interactions & Due Date Estimation</div>
+    </div>
+
+    <div class="slide3-grid">
+      <div>
+        <img src="file:///Volumes/DiskD/HACKATHONS/Swasth/assets/reference/29_feature_due_date_estimation_methods.png" class="img-card-fit" alt="Due Date Methods">
+      </div>
+      <div>
+        <img src="file:///Volumes/DiskD/HACKATHONS/Swasth/assets/reference/25_feature_baby_growth_tracking.png" class="img-card-fit" alt="Baby Growth Tracking">
+      </div>
+      <div class="flow-col">
+        <div class="flow-box">
+          <div class="fb-title">Flexible Due Date Estimation</div>
+          <div class="fb-sub">Supports Gestational age, LMP date, Conception date, or manual due date.</div>
+        </div>
+        <div class="flow-box sec">
+          <div class="fb-title">Tactile 3D Visuals</div>
+          <div class="fb-sub">Apple/peach baby size comparisons & joyful floating heart milestones.</div>
+        </div>
+        <div class="flow-box">
+          <div class="fb-title">Soft Pastel Tones</div>
+          <div class="fb-sub">Warm rose (#E93B67) and lavender to eliminate clinical anxiety.</div>
+        </div>
+        <div class="flow-box green">
+          <div class="fb-title">Caregiver First</div>
+          <div class="fb-sub">Simple large buttons designed for low digital literacy.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <span>Swasth · Design System</span>
+      <span>Slide 3 of 5</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: AI ASSISTANT CHAT & SIGNATURE EXPERIENCES -->
+  <div class="slide">
+    <div class="slide-header">
+      <div class="track-tag">03 · Conversational AI & Interfaces</div>
+      <div class="slide-title">AI Pregnancy Assistant Chat & Signature Experiences</div>
+    </div>
+
+    <div class="slide4-grid">
+      <div>
+        <img src="file:///Volumes/DiskD/HACKATHONS/Swasth/assets/reference/30_feature_ai_pregnancy_assistant_chat.png" class="img-card-fit" alt="AI Chat Assistant">
+      </div>
+      <div>
+        <img src="file:///Volumes/DiskD/HACKATHONS/Swasth/assets/app_design/swasth_app_design_preview.png" class="img-card-fit" alt="4 Screens Preview">
+      </div>
+      <div class="flow-col">
+        <div class="flow-box">
+          <div class="fb-title">AI Companion Chat</div>
+          <div class="fb-sub">Instant non-medical support for Baby Development, Due Date Timeline, Nutrition & Wellness.</div>
+        </div>
+        <div class="flow-box sec">
+          <div class="fb-title">3D Stage Journey</div>
+          <div class="fb-sub">Trimester progress rail, Apple-size fetal progress, ultrasound appointments.</div>
+        </div>
+        <div class="flow-box">
+          <div class="fb-title">4Q Garbh Sanskar</div>
+          <div class="fb-sub">Daily 12 micro-habits & calming raga lullabies.</div>
+        </div>
+        <div class="flow-box green">
+          <div class="fb-title">Birth Clubs & Vaccines</div>
+          <div class="fb-sub">Hyperlocal mother circles with peer safety moderation and 6-week vaccine checklist.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <span>Swasth · AI Companion & Experiences</span>
+      <span>Slide 4 of 5</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: ARCHITECTURE, DATA PROTECTION & IMPACT -->
+  <div class="slide">
+    <div class="slide-header">
+      <div class="track-tag">04 · Technical Stack & Governance</div>
+      <div class="slide-title">Enterprise Architecture, Data Protection & 60-90 Day Impact</div>
+    </div>
+
+    <div class="slide5-grid">
+      <div>
+        <img src="file:///Volumes/DiskD/HACKATHONS/Swasth/assets/reference/31_feature_settings_preferences_data_protection.png" class="img-card-fit" alt="Settings & Data Protection">
+      </div>
+
+      <div class="arch-box p1">
+        <div class="ab-title" style="color: var(--primary);">Open Enterprise Stack</div>
+        <div class="ab-bullets">
+          <div>• <strong>Flutter Mobile:</strong> 60–120 FPS iOS & Android with encrypted offline sync.</div>
+          <div>• <strong>React/TypeScript:</strong> Web portal backup.</div>
+          <div>• <strong>Python (FastAPI):</strong> Single unified backend.</div>
+          <div>• <strong>NVIDIA Nemotron / Llama 3:</strong> vLLM serving.</div>
+          <div>• <strong>Indic NLP:</strong> Whisper & IndicTrans2.</div>
+          <div>• <strong>PostgreSQL:</strong> Immutable audit ledger.</div>
+        </div>
+      </div>
+
+      <div class="arch-box p2">
+        <div class="ab-title" style="color: var(--secondary);">Safety & 60–90 Day Impact</div>
+        <div class="ab-bullets">
+          <div>• <strong>0% Diagnostic Advice:</strong> Strictly non-medical.</div>
+          <div>• <strong>NVIDIA NeMo Guardrails:</strong> Intercepts symptoms and routes to emergency PHC.</div>
+          <div>• <strong>Data Protection:</strong> ABHA compliance & privacy.</div>
+          <div>• <strong>85% Drop in Admin Burden:</strong> Due-list compilation &lt;1.5 hrs/week.</div>
+          <div>• <strong>90%+ Vaccine Adherence:</strong> Drastic dropout cut.</div>
+          <div>• <strong>4x Higher Family Engagement:</strong> Multi-user sync.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-footer">
+      <span>Swasth · Architecture, Safety & Outcomes</span>
+      <span>Slide 5 of 5</span>
+    </div>
+  </div>
+
+</body>
+</html>

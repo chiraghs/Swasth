@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Swasth - App Design & Architecture Showcase</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #E93B67;
+    --primary-glow: rgba(233, 59, 103, 0.4);
+    --primary-soft: #FFF1F4;
+    --secondary: #6366F1;
+    --secondary-glow: rgba(99, 102, 241, 0.35);
+    --lavender: #8B5CF6;
+    --mint: #10B981;
+    --mint-soft: #ECFDF5;
+    --dark: #0B0F19;
+    --dark-surface: #131A2B;
+    --dark-card: #1E293B;
+    --text-muted: #94A3B8;
+    --text-light: #F8FAFC;
+    --border-dark: rgba(255, 255, 255, 0.1);
+    --border-card: rgba(255, 255, 255, 0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+  body { background: var(--dark); color: var(--text-light); overflow-x: hidden; line-height: 1.6; }
+
+  /* NAVIGATION */
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 80px;
+    background: rgba(11, 15, 25, 0.85);
+    backdrop-filter: blur(16px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid var(--border-dark);
+  }
+  .nav-logo { font-size: 26px; font-weight: 800; font-family: 'Outfit', sans-serif; display: flex; align-items: center; gap: 10px; color: white; }
+  .nav-logo span { color: var(--primary); }
+  .nav-badge { font-size: 11px; font-weight: 700; background: rgba(233, 59, 103, 0.18); color: #FF7597; border: 1px solid rgba(233, 59, 103, 0.3); padding: 4px 10px; border-radius: 999px; }
+  .nav-links { display: flex; gap: 32px; font-size: 14px; font-weight: 600; list-style: none; }
+  .nav-links a { color: var(--text-muted); text-decoration: none; transition: all 0.2s; }
+  .nav-links a:hover { color: white; }
+  .nav-cta { background: var(--primary); color: white; padding: 10px 22px; border-radius: 999px; font-size: 13px; font-weight: 700; text-decoration: none; box-shadow: 0 4px 16px var(--primary-glow); transition: 0.2s; }
+  .nav-cta:hover { transform: translateY(-2px); }
+
+  /* HERO SECTION */
+  .hero-section {
+    padding: 80px 80px 100px;
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 60px;
+    align-items: center;
+  }
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(99, 102, 241, 0.15);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    color: #A5B4FC;
+    padding: 6px 16px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 24px;
+  }
+  .hero-title {
+    font-size: 54px;
+    font-weight: 800;
+    line-height: 1.15;
+    font-family: 'Outfit', sans-serif;
+    letter-spacing: -0.5px;
+  }
+  .hero-title span {
+    background: linear-gradient(135deg, #FF6B8B 0%, #E93B67 50%, #A855F7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero-desc {
+    font-size: 18px;
+    color: var(--text-muted);
+    margin: 20px 0 32px;
+    max-width: 600px;
+    line-height: 1.65;
+  }
+  .hero-btn-row { display: flex; gap: 18px; align-items: center; }
+  .btn-primary {
+    background: var(--primary);
+    color: white;
+    padding: 14px 28px;
+    border-radius: 999px;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: 0 10px 30px var(--primary-glow);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-secondary {
+    background: var(--dark-card);
+    color: white;
+    border: 1px solid var(--border-dark);
+    padding: 14px 28px;
+    border-radius: 999px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  /* INTERACTIVE MOCKUP SHOWCASE */
+  .interactive-frame-wrap {
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+  .phone-mockup {
+    width: 360px;
+    height: 740px;
+    background: #FFFFFF;
+    border-radius: 46px;
+    box-shadow: 0 40px 100px -20px rgba(0,0,0,0.8), 0 0 0 12px #1E293B, 0 0 0 14px #334155;
+    position: relative;
+    overflow: hidden;
+    color: #0F172A;
+    display: flex;
+    flex-direction: column;
+  }
+  .phone-screen { flex: 1; overflow-y: auto; background: #FAF5FF; position: relative; }
+  .dynamic-island { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: 100px; height: 24px; background: #000; border-radius: 20px; z-index: 50; }
+  
+  /* SCREEN SWITCHER BUTTONS */
+  .screen-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: 40px auto 30px;
+    max-width: 1000px;
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    background: var(--dark-surface);
+    border: 1px solid var(--border-dark);
+    color: var(--text-muted);
+    padding: 10px 20px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn.active, .tab-btn:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    box-shadow: 0 4px 15px var(--primary-glow);
+  }
+
+  /* FEATURES SECTION */
+  .section-wrap { max-width: 1300px; margin: 60px auto; padding: 0 40px; }
+  .sec-header { text-align: center; margin-bottom: 50px; }
+  .sec-tag { font-size: 13px; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 1.5px; }
+  .sec-title { font-size: 38px; font-weight: 800; font-family: 'Outfit', sans-serif; margin-top: 8px; }
+  
+  .feature-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+  .feature-box {
+    background: var(--dark-surface);
+    border: 1px solid var(--border-card);
+    border-radius: 24px;
+    padding: 32px 26px;
+    display: flex;
+    flex-direction: column;
+    transition: 0.2s;
+  }
+  .feature-box:hover { transform: translateY(-4px); border-color: rgba(233, 59, 103, 0.4); }
+  .feat-icon { width: 50px; height: 50px; border-radius: 16px; background: rgba(233, 59, 103, 0.15); color: #FF7597; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 20px; }
+  .feat-title { font-size: 20px; font-weight: 700; font-family: 'Outfit', sans-serif; margin-bottom: 10px; }
+  .feat-desc { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+
+  /* ARCHITECTURE & STACK */
+  .arch-section { background: var(--dark-surface); border-top: 1px solid var(--border-dark); border-bottom: 1px solid var(--border-dark); padding: 80px 40px; margin-top: 80px; }
+  .arch-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; max-width: 1300px; margin: 40px auto 0; }
+  .arch-card { background: var(--dark); border: 1px solid var(--border-card); border-radius: 20px; padding: 24px 20px; }
+  .arch-card .tier { font-size: 11px; font-weight: 800; color: var(--secondary); text-transform: uppercase; letter-spacing: 1px; }
+  .arch-card .tech { font-size: 18px; font-weight: 800; color: white; margin: 6px 0 12px; font-family: 'Outfit', sans-serif; }
+  .arch-card ul { font-size: 13px; color: var(--text-muted); list-style: none; display: flex; flex-direction: column; gap: 8px; }
+
+  /* SAFETY BANNER */
+  .safety-banner {
+    background: radial-gradient(circle at center, #1E1B4B 0%, #0F172A 100%);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: 24px;
+    padding: 40px 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1300px;
+    margin: 80px auto;
+  }
+  .sb-title { font-size: 28px; font-weight: 800; font-family: 'Outfit', sans-serif; color: white; }
+  .sb-sub { font-size: 15px; color: #94A3B8; margin-top: 6px; max-width: 700px; }
+  .sb-pill { background: #10B981; color: white; font-weight: 800; font-size: 13px; padding: 8px 18px; border-radius: 999px; }
+
+  /* FOOTER */
+  footer {
+    padding: 50px 80px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border-dark);
+  }
+</style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">
+      <span>Swasth</span> Maternal Health
+      <span class="nav-badge">SWASTH Hackathon 2026</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#screens">App Design</a></li>
+      <li><a href="#features">Garbh Sanskar & Clubs</a></li>
+      <li><a href="#architecture">Enterprise Stack</a></li>
+      <li><a href="#safety">Clinical Safety</a></li>
+    </ul>
+    <a href="./deck/Swasth_App_Design_5_Slides.pdf" target="_blank" class="nav-cta">View 5-Slide App Design PDF</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero-section">
+    <div>
+      <div class="hero-tag">
+        <span>✨</span> Long-Term Care Engagement · Maternal & Child Health
+      </div>
+      <h1 class="hero-title">
+        The Daily Cultural Companion for <span>Mothers & Caregivers</span>
+      </h1>
+      <p class="hero-desc">
+        Swasth solves the 1,000-day drop-off cliff by blending daily <strong>Garbh Sanskar rituals</strong> and <strong>Hyperlocal Birth Clubs</strong> with automated, multilingual vaccination and healthcare milestone continuity.
+      </p>
+      <div class="hero-btn-row">
+        <a href="#screens" class="btn-primary">Explore Interactive Design ➔</a>
+      </div>
+    </div>
+
+    <!-- MOCKUP FRAME -->
+    <div class="interactive-frame-wrap">
+      <div class="phone-mockup">
+        <div class="dynamic-island"></div>
+        <div class="phone-screen" id="appScreenContainer">
+          
+          <!-- Screen 1: 3D Stage & Trimesters -->
+          <div style="padding: 40px 14px 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+              <div style="font-size: 14px; font-weight: 800;">Week 15 · Trimester 2</div>
+              <span style="background: #E93B67; color: white; font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 10px;">Day 101</span>
+            </div>
+
+            <div style="background: linear-gradient(135deg, #FDF2F8 0%, #F5F3FF 100%); border-radius: 20px; padding: 18px; text-align: center; border: 1px solid #FBCFE8; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+              <div style="font-size: 54px; margin-bottom: 4px;">👶</div>
+              <div style="font-size: 18px; font-weight: 800; color: #1E293B;">Baby Size: Apple 🍎</div>
+              <div style="font-size: 11px; color: #64748B; margin-top: 2px;">Length: 10.1 cm · Weight: 70g</div>
+              <div style="display: flex; justify-content: center; gap: 14px; margin-top: 14px;">
+                <div style="background: white; padding: 6px 12px; border-radius: 10px; font-size: 11px; font-weight: 700; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">15 Wk Done</div>
+                <div style="background: white; padding: 6px 12px; border-radius: 10px; font-size: 11px; font-weight: 700; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">25 Wk Left</div>
+              </div>
+            </div>
+
+            <!-- Trimester Bar -->
+            <div style="background: white; border-radius: 14px; padding: 12px; margin-top: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
+              <div style="display: flex; justify-content: space-between; font-size: 10px; font-weight: 700; color: #64748B; margin-bottom: 6px;">
+                <span>12w</span>
+                <span style="color: #E93B67;">Week 15 (Active)</span>
+                <span>28w</span>
+              </div>
+              <div style="height: 6px; background: #E2E8F0; border-radius: 999px; overflow: hidden;">
+                <div style="width: 55%; height: 100%; background: linear-gradient(90deg, #8B5CF6, #E93B67);"></div>
+              </div>
+            </div>
+
+            <!-- Daily Micro-Activity -->
+            <div style="background: white; border-radius: 14px; padding: 12px; margin-top: 10px; display: flex; align-items: center; gap: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
+              <div style="width: 40px; height: 40px; border-radius: 10px; background: #FFF1F4; display: flex; align-items: center; justify-content: center; font-size: 18px;">🪷</div>
+              <div style="flex: 1;">
+                <div style="font-size: 9px; font-weight: 800; color: #E93B67; text-transform: uppercase;">Garbh Sanskar Daily</div>
+                <div style="font-size: 12px; font-weight: 700; color: #1E293B;">Baby Bonding & Flute Raga</div>
+              </div>
+              <span style="font-size: 12px; color: #E93B67; font-weight: 800;">▶</span>
+            </div>
+
+            <!-- Next Clinic Appointment -->
+            <div style="background: #ECFDF5; border: 1px solid #A7F3D0; border-radius: 14px; padding: 10px 12px; margin-top: 10px; display: flex; align-items: center; justify-content: space-between;">
+              <div>
+                <div style="font-size: 11px; font-weight: 800; color: #065F46;">Ultrasound Scan Slot</div>
+                <div style="font-size: 9px; color: #047857;">PHC Rampur · Carry MCP Card</div>
+              </div>
+              <span style="background: #10B981; color: white; font-size: 9px; font-weight: 800; padding: 3px 8px; border-radius: 6px;">In 5 Days</span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREEN SHOWCASE TABS -->
+  <section class="section-wrap" id="screens">
+    <div class="sec-header">
+      <div class="sec-tag">Project Design System</div>
+      <h2 class="sec-title">Four Core Pillars of the Swasth Mobile App</h2>
+    </div>
+
+    <div class="screen-tabs">
+      <button class="tab-btn active" onclick="switchMockup(1)">1. 3D Stage Progress & Labs</button>
+      <button class="tab-btn" onclick="switchMockup(2)">2. 4Q Garbh Sanskar Schedule</button>
+      <button class="tab-btn" onclick="switchMockup(3)">3. Hyperlocal Birth Clubs</button>
+      <button class="tab-btn" onclick="switchMockup(4)">4. Vaccine & Weaning Diet</button>
+    </div>
+
+    <div style="text-align: center; margin-top: 20px;">
+      <img src="./assets/app_design/swasth_app_design_preview.png" style="width: 100%; max-width: 1250px; border-radius: 28px; box-shadow: 0 25px 60px rgba(0,0,0,0.5); border: 1px solid var(--border-dark);" alt="Swasth 4-Screen App Preview">
+    </div>
+  </section>
+
+  <!-- ONBOARDING & INFORMATION ARCHITECTURE TREE -->
+  <section class="section-wrap" id="tree" style="margin-top: 80px;">
+    <div class="sec-header">
+      <div class="sec-tag">Complete User Journey</div>
+      <h2 class="sec-title">Information Architecture & Intent Alignment</h2>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 30px; align-items: center;">
+      <div style="background: var(--dark-surface); border: 1px solid var(--border-card); border-radius: 24px; padding: 20px; text-align: center;">
+        <h4 style="font-size: 16px; color: #FF7597; font-weight: 800; margin-bottom: 12px; text-transform: uppercase;">App Information Architecture Tree</h4>
+        <img src="./assets/reference/21_app_information_architecture_tree.png" style="width: 100%; max-height: 480px; object-fit: contain; border-radius: 16px; background: white; padding: 10px;" alt="Information Architecture">
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        <div style="background: var(--dark-surface); border: 1px solid var(--border-card); border-radius: 20px; padding: 20px; display: flex; align-items: center; gap: 16px;">
+          <img src="./assets/reference/28_feature_personalized_journey_intent.png" style="width: 100px; border-radius: 12px;" alt="Personalized Intent">
+          <div>
+            <div style="font-size: 16px; font-weight: 800; color: white;">Personalized Intent Onboarding</div>
+            <div style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">Mothers choose whether to focus on fetal growth, daily learning, appointment planning, or partner sync.</div>
+          </div>
+        </div>
+
+        <div style="background: var(--dark-surface); border: 1px solid var(--border-card); border-radius: 20px; padding: 20px; display: flex; align-items: center; gap: 16px;">
+          <img src="./assets/reference/29_feature_due_date_estimation_methods.png" style="width: 100px; border-radius: 12px;" alt="Due Date Estimation">
+          <div>
+            <div style="font-size: 16px; font-weight: 800; color: white;">Multi-Method Due Date Setup</div>
+            <div style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">Supports Gestational age, LMP date, Conception date, or manual due date input for instant personalization.</div>
+          </div>
+        </div>
+
+        <div style="background: var(--dark-surface); border: 1px solid var(--border-card); border-radius: 20px; padding: 20px; display: flex; align-items: center; gap: 16px;">
+          <img src="./assets/reference/25_feature_baby_growth_tracking.png" style="width: 100px; border-radius: 12px;" alt="Baby Growth Tracking">
+          <div>
+            <div style="font-size: 16px; font-weight: 800; color: white;">3D Baby Growth Tracking</div>
+            <div style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">Tactile heart-cradled milestone cards and weekly fruit-size analogies keeping mothers emotionally engaged.</div>
+          </div>
+        </div>
+
+        <div style="background: var(--dark-surface); border: 1px solid var(--border-card); border-radius: 20px; padding: 20px; display: flex; align-items: center; gap: 16px;">
+          <img src="./assets/reference/30_feature_ai_pregnancy_assistant_chat.png" style="width: 100px; border-radius: 12px;" alt="AI Pregnancy Assistant">
+          <div>
+            <div style="font-size: 16px; font-weight: 800; color: white;">AI Pregnancy Assistant Chat</div>
+            <div style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">Instant non-medical support for baby development, nutrition, wellness, and appointment prep with NeMo Guardrails.</div>
+          </div>
+        </div>
+
+        <div style="background: var(--dark-surface); border: 1px solid var(--border-card); border-radius: 20px; padding: 20px; display: flex; align-items: center; gap: 16px;">
+          <img src="./assets/reference/31_feature_settings_preferences_data_protection.png" style="width: 100px; border-radius: 12px;" alt="Settings & Data Protection">
+          <div>
+            <div style="font-size: 16px; font-weight: 800; color: white;">Settings & ABHA Data Protection</div>
+            <div style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">Granular notification preferences, multilingual translation support, and enterprise ABHA/HIPAA data privacy controls.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 KEY INNOVATIONS -->
+  <section class="section-wrap" id="features">
+    <div class="sec-header">
+      <div class="sec-tag">Why Swasth Succeeds</div>
+      <h2 class="sec-title">Engineered to Prevent Long-Term Dropouts</h2>
+    </div>
+
+    <div class="feature-grid-4">
+      <div class="feature-box">
+        <div class="feat-icon">🪷</div>
+        <h3 class="feat-title">The Daily Hook</h3>
+        <p class="feat-desc">Culturally rooted Garbh Sanskar micro-habits (IQ, EQ, PQ, SQ), calming raga music, and partner bonding that mothers look forward to every morning.</p>
+      </div>
+
+      <div class="feature-box">
+        <div class="feat-icon">👥</div>
+        <h3 class="feat-title">Birth Clubs & Circles</h3>
+        <p class="feat-desc">Hyperlocal peer circles connecting mothers in the same PHC radius for mutual comfort, recipes, and logistical guidance with NeMo Guardrails moderation.</p>
+      </div>
+
+      <div class="feature-box">
+        <div class="feat-icon">💉</div>
+        <h3 class="feat-title">Care Continuity Bridge</h3>
+        <p class="feat-desc">Automated vaccination cohort tracking (6, 10, 14 weeks) and doctor-approved weaning diet schedules seamlessly delivered alongside daily habits.</p>
+      </div>
+
+      <div class="feature-box">
+        <div class="feat-icon">📶</div>
+        <h3 class="feat-title">24/7 Offline Sync</h3>
+        <p class="feat-desc">Engineered for low-connectivity rural health centers. Functions 100% offline and synchronizes encrypted state to PostgreSQL when online.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ARCHITECTURE -->
+  <section class="arch-section" id="architecture">
+    <div class="sec-header">
+      <div class="sec-tag">Enterprise Open-Source Architecture</div>
+      <h2 class="sec-title">Unified Microservices Stack</h2>
+    </div>
+
+    <div class="arch-grid">
+      <div class="arch-card">
+        <div class="tier">Client Layer</div>
+        <div class="tech">Flutter & React</div>
+        <ul>
+          <li>• Flutter Mobile: 60 FPS iOS/Android</li>
+          <li>• React/TypeScript: Web backup</li>
+          <li>• Encrypted offline SQLite/local cache</li>
+        </ul>
+      </div>
+
+      <div class="arch-card">
+        <div class="tier">Unified Backend</div>
+        <div class="tech">Python (FastAPI)</div>
+        <ul>
+          <li>• Single unified REST & WebSockets</li>
+          <li>• Asyncpg with connection pooling</li>
+          <li>• Sub-5ms API response latency</li>
+        </ul>
+      </div>
+
+      <div class="arch-card">
+        <div class="tier">Agent Pipeline</div>
+        <div class="tech">LangGraph + vLLM</div>
+        <ul>
+          <li>• Open models: NVIDIA Nemotron / Llama 3</li>
+          <li>• PagedAttention vLLM serving</li>
+          <li>• State-aware milestone workflow</li>
+        </ul>
+      </div>
+
+      <div class="arch-card">
+        <div class="tier">Indic Voice & NLP</div>
+        <div class="tech">Whisper & IndicTrans2</div>
+        <ul>
+          <li>• Open-source Whisper voice notes</li>
+          <li>• AI4Bharat IndicTrans2 (10+ languages)</li>
+          <li>• Low-literacy audio prompts</li>
+        </ul>
+      </div>
+
+      <div class="arch-card">
+        <div class="tier">Data & Governance</div>
+        <div class="tech">PostgreSQL Ledger</div>
+        <ul>
+          <li>• Row-level security for ABHA IDs</li>
+          <li>• Append-only compliance audit trail</li>
+          <li>• Human-in-the-loop signoff logs</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SAFETY BANNER -->
+  <section class="safety-banner" id="safety">
+    <div>
+      <div class="sb-title">100% Assistive · Strict Non-Clinical Scope</div>
+      <div class="sb-sub">
+        Zero diagnostic advice, zero medication prescribing, zero medical risk scoring. Powered by NVIDIA NeMo Guardrails to intercept clinical red flags and route immediately to primary health centers.
+      </div>
+    </div>
+    <div class="sb-pill">NeMo Guardrails Active 🛡️</div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>Swasth · Maternal & Caregiver Platform · SWASTH Hackathon Round 1 Entry</p>
+    <p style="margin-top: 6px; font-size: 11px;">Maternal & Women's Health Track · Patient & Caregiver Focus · Long-Term Care Engagement</p>
+  </footer>
+
+  <script>
+    function switchMockup(id) {
+      document.querySelectorAll('.tab-btn').forEach((b, i) => {
+        b.classList.toggle('active', i === (id - 1));
+      });
+    }
+  </script>
+</body>
+</html>
