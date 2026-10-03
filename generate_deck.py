@@ -202,40 +202,68 @@ def create_presentation():
     add_header(slide4, "Full Alignment with SWASTH's 6 Core Pillars")
 
     pillars = [
-        ("01. Care Journey Companion", "Stage-aware guidance tailored across planning, trimester weeks, and 0-24 month infancy. Clear guidance on what to prepare and when to visit."),
-        ("02. Long-Term Engagement", "Sustained adherence over months & years via Garbh Sanskar daily micro-habits, birth club peer communities, and milestone streaks."),
-        ("03. Family & Caregiver Support", "Caregiver synchronization tools empowering husbands and elders with localized voice/WhatsApp alerts, reducing stress on the mother."),
-        ("04. Healthcare Navigation", "Clear operational next steps across clinic token counters, lab tests, ultrasound schedules, and PHC-to-District referral handoffs."),
-        ("05. Financial & Admin Support", "Simplifies maternity schemes (PMMVY, JSY, JSSK) and hospital documentation so financial paperwork never delays care."),
-        ("06. Longitudinal Journey Progress", "A simple, visual timeline of completed, pending, and upcoming clinical and developmental milestones at a single glance.")
+        ("01. Care Journey Companion", "Stage-Aware Guidance",
+         ["Trimester checklists & delivery bag planner", "Weekly baby development & fruit-size analogies", "42-day postpartum lochia recovery tracking"],
+         "Target: 95% Milestone Awareness"),
+        ("02. Long-Term Care Engagement", "Sustained Multi-Year Adherence",
+         ["Daily 4Q Garbh Sanskar routines (IQ, EQ, PQ, SQ)", "Milestone streak badges & celebration rewards", "Hyperlocal Birth Clubs for peer empathy circles"],
+         "Target: >80% 90-Day Retention"),
+        ("03. Family & Caregiver Support", "Caregiver Synchronization",
+         ["Husband prep checklists & appointment sync", "Vernacular voice nudges for family elders", "Shared emergency transport & blood donor plans"],
+         "Target: 3x Caregiver Participation"),
+        ("04. Healthcare Navigation", "Clinic & Facility Guidance",
+         ["Ultrasound scan window alerts & fasting steps", "PHC-to-District referral handoff documentation", "Pre-filled check-in questions for doctor visits"],
+         "Target: 40% Shorter Clinic Wait Time"),
+        ("05. Financial & Admin Support", "Maternity Scheme Navigator",
+         ["PMMVY (₹5,000 grant) document tracker", "JSY & JSSK cash transfer entitlement guides", "Direct digital integration with ABHA ID"],
+         "Target: 100% Scheme Realization"),
+        ("06. Patient Journey Progress", "Longitudinal Milestone View",
+         ["Digital MCP card sync with cloud backup", "Visual tracking of 7 infant vaccine cohorts", "Verified doctor visit summary archive"],
+         "Target: Zero Lost Health Records")
     ]
 
-    for idx, (p_title, p_desc) in enumerate(pillars):
+    for idx, (p_tag, p_title, p_bullets, p_metric) in enumerate(pillars):
         row = idx // 3
         col = idx % 3
         left = Inches(0.8 + col * 4.0)
-        top = Inches(2.0 + row * 2.5)
-        box = slide4.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left, top, Inches(3.7), Inches(2.2))
+        top = Inches(1.9 + row * 2.6)
+        box = slide4.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left, top, Inches(3.75), Inches(2.45))
         box.fill.solid()
         box.fill.fore_color.rgb = C_CARD_BG
         box.line.color.rgb = C_PRIMARY if idx < 3 else C_SECONDARY
         box.line.width = Pt(1.5)
         tf = box.text_frame
         tf.word_wrap = True
-        tf.margin_top = Inches(0.18)
-        tf.margin_left = tf.margin_right = Inches(0.2)
+        tf.margin_top = Inches(0.12)
+        tf.margin_left = tf.margin_right = Inches(0.15)
+        tf.margin_bottom = Inches(0.1)
         
-        p = tf.paragraphs[0]
-        p.text = p_title
-        p.font.size = Pt(14)
-        p.font.bold = True
-        p.font.color.rgb = C_DARK
+        p0 = tf.paragraphs[0]
+        p0.text = p_tag.upper()
+        p0.font.size = Pt(9.5)
+        p0.font.bold = True
+        p0.font.color.rgb = C_PRIMARY
         
-        p = tf.add_paragraph()
-        p.text = p_desc
-        p.font.size = Pt(11)
-        p.font.color.rgb = C_MUTED
-        p.space_before = Pt(6)
+        p1 = tf.add_paragraph()
+        p1.text = p_title
+        p1.font.size = Pt(13)
+        p1.font.bold = True
+        p1.font.color.rgb = C_DARK
+        p1.space_before = Pt(1)
+        
+        for b in p_bullets:
+            pb = tf.add_paragraph()
+            pb.text = "✓ " + b
+            pb.font.size = Pt(10)
+            pb.font.color.rgb = RGBColor(51, 65, 85)
+            pb.space_before = Pt(2)
+            
+        pm = tf.add_paragraph()
+        pm.text = "📊 " + p_metric
+        pm.font.size = Pt(9.5)
+        pm.font.bold = True
+        pm.font.color.rgb = C_PRIMARY
+        pm.space_before = Pt(4)
 
     # SLIDE 5: APP DESIGN SHOWCASE
     slide5 = prs.slides.add_slide(blank_layout)
@@ -281,36 +309,62 @@ def create_presentation():
     add_header(slide6, "Enterprise Open-Source Architecture: Speed & Reliability")
 
     tech_blocks = [
-        ("Client Layer", "Flutter Mobile App\n(iOS & Android native 60 FPS)\n+ React/TypeScript Web backup\nEncrypted local offline store.", C_PRIMARY),
-        ("Single Unified API", "Python (FastAPI)\nAsync microservices, REST & WebSockets, ABHA ID auth, sub-5ms indexed response times.", C_SECONDARY),
-        ("Agent Orchestration", "LangChain / LangGraph\nvLLM-accelerated open-weights models:\nNVIDIA Nemotron / Llama 3 for sub-second milestone mapping.", RGBColor(124, 58, 237)),
-        ("Multilingual Voice", "Open-source Whisper &\nAI4Bharat IndicTrans2 / Bhashini\nNative support for 10+ Indic languages and voice notes.", RGBColor(13, 148, 136)),
-        ("Data & Audit Ledger", "Enterprise PostgreSQL\nEncrypted row-level security, patient records, and append-only compliance audit trail.", RGBColor(217, 119, 6))
+        ("Client Layer", "Flutter & Web",
+         ["Flutter 3.x native (60–120 FPS)", "Hive local DB for 24/7 offline cache", "Lightweight React clinic backup portal", "<18 MB APK size for rural devices"],
+         "⚡ <50ms UI Latency", C_PRIMARY),
+        ("Unified Backend", "Python FastAPI",
+         ["Async Starlette pipeline (high scale)", "WebSockets for live community sync", "ABHA Gateway tokenized login", "Background Celery immunization crons"],
+         "⚡ 10k+ req/sec Throughput", C_SECONDARY),
+        ("Agent Engine", "vLLM + LangGraph",
+         ["Nemotron & Llama 3 on private cloud", "PagedAttention memory optimization", "LangGraph strict non-clinical paths", "Zero GPU lock-in (standard Linux)"],
+         "⚡ <90ms First-Token Time", RGBColor(124, 58, 237)),
+        ("Speech & NLP", "Indic NLP AI",
+         ["Whisper STT fine-tuned on Indic accents", "AI4Bharat IndicTrans2 (10+ languages)", "Bhashini vernacular TTS voice notes", "15-sec localized WhatsApp audio nudges"],
+         "⚡ 10+ Indic Languages", RGBColor(13, 148, 136)),
+        ("Data & Audit", "PostgreSQL",
+         ["Row-Level Security (RLS) tenant lock", "Immutable append-only audit ledger", "pgvector semantic guidance search", "DPDP Act 2023 & HIPAA compliance"],
+         "⚡ 100% Cryptographic Log", RGBColor(217, 119, 6))
     ]
 
-    for i, (layer, details, col) in enumerate(tech_blocks):
+    for i, (layer_tag, layer_name, bullets, metric, col) in enumerate(tech_blocks):
         left = Inches(0.8 + i * 2.4)
-        box = slide6.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left, Inches(2.1), Inches(2.2), Inches(4.6))
+        box = slide6.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left, Inches(1.9), Inches(2.25), Inches(5.1))
         box.fill.solid()
         box.fill.fore_color.rgb = C_CARD_BG
         box.line.color.rgb = col
         box.line.width = Pt(2)
         tf = box.text_frame
         tf.word_wrap = True
-        tf.margin_top = Inches(0.2)
+        tf.margin_top = Inches(0.15)
         tf.margin_left = tf.margin_right = Inches(0.15)
+        tf.margin_bottom = Inches(0.1)
         
-        p = tf.paragraphs[0]
-        p.text = layer
-        p.font.size = Pt(15)
-        p.font.bold = True
-        p.font.color.rgb = col
+        p0 = tf.paragraphs[0]
+        p0.text = layer_tag.upper()
+        p0.font.size = Pt(9.5)
+        p0.font.bold = True
+        p0.font.color.rgb = col
         
-        p = tf.add_paragraph()
-        p.text = details
-        p.font.size = Pt(11)
-        p.font.color.rgb = C_DARK
-        p.space_before = Pt(12)
+        p1 = tf.add_paragraph()
+        p1.text = layer_name
+        p1.font.size = Pt(14)
+        p1.font.bold = True
+        p1.font.color.rgb = C_DARK
+        p1.space_before = Pt(1)
+        
+        for b in bullets:
+            pb = tf.add_paragraph()
+            pb.text = "• " + b
+            pb.font.size = Pt(10)
+            pb.font.color.rgb = RGBColor(51, 65, 85)
+            pb.space_before = Pt(6)
+            
+        pm = tf.add_paragraph()
+        pm.text = metric
+        pm.font.size = Pt(9.5)
+        pm.font.bold = True
+        pm.font.color.rgb = col
+        pm.space_before = Pt(14)
 
     # SLIDE 7: SAFETY
     slide7 = prs.slides.add_slide(blank_layout)
