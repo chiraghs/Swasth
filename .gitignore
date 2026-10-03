@@ -3,7 +3,7 @@ __pycache__/
 *.pyc
 .DS_Store
 
-# Ignore all images as requested
+# Ignore images generally in root/assets
 *.png
 *.jpg
 *.jpeg
@@ -11,3 +11,12 @@ __pycache__/
 *.svg
 *.webp
 *.ico
+
+# But allow images required for website
+!website/**/*.png
+!website/**/*.jpg
+!website/**/*.jpeg
+!website/**/*.gif
+!website/**/*.svg
+!website/**/*.webp
+!website/**/*.ico
