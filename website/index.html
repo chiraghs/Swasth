@@ -499,6 +499,10 @@
   </footer>
 
   <script>
+    document.querySelectorAll('img').forEach(img => {
+      img.onerror = function() { this.style.display = 'none'; };
+    });
+
     function switchMockup(id) {
       document.querySelectorAll('.tab-btn').forEach((b, i) => {
         b.classList.toggle('active', i === (id - 1));
