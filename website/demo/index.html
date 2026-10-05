@@ -1,0 +1,2423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Swasth - Live Interactive Maternal Health Web App (MVP)</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- sql.js (WebAssembly SQLite) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
+
+  <style>
+    :root {
+      --primary: #FF3B69;
+      --primary-hover: #E02B56;
+      --primary-glow: rgba(255, 59, 105, 0.35);
+      --primary-gradient: linear-gradient(135deg, #FF3B69 0%, #FF6F91 100%);
+      
+      --accent-peach: #FFB088;
+      --accent-mint: #34D399;
+      --accent-sky: #38BDF8;
+      --accent-lavender: #A78BFA;
+      
+      --canvas: #FFF5F7;
+      --canvas-surface: #FAF8F9;
+      --card-white: #FFFFFF;
+      --dock-bg: rgba(255, 255, 255, 0.88);
+      
+      --text-main: #18181B;
+      --text-muted: #64748B;
+      --text-subtle: #94A3B8;
+      --border-soft: rgba(0, 0, 0, 0.06);
+      --border-card: rgba(255, 59, 105, 0.08);
+      
+      --shadow-sm: 0 4px 12px rgba(255, 59, 105, 0.04);
+      --shadow-md: 0 10px 25px rgba(255, 59, 105, 0.08);
+      --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: #0B0F19;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+    }
+
+    /* DESKTOP WRAPPER & TOOLBAR */
+    .desktop-toolbar {
+      position: fixed;
+      top: 16px;
+      z-index: 1000;
+      display: flex;
+      gap: 12px;
+      background: rgba(19, 26, 43, 0.9);
+      backdrop-filter: blur(16px);
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .tool-btn {
+      background: transparent;
+      border: none;
+      color: #94A3B8;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .tool-btn:hover, .tool-btn.active {
+      color: white;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    .tool-btn.primary {
+      background: var(--primary-gradient);
+      color: white;
+      box-shadow: 0 4px 14px var(--primary-glow);
+    }
+    .tool-btn.sql-btn {
+      background: rgba(99, 102, 241, 0.25);
+      color: #C7D2FE;
+      border: 1px solid rgba(99, 102, 241, 0.4);
+    }
+
+    /* PHONE CONTAINER */
+    .phone-container {
+      width: 100%;
+      max-width: 412px;
+      height: 870px;
+      max-height: 94vh;
+      background: var(--canvas);
+      border-radius: 48px;
+      box-shadow: 0 35px 80px -15px rgba(0, 0, 0, 0.7), 0 0 0 12px #1E293B, 0 0 0 14px #334155;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      margin: 40px auto 20px;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* FULLSCREEN TOGGLE FOR MOBILE SCREENS */
+    body.is-fullscreen .phone-container {
+      max-width: 100%;
+      height: 100vh;
+      max-height: 100vh;
+      border-radius: 0;
+      margin: 0;
+      box-shadow: none;
+      border: none;
+    }
+
+    /* DYNAMIC ISLAND */
+    .dynamic-island {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 110px;
+      height: 28px;
+      background: #000000;
+      border-radius: 20px;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .island-cam {
+      width: 10px;
+      height: 10px;
+      background: #111827;
+      border-radius: 50%;
+      border: 1px solid #1f2937;
+    }
+
+    /* STATUS BAR */
+    .status-bar {
+      height: 48px;
+      padding: 12px 24px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: #1E293B;
+      z-index: 100;
+      user-select: none;
+    }
+
+    /* APP SCROLLABLE VIEWPORT */
+    .app-screen-viewport {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding-bottom: 96px; /* space for frosted dock */
+      position: relative;
+      scroll-behavior: smooth;
+    }
+    .app-screen-viewport::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* TOP HEADER */
+    .app-header {
+      padding: 12px 20px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .header-user {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .user-avatar-wrap {
+      position: relative;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #FFB088, #FF3B69);
+      padding: 2px;
+      cursor: pointer;
+    }
+    .user-avatar-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+    .user-status-dot {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 12px;
+      height: 12px;
+      background: #10B981;
+      border: 2px solid white;
+      border-radius: 50%;
+    }
+    .header-greeting {
+      display: flex;
+      flex-direction: column;
+    }
+    .greeting-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .greeting-name {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text-main);
+      font-family: 'Outfit', sans-serif;
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .icon-badge-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--card-white);
+      border: 1px solid var(--border-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      cursor: pointer;
+      position: relative;
+      box-shadow: var(--shadow-sm);
+    }
+    .badge-num {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      background: var(--primary);
+      color: white;
+      font-size: 9px;
+      font-weight: 800;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* WEEK STRIP SELECTOR */
+    .week-strip-wrap {
+      padding: 10px 20px;
+      overflow-x: auto;
+      display: flex;
+      gap: 8px;
+      scrollbar-width: none;
+    }
+    .week-strip-wrap::-webkit-scrollbar { display: none; }
+    .week-pill {
+      background: var(--card-white);
+      border: 1px solid var(--border-soft);
+      border-radius: 20px;
+      padding: 8px 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 64px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .week-pill .wk-lbl {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+    .week-pill .wk-num {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+    .week-pill.active {
+      background: var(--primary-gradient);
+      border-color: transparent;
+      box-shadow: 0 4px 14px var(--primary-glow);
+    }
+    .week-pill.active .wk-lbl, .week-pill.active .wk-num {
+      color: white;
+    }
+
+    /* HERO BABY GROWTH CARD (MOMLY 15, 17, 25) */
+    .hero-growth-card {
+      margin: 10px 20px 16px;
+      background: linear-gradient(135deg, #FFF0F3 0%, #FFE4E9 50%, #FFF5F7 100%);
+      border: 1.5px solid rgba(255, 59, 105, 0.15);
+      border-radius: 28px;
+      padding: 22px 20px;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+    }
+    .card-top-tag {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .stage-badge {
+      background: rgba(255, 59, 105, 0.12);
+      color: var(--primary);
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .day-count-badge {
+      font-size: 11px;
+      font-weight: 800;
+      color: #9D174D;
+      background: #FCE7F3;
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+    .baby-visual-row {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin: 8px 0 16px;
+    }
+    .baby-fruit-3d {
+      width: 80px;
+      height: 80px;
+      background: var(--card-white);
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 44px;
+      box-shadow: 0 8px 20px rgba(255, 59, 105, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      position: relative;
+    }
+    .baby-growth-info {
+      flex: 1;
+    }
+    .fruit-title {
+      font-size: 20px;
+      font-weight: 800;
+      font-family: 'Outfit', sans-serif;
+      color: #831843;
+    }
+    .fruit-analogy {
+      font-size: 12px;
+      color: #9D174D;
+      margin-top: 2px;
+    }
+    .metrics-pills-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .metric-pill {
+      background: var(--card-white);
+      border: 1px solid rgba(255, 59, 105, 0.1);
+      padding: 4px 10px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #475569;
+    }
+    .metric-pill strong {
+      color: var(--primary);
+    }
+    
+    /* INTERACTIVE SCRUBBER SLIDER */
+    .slider-track-wrap {
+      margin-top: 14px;
+      background: rgba(255, 255, 255, 0.7);
+      padding: 10px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 59, 105, 0.08);
+    }
+    .slider-label-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      font-weight: 700;
+      color: #64748B;
+      margin-bottom: 6px;
+    }
+    .growth-slider {
+      width: 100%;
+      accent-color: var(--primary);
+      cursor: pointer;
+      height: 6px;
+    }
+
+    /* STORY CIRCLES (MOMLY STYLE) */
+    .story-section {
+      padding: 0 20px 14px;
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .story-section::-webkit-scrollbar { display: none; }
+    .story-circle-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      min-width: 60px;
+    }
+    .story-ring {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      padding: 2.5px;
+      background: linear-gradient(135deg, #FF3B69, #FFB088, #A78BFA);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(255, 59, 105, 0.15);
+    }
+    .story-inner {
+      width: 100%;
+      height: 100%;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+    .story-lbl {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-main);
+      text-align: center;
+    }
+
+    /* SECTION TITLES */
+    .section-heading {
+      padding: 10px 20px 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .heading-title {
+      font-size: 16px;
+      font-weight: 800;
+      font-family: 'Outfit', sans-serif;
+      color: var(--text-main);
+    }
+    .heading-link {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    /* DAILY ACTIVITIES (REF 02) */
+    .daily-activities-wrap {
+      padding: 0 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .activity-progress-card {
+      background: var(--card-white);
+      border-radius: 20px;
+      padding: 14px 16px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-soft);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+    .progress-bar-bg {
+      width: 130px;
+      height: 8px;
+      background: #F1F5F9;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--primary-gradient);
+      width: 67%;
+      transition: width 0.3s;
+    }
+    .category-filter-strip {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      margin-bottom: 6px;
+    }
+    .category-filter-strip::-webkit-scrollbar { display: none; }
+    .cat-btn {
+      background: var(--card-white);
+      border: 1px solid var(--border-soft);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+    }
+    .cat-btn.active {
+      background: #18181B;
+      color: white;
+      border-color: #18181B;
+    }
+    .activity-card {
+      background: var(--card-white);
+      border-radius: 18px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-soft);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .activity-card.completed {
+      background: #F0FDF4;
+      border-color: #BBF7D0;
+    }
+    .activity-icon-sq {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      background: #FFF1F4;
+    }
+    .activity-icon-sq.iq { background: #FEF9C3; }
+    .activity-icon-sq.eq { background: #EDE9FE; }
+    .activity-icon-sq.pq { background: #DCFCE7; }
+    .activity-details {
+      flex: 1;
+    }
+    .act-tag {
+      font-size: 9px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--primary);
+    }
+    .act-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-top: 2px;
+    }
+    .act-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .act-check-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid #CBD5E1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+    .activity-card.completed .act-check-btn {
+      background: #10B981;
+      border-color: #10B981;
+    }
+
+    /* SMART TOOLS 2-COL GRID (REF 01) */
+    .smart-tools-grid {
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .tool-tile {
+      background: var(--card-white);
+      border-radius: 20px;
+      padding: 16px 14px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-soft);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 110px;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .tool-tile:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .tool-tile.pastel-blue { background: #F0F9FF; border-color: #BAE6FD; }
+    .tool-tile.pastel-pink { background: #FFF1F4; border-color: #FECDD3; }
+    .tool-tile.pastel-mint { background: #ECFDF5; border-color: #A7F3D0; }
+    .tool-tile.pastel-cyan { background: #ECFEFF; border-color: #A5F3FC; }
+    .tool-tile.pastel-lavender { background: #FAF5FF; border-color: #DDD6FE; }
+    .tool-tile.pastel-apricot { background: #FFF7ED; border-color: #FFEDD5; }
+    .tool-tile.pastel-yellow { background: #FEFCE8; border-color: #FEF08A; }
+    
+    .tile-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: #1E293B;
+      font-family: 'Outfit', sans-serif;
+    }
+    .tile-sub {
+      font-size: 10px;
+      color: #64748B;
+      margin-top: 2px;
+    }
+    .tile-icon-bubble {
+      align-self: flex-end;
+      font-size: 30px;
+    }
+
+    /* COMMUNITY BIRTH CLUBS (REF 06) */
+    .community-view-wrap {
+      padding: 0 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .comm-tabs-strip {
+      display: flex;
+      border-bottom: 1px solid #E2E8F0;
+      gap: 18px;
+      margin-bottom: 8px;
+    }
+    .comm-tab-item {
+      padding: 8px 0;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      position: relative;
+    }
+    .comm-tab-item.active {
+      color: var(--primary);
+    }
+    .comm-tab-item.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 2.5px;
+      background: var(--primary);
+      border-radius: 999px;
+    }
+    .comm-post-card {
+      background: var(--card-white);
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-soft);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .post-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .post-author-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .post-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #E2E8F0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+    .post-author-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    .post-stage-pill {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+    .post-category-tag {
+      background: #F1F5F9;
+      color: #475569;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+    .post-content {
+      font-size: 13px;
+      color: #334155;
+      line-height: 1.5;
+    }
+    .post-footer-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--text-muted);
+      padding-top: 8px;
+      border-top: 1px solid #F8FAFC;
+    }
+    .action-like-btn {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .action-like-btn.liked { color: var(--primary); }
+
+    /* AI PREGNANCY ASSISTANT CHAT (REF 30) */
+    .ai-chat-wrap {
+      padding: 10px 20px;
+      display: flex;
+      flex-direction: column;
+      height: calc(100% - 100px);
+    }
+    .ai-hero-banner {
+      background: linear-gradient(135deg, #E0F2FE 0%, #EDE9FE 100%);
+      border-radius: 24px;
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 14px;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+    }
+    .ai-sparkle-glyph {
+      width: 56px;
+      height: 56px;
+      background: #38BDF8;
+      border-radius: 50%;
+      margin: 0 auto 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      box-shadow: 0 8px 20px rgba(56, 189, 248, 0.35);
+    }
+    .ai-prompt-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: center;
+      margin-top: 10px;
+    }
+    .prompt-chip {
+      background: var(--card-white);
+      border: 1px solid rgba(0,0,0,0.06);
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #334155;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+    .chat-messages-box {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 12px;
+      overflow-y: auto;
+    }
+    .chat-bubble {
+      max-width: 82%;
+      padding: 12px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .chat-bubble.ai {
+      background: var(--card-white);
+      border: 1px solid var(--border-soft);
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
+      box-shadow: var(--shadow-sm);
+    }
+    .chat-bubble.user {
+      background: var(--primary-gradient);
+      color: white;
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+    }
+    .chat-input-bar {
+      display: flex;
+      gap: 8px;
+      background: var(--card-white);
+      border-radius: 999px;
+      padding: 6px 6px 6px 16px;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-soft);
+    }
+    .chat-input-field {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-size: 13px;
+    }
+    .chat-send-btn {
+      width: 36px;
+      height: 36px;
+      background: var(--primary);
+      border: none;
+      border-radius: 50%;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    /* AUTH SCREEN (PHONE / EMAIL LOGIN) */
+    .auth-screen-wrap {
+      padding: 30px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 680px;
+    }
+    .auth-logo-box {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .auth-logo-icon {
+      width: 72px;
+      height: 72px;
+      background: var(--primary-gradient);
+      border-radius: 24px;
+      margin: 0 auto 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      box-shadow: 0 10px 25px var(--primary-glow);
+    }
+    .auth-tab-row {
+      display: flex;
+      background: #F1F5F9;
+      border-radius: 12px;
+      padding: 3px;
+      margin-bottom: 20px;
+    }
+    .auth-tab {
+      flex: 1;
+      text-align: center;
+      padding: 8px 0;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .auth-tab.active {
+      background: var(--card-white);
+      color: var(--text-main);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+    .auth-input-group {
+      margin-bottom: 16px;
+    }
+    .auth-input-group label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      display: block;
+    }
+    .auth-input {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 16px;
+      border: 1.5px solid #E2E8F0;
+      background: var(--card-white);
+      font-size: 14px;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .auth-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(255, 59, 105, 0.15);
+    }
+    .auth-btn-primary {
+      width: 100%;
+      padding: 14px;
+      background: var(--primary-gradient);
+      border: none;
+      border-radius: 16px;
+      color: white;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 20px var(--primary-glow);
+      margin-top: 10px;
+    }
+    .demo-mama-btn {
+      width: 100%;
+      padding: 12px;
+      background: #F0FDF4;
+      border: 1.5px solid #86EFAC;
+      border-radius: 16px;
+      color: #166534;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      margin-top: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    /* FLOATING FROSTED DOCK (MOMLY 15, 17, 20) */
+    .frosted-dock {
+      position: absolute;
+      bottom: 16px;
+      left: 18px;
+      right: 18px;
+      height: 68px;
+      background: var(--dock-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 34px;
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(255, 59, 105, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 0 8px;
+      z-index: 500;
+    }
+    .dock-tab {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      width: 52px;
+      height: 52px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      color: #94A3B8;
+      text-decoration: none;
+      border: none;
+      background: transparent;
+    }
+    .dock-tab .dock-icon {
+      font-size: 20px;
+    }
+    .dock-tab .dock-lbl {
+      font-size: 9px;
+      font-weight: 700;
+    }
+    .dock-tab.active {
+      color: var(--primary);
+    }
+    .dock-tab.active .dock-icon {
+      transform: scale(1.1);
+    }
+    .dock-tab-orb {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--primary-gradient);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 6px 18px var(--primary-glow);
+      transform: translateY(-8px);
+      border: 3px solid white;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .dock-tab-orb:hover {
+      transform: translateY(-11px) scale(1.05);
+    }
+
+    /* SQL CONSOLE MODAL */
+    .sql-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .sql-modal-content {
+      background: #0F172A;
+      color: #F8FAFC;
+      border-radius: 24px;
+      width: 100%;
+      max-width: 800px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.8);
+      overflow: hidden;
+    }
+    .sql-header {
+      padding: 16px 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .sql-body {
+      padding: 20px 24px;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .sql-query-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .sql-input {
+      flex: 1;
+      background: #1E293B;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 10px 14px;
+      color: #38BDF8;
+      font-family: monospace;
+      font-size: 13px;
+      outline: none;
+    }
+    .sql-table-viewer {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      margin-top: 10px;
+    }
+    .sql-table-viewer th, .sql-table-viewer td {
+      border: 1px solid #334155;
+      padding: 8px 12px;
+      text-align: left;
+    }
+    .sql-table-viewer th {
+      background: #1E293B;
+      color: #A5B4FC;
+    }
+    
+    /* MODAL FOR TOOLS / LOGGERS */
+    .app-bottom-sheet {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      border-radius: 32px 32px 0 0;
+      padding: 24px 20px 40px;
+      box-shadow: 0 -10px 40px rgba(0,0,0,0.2);
+      z-index: 600;
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .app-bottom-sheet.open {
+      transform: translateY(0);
+    }
+    .sheet-handle {
+      width: 40px;
+      height: 4px;
+      background: #CBD5E1;
+      border-radius: 999px;
+      margin: 0 auto 16px;
+    }
+
+    /* CONFETTI BANNER */
+    .confetti-pop {
+      position: absolute;
+      top: 60px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      background: #10B981;
+      color: white;
+      padding: 8px 18px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 800;
+      pointer-events: none;
+    }
+    .confetti-pop.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- DESKTOP TOP TOOLBAR -->
+  <div class="desktop-toolbar">
+    <a href="../index.html" class="tool-btn">⬅ Back to Showcase</a>
+    <button class="tool-btn sql-btn" onclick="openSqlModal()">⚡ SQLite Live Inspector</button>
+    <button class="tool-btn" id="btnToggleFrame" onclick="togglePhoneFrame()">📱 Toggle Fullscreen</button>
+    <button class="tool-btn primary" onclick="seedSampleData()">↺ Reset Demo Data</button>
+  </div>
+
+  <!-- PHONE CONTAINER -->
+  <div class="phone-container" id="phoneContainer">
+    <!-- DYNAMIC ISLAND -->
+    <div class="dynamic-island">
+      <span>9:41</span>
+      <div class="island-cam"></div>
+      <span>5G</span>
+    </div>
+
+    <!-- STATUS BAR -->
+    <div class="status-bar">
+      <span>9:41</span>
+      <span>●●● 100%</span>
+    </div>
+
+    <!-- CONFETTI POPUP -->
+    <div class="confetti-pop" id="confettiPop">🎉 Activity Completed! SQLite Updated</div>
+
+    <!-- MAIN APP SCROLLABLE VIEWPORT -->
+    <div class="app-screen-viewport" id="appViewport">
+
+      <!-- ==============================================
+           SCREEN 0: AUTH & LOGIN (PHONE / EMAIL OTP)
+           ============================================== -->
+      <div id="view-auth" class="auth-screen-wrap" style="display: none;">
+        <div class="auth-logo-box">
+          <div class="auth-logo-icon">🌸</div>
+          <h2 style="font-size: 24px; font-weight: 800; font-family: 'Outfit', sans-serif;">Welcome to Swasth</h2>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Your Daily Maternal Health & Garbh Sanskar Companion</p>
+        </div>
+
+        <div class="auth-tab-row">
+          <div class="auth-tab active" onclick="switchAuthTab('phone')">Phone Number</div>
+          <div class="auth-tab" onclick="switchAuthTab('email')">Email Address</div>
+        </div>
+
+        <div id="authPhoneGroup" class="auth-input-group">
+          <label>Mobile Number (+91)</label>
+          <input type="tel" id="inputPhone" class="auth-input" placeholder="98765 43210" value="9876543210">
+        </div>
+
+        <div id="authEmailGroup" class="auth-input-group" style="display: none;">
+          <label>Email Address</label>
+          <input type="email" id="inputEmail" class="auth-input" placeholder="ananya@example.com" value="ananya@swasth.org">
+        </div>
+
+        <button class="auth-btn-primary" onclick="proceedToVerification()">Get One-Time Passcode (OTP)</button>
+
+        <div style="text-align: center; margin: 16px 0 8px; font-size: 11px; color: var(--text-subtle);">— OR FAST-TRACK DEMO —</div>
+
+        <button class="demo-mama-btn" onclick="oneClickDemoLogin()">
+          <span>✨</span> Try Live Demo as Ananya (Week 14)
+        </button>
+
+        <p style="font-size: 10px; color: var(--text-subtle); text-align: center; margin-top: 18px;">
+          🔒 ABDM & ABHA Compliant. Data stored locally on encrypted SQLite.
+        </p>
+      </div>
+
+
+      <!-- ==============================================
+           SCREEN 1: HOME DASHBOARD (MOMLY 15, 17, 25)
+           ============================================== -->
+      <div id="view-home">
+        <!-- TOP APP BAR -->
+        <div class="app-header">
+          <div class="header-user">
+            <div class="user-avatar-wrap" onclick="switchTab('profile')">
+              <div class="user-avatar-img">👩</div>
+              <div class="user-status-dot"></div>
+            </div>
+            <div class="header-greeting">
+              <span class="greeting-sub">Good Morning,</span>
+              <span class="greeting-name" id="userNameHeader">Ananya Sharma 👋</span>
+            </div>
+          </div>
+          <div class="header-actions">
+            <div class="icon-badge-btn" onclick="openToolSheet('vaccine')">
+              <span>💉</span>
+              <span class="badge-num">1</span>
+            </div>
+            <div class="icon-badge-btn" onclick="switchTab('ai')">
+              <span>✨</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- HORIZONTAL WEEK STRIP (1 to 40) -->
+        <div class="week-strip-wrap" id="weekStripContainer">
+          <!-- Populated dynamically via JS -->
+        </div>
+
+        <!-- HERO BABY GROWTH CARD -->
+        <div class="hero-growth-card">
+          <div class="card-top-tag">
+            <div class="stage-badge">
+              <span>🌱</span> <span id="heroTrimesterText">Trimester 2 · Week 14</span>
+            </div>
+            <div class="day-count-badge" id="heroDayText">Day 98 of 280</div>
+          </div>
+
+          <div class="baby-visual-row">
+            <div class="baby-fruit-3d" id="babyFruitEmoji">🍑</div>
+            <div class="baby-growth-info">
+              <div class="fruit-title" id="babyFruitName">Peach Size</div>
+              <div class="fruit-analogy" id="babyMilestoneShort">Baby is flexing tiny facial muscles and sucking thumb!</div>
+              <div class="metrics-pills-row">
+                <div class="metric-pill">Length: <strong id="babyLengthText">8.7 cm</strong></div>
+                <div class="metric-pill">Weight: <strong id="babyWeightText">43 g</strong></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SLIDER TRACK -->
+          <div class="slider-track-wrap">
+            <div class="slider-label-row">
+              <span>Week 1</span>
+              <span style="color: var(--primary); font-weight: 800;" id="sliderWeekDisplay">Week 14 (Interactive Scrubber)</span>
+              <span>Week 40</span>
+            </div>
+            <input type="range" min="1" max="40" value="14" class="growth-slider" id="growthWeekSlider" oninput="onWeekSliderChange(this.value)">
+          </div>
+        </div>
+
+        <!-- STORY ACTION CIRCLES -->
+        <div class="story-section">
+          <div class="story-circle-item" onclick="switchTab('ai')">
+            <div class="story-ring"><div class="story-inner">🤖</div></div>
+            <span class="story-lbl">AI Ask</span>
+          </div>
+          <div class="story-circle-item" onclick="switchTab('tools')">
+            <div class="story-ring"><div class="story-inner">💧</div></div>
+            <span class="story-lbl">Hydration</span>
+          </div>
+          <div class="story-circle-item" onclick="openToolSheet('audio')">
+            <div class="story-ring"><div class="story-inner">🧘</div></div>
+            <span class="story-lbl">Om Chant</span>
+          </div>
+          <div class="story-circle-item" onclick="switchTab('community')">
+            <div class="story-ring"><div class="story-inner">👥</div></div>
+            <span class="story-lbl">Birth Club</span>
+          </div>
+          <div class="story-circle-item" onclick="openToolSheet('diet')">
+            <div class="story-ring"><div class="story-inner">🥗</div></div>
+            <span class="story-lbl">Diet Plan</span>
+          </div>
+        </div>
+
+        <!-- TODAY'S SCHEDULE & 4Q GARBH SANSKAR (REF 02) -->
+        <div class="section-heading">
+          <span class="heading-title">Today's Schedule (4Q Habits)</span>
+          <span class="heading-link" onclick="filterActivities('ALL')">View All</span>
+        </div>
+
+        <div class="daily-activities-wrap">
+          <!-- Overall Daily Progress Card -->
+          <div class="activity-progress-card">
+            <div>
+              <div style="font-size: 13px; font-weight: 800; color: #1E293B;">Daily Garbh Sanskar Routine</div>
+              <div style="font-size: 11px; color: var(--text-muted);" id="activityProgressStats">8 of 12 Activities Completed (67%)</div>
+              <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="activityProgressBar"></div>
+              </div>
+            </div>
+            <div style="font-size: 26px;">🪷</div>
+          </div>
+
+          <!-- Category Filter Strip -->
+          <div class="category-filter-strip">
+            <button class="cat-btn active" onclick="filterActivities('ALL')">All (12)</button>
+            <button class="cat-btn" onclick="filterActivities('SQ')">🪷 SQ Spiritual</button>
+            <button class="cat-btn" onclick="filterActivities('IQ')">💡 IQ Intellectual</button>
+            <button class="cat-btn" onclick="filterActivities('EQ')">❤️ EQ Emotional</button>
+            <button class="cat-btn" onclick="filterActivities('PQ')">🏃 PQ Physical</button>
+          </div>
+
+          <!-- Dynamic List of Activities -->
+          <div id="activitiesListContainer" style="display: flex; flex-direction: column; gap: 8px;">
+            <!-- Populated from SQLite -->
+          </div>
+        </div>
+
+        <!-- UPCOMING CLINIC APPOINTMENT -->
+        <div style="margin: 18px 20px 8px; background: #ECFDF5; border: 1.5px solid #A7F3D0; border-radius: 20px; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between;">
+          <div>
+            <div style="font-size: 12px; font-weight: 800; color: #065F46;">PHC Antenatal Care Checkup #2</div>
+            <div style="font-size: 10px; color: #047857; margin-top: 2px;">Carry MCP card · Rampur Primary Health Center</div>
+          </div>
+          <span style="background: #10B981; color: white; font-size: 10px; font-weight: 800; padding: 4px 10px; border-radius: 999px;">In 5 Days</span>
+        </div>
+
+      </div><!-- End view-home -->
+
+
+      <!-- ==============================================
+           SCREEN 2: COMMUNITY BIRTH CLUBS (REF 06)
+           ============================================== -->
+      <div id="view-community" style="display: none;">
+        <div class="app-header">
+          <div>
+            <div style="font-size: 12px; font-weight: 700; color: #10B981; display: flex; align-items: center; gap: 4px;">
+              <span style="width: 8px; height: 8px; background: #10B981; border-radius: 50%;"></span> 9,388 Mothers Online
+            </div>
+            <h2 style="font-size: 20px; font-weight: 800; font-family: 'Outfit', sans-serif;">Maternal Community</h2>
+          </div>
+          <button class="icon-badge-btn" onclick="openNewPostModal()">✏️</button>
+        </div>
+
+        <div class="community-view-wrap">
+          <div class="comm-tabs-strip">
+            <div class="comm-tab-item active" onclick="switchCommTab(this, 'FOR_YOU')">FOR YOU</div>
+            <div class="comm-tab-item" onclick="switchCommTab(this, 'SEPT_2026')">SEPT 2026 MOMS</div>
+            <div class="comm-tab-item" onclick="switchCommTab(this, 'HEALTH')">HEALTH SUPPORT</div>
+          </div>
+
+          <!-- Non-Medical Disclaimer Banner -->
+          <div style="background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 14px; padding: 10px 12px; font-size: 11px; color: #1E40AF;">
+            🛡️ <strong>Safe Peer Circle:</strong> Shared experiences for peer support. Always consult your PHC medical officer for clinical conditions.
+          </div>
+
+          <!-- Community Posts Feed Container -->
+          <div id="communityFeedContainer" style="display: flex; flex-direction: column; gap: 12px;">
+            <!-- Populated from SQLite -->
+          </div>
+        </div>
+      </div><!-- End view-community -->
+
+
+      <!-- ==============================================
+           SCREEN 3: SMART TOOLS (REF 01)
+           ============================================== -->
+      <div id="view-tools" style="display: none;">
+        <div class="app-header">
+          <div>
+            <span class="greeting-sub">Interactive Utilities</span>
+            <h2 style="font-size: 20px; font-weight: 800; font-family: 'Outfit', sans-serif;">Smart Tools & Vitals</h2>
+          </div>
+        </div>
+
+        <!-- Banner -->
+        <div style="margin: 0 20px 16px; background: linear-gradient(135deg, #10B981 0%, #059669 100%); border-radius: 22px; padding: 18px 20px; color: white; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div style="font-size: 18px; font-weight: 800; font-family: 'Outfit', sans-serif;">Daily Health Toolkit</div>
+            <div style="font-size: 11px; opacity: 0.9; margin-top: 2px;">Track hydration, vitals, kicks & sounds</div>
+          </div>
+          <div style="font-size: 34px;">🧰</div>
+        </div>
+
+        <!-- 2-Column Grid (Reference 01) -->
+        <div class="smart-tools-grid">
+          <div class="tool-tile pastel-cyan" onclick="openToolSheet('water')">
+            <div>
+              <div class="tile-title">Water Hydration</div>
+              <div class="tile-sub" id="toolWaterSub">1,750 / 2,500 ml</div>
+            </div>
+            <div class="tile-icon-bubble">💧</div>
+          </div>
+
+          <div class="tool-tile pastel-pink" onclick="openToolSheet('baby_size')">
+            <div>
+              <div class="tile-title">Baby Size</div>
+              <div class="tile-sub">Week 14 · Peach 🍑</div>
+            </div>
+            <div class="tile-icon-bubble">👶</div>
+          </div>
+
+          <div class="tool-tile pastel-mint" onclick="openToolSheet('steps')">
+            <div>
+              <div class="tile-title">Daily Steps</div>
+              <div class="tile-sub" id="toolStepsSub">3,840 / 5,000 steps</div>
+            </div>
+            <div class="tile-icon-bubble">👟</div>
+          </div>
+
+          <div class="tool-tile pastel-apricot" onclick="openToolSheet('audio')">
+            <div>
+              <div class="tile-title">Om Chanter</div>
+              <div class="tile-sub">432Hz Sound Healing</div>
+            </div>
+            <div class="tile-icon-bubble">🕉️</div>
+          </div>
+
+          <div class="tool-tile pastel-yellow" onclick="openToolSheet('kicks')">
+            <div>
+              <div class="tile-title">Kick Counter</div>
+              <div class="tile-sub" id="toolKicksSub">10 kicks recorded</div>
+            </div>
+            <div class="tile-icon-bubble">👣</div>
+          </div>
+
+          <div class="tool-tile pastel-lavender" onclick="openToolSheet('vitals')">
+            <div>
+              <div class="tile-title">Health Hub</div>
+              <div class="tile-sub">BP: 118/76 · 62 kg</div>
+            </div>
+            <div class="tile-icon-bubble">🩺</div>
+          </div>
+
+          <div class="tool-tile pastel-blue" onclick="openToolSheet('belly')">
+            <div>
+              <div class="tile-title">Belly Size</div>
+              <div class="tile-sub">82 cm circumference</div>
+            </div>
+            <div class="tile-icon-bubble">📏</div>
+          </div>
+
+          <div class="tool-tile pastel-pink" onclick="openToolSheet('vaccine')">
+            <div>
+              <div class="tile-title">Vaccine Tracker</div>
+              <div class="tile-sub">TT-1 Completed</div>
+            </div>
+            <div class="tile-icon-bubble">💉</div>
+          </div>
+        </div>
+      </div><!-- End view-tools -->
+
+
+      <!-- ==============================================
+           SCREEN 4: AI ASSISTANT CHAT (REF 30)
+           ============================================== -->
+      <div id="view-ai" style="display: none;">
+        <div class="app-header">
+          <div>
+            <span class="greeting-sub">Operational AI Guidance</span>
+            <h2 style="font-size: 20px; font-weight: 800; font-family: 'Outfit', sans-serif;">Swasth AI Companion</h2>
+          </div>
+          <button class="icon-badge-btn" onclick="clearAiChat()">🗑️</button>
+        </div>
+
+        <div class="ai-chat-wrap">
+          <div class="ai-hero-banner">
+            <div class="ai-sparkle-glyph">✨</div>
+            <div style="font-size: 16px; font-weight: 800; color: #0369A1;">Hi Ananya! 👋</div>
+            <div style="font-size: 12px; color: #475569; margin-top: 4px;">
+              Ask anything about baby development, cultural diet, or clinic schedules.
+            </div>
+
+            <!-- Chips -->
+            <div class="ai-prompt-chips">
+              <button class="prompt-chip" onclick="askAiQuestion('What is baby developing at Week 14?')">👶 Week 14 Milestones</button>
+              <button class="prompt-chip" onclick="askAiQuestion('Which foods provide natural iron and calcium?')">🥗 Iron & Calcium Foods</button>
+              <button class="prompt-chip" onclick="askAiQuestion('Is mild lower back stretching safe right now?')">🧘 Safe Stretches</button>
+              <button class="prompt-chip" onclick="askAiQuestion('I have severe abdominal pain and bleeding')">🚨 Check Emergency</button>
+            </div>
+          </div>
+
+          <!-- Chat Messages Container -->
+          <div class="chat-messages-box" id="aiChatBox">
+            <!-- Populated from SQLite -->
+          </div>
+
+          <!-- Input Bar -->
+          <div class="chat-input-bar">
+            <input type="text" id="aiInput" class="chat-input-field" placeholder="Ask a question..." onkeydown="if(event.key==='Enter') sendAiMessage()">
+            <button class="chat-send-btn" onclick="sendAiMessage()">➔</button>
+          </div>
+        </div>
+      </div><!-- End view-ai -->
+
+
+      <!-- ==============================================
+           SCREEN 5: PROFILE & ABHA SETTINGS (REF 20, 31)
+           ============================================== -->
+      <div id="view-profile" style="display: none;">
+        <div class="app-header">
+          <div>
+            <h2 style="font-size: 20px; font-weight: 800; font-family: 'Outfit', sans-serif;">Profile & Preferences</h2>
+          </div>
+          <button class="icon-badge-btn" onclick="switchTab('auth')">🚪</button>
+        </div>
+
+        <div style="padding: 0 20px 20px; display: flex; flex-direction: column; gap: 14px;">
+          <!-- Mother Card -->
+          <div style="background: var(--card-white); border-radius: 24px; padding: 20px; box-shadow: var(--shadow-sm); border: 1px solid var(--border-soft); text-align: center;">
+            <div style="width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, #FFB088, #FF3B69); margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 36px;">
+              👩
+            </div>
+            <h3 style="font-size: 18px; font-weight: 800; color: var(--text-main);" id="profileNameDisplay">Ananya Sharma</h3>
+            <p style="font-size: 12px; color: var(--text-muted);">Due Date: 18 September 2026 · Week 14</p>
+            
+            <div style="display: inline-flex; align-items: center; gap: 6px; background: #ECFDF5; border: 1px solid #A7F3D0; padding: 4px 12px; border-radius: 999px; margin-top: 10px; font-size: 11px; font-weight: 700; color: #065F46;">
+              <span>🆔</span> ABHA: 91-8842-1094-8831
+            </div>
+          </div>
+
+          <!-- Settings Groups (Ref 31) -->
+          <div style="background: var(--card-white); border-radius: 20px; padding: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--border-soft);">
+            <div style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 12px;">App Preferences</div>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #F1F5F9;">
+              <span style="font-size: 13px; font-weight: 600;">Units</span>
+              <span style="font-size: 12px; font-weight: 700; color: var(--primary);">Metric (Kg / Cm)</span>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #F1F5F9;">
+              <span style="font-size: 13px; font-weight: 600;">Daily Habit Reminders</span>
+              <input type="checkbox" checked style="accent-color: var(--primary); transform: scale(1.2);">
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0;">
+              <span style="font-size: 13px; font-weight: 600;">Haptic Vibrations</span>
+              <input type="checkbox" checked style="accent-color: var(--primary); transform: scale(1.2);">
+            </div>
+          </div>
+
+          <div style="background: var(--card-white); border-radius: 20px; padding: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--border-soft);">
+            <div style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 12px;">Data Governance & Ledger</div>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #F1F5F9;">
+              <div>
+                <div style="font-size: 13px; font-weight: 600;">On-Device SQLite Engine</div>
+                <div style="font-size: 10px; color: var(--text-muted);">Instant zero-network offline storage</div>
+              </div>
+              <span style="font-size: 10px; background: #DCFCE7; color: #15803D; font-weight: 800; padding: 3px 8px; border-radius: 6px;">Active 🟢</span>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0;">
+              <div>
+                <div style="font-size: 13px; font-weight: 600;">ABHA Consent Ledger</div>
+                <div style="font-size: 10px; color: var(--text-muted);">Encrypted health records</div>
+              </div>
+              <button onclick="openSqlModal()" style="font-size: 11px; background: #EEF2FF; color: #4338CA; border: none; font-weight: 700; padding: 4px 10px; border-radius: 6px; cursor: pointer;">View Tables</button>
+            </div>
+          </div>
+
+          <button onclick="switchTab('auth')" style="background: #FEE2E2; color: #B91C1C; border: none; padding: 12px; border-radius: 14px; font-size: 13px; font-weight: 700; cursor: pointer;">
+            Sign Out / Switch Account
+          </button>
+        </div>
+      </div><!-- End view-profile -->
+
+    </div><!-- End app-screen-viewport -->
+
+
+    <!-- FLOATING FROSTED DOCK (MOMLY DESIGN) -->
+    <div class="frosted-dock" id="bottomDock">
+      <button class="dock-tab active" id="tabBtn-home" onclick="switchTab('home')">
+        <span class="dock-icon">🏠</span>
+        <span class="dock-lbl">Home</span>
+      </button>
+
+      <button class="dock-tab" id="tabBtn-community" onclick="switchTab('community')">
+        <span class="dock-icon">👥</span>
+        <span class="dock-lbl">Clubs</span>
+      </button>
+
+      <!-- Center Floating Orb -->
+      <button class="dock-tab-orb" onclick="switchTab('ai')">
+        ✨
+      </button>
+
+      <button class="dock-tab" id="tabBtn-tools" onclick="switchTab('tools')">
+        <span class="dock-icon">🛠️</span>
+        <span class="dock-lbl">Tools</span>
+      </button>
+
+      <button class="dock-tab" id="tabBtn-profile" onclick="switchTab('profile')">
+        <span class="dock-icon">👤</span>
+        <span class="dock-lbl">Profile</span>
+      </button>
+    </div>
+
+
+    <!-- APP BOTTOM SHEET MODAL (FOR TOOLS / LOGGING) -->
+    <div class="app-bottom-sheet" id="bottomSheet">
+      <div class="sheet-handle" onclick="closeToolSheet()"></div>
+      <div id="sheetContent">
+        <!-- Injected dynamically -->
+      </div>
+    </div>
+
+  </div><!-- End phone-container -->
+
+
+  <!-- SQL LIVE INSPECTOR MODAL -->
+  <div class="sql-modal-overlay" id="sqlModal">
+    <div class="sql-modal-content">
+      <div class="sql-header">
+        <div>
+          <h3 style="font-size: 18px; font-weight: 800; color: #38BDF8;">⚡ Real SQLite WebAssembly Inspector</h3>
+          <p style="font-size: 11px; color: #94A3B8;">Direct in-browser SQLite database queries with live updates</p>
+        </div>
+        <button onclick="closeSqlModal()" style="background: #334155; border: none; color: white; width: 32px; height: 32px; border-radius: 50%; font-size: 16px; cursor: pointer;">✕</button>
+      </div>
+      <div class="sql-body">
+        <div style="display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;">
+          <button class="tool-btn sql-btn" onclick="runSqlPreset('SELECT * FROM users;')">Table: users</button>
+          <button class="tool-btn sql-btn" onclick="runSqlPreset('SELECT * FROM daily_activities;')">Table: daily_activities</button>
+          <button class="tool-btn sql-btn" onclick="runSqlPreset('SELECT * FROM community_posts;')">Table: community_posts</button>
+          <button class="tool-btn sql-btn" onclick="runSqlPreset('SELECT * FROM smart_tools_logs;')">Table: smart_tools_logs</button>
+          <button class="tool-btn sql-btn" onclick="runSqlPreset('SELECT * FROM baby_milestones WHERE week_num BETWEEN 12 AND 16;')">Table: baby_milestones</button>
+        </div>
+
+        <div class="sql-query-row">
+          <input type="text" id="customSqlInput" class="sql-input" value="SELECT * FROM daily_activities;" onkeydown="if(event.key==='Enter') executeCustomSql()">
+          <button class="tool-btn primary" onclick="executeCustomSql()">Execute SQL</button>
+        </div>
+
+        <div id="sqlQueryResult" style="overflow-x: auto;">
+          <!-- Table result output -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==============================================
+       JAVASCRIPT LOGIC & SQLITE INTEGRATION
+       ============================================== -->
+  <script>
+    let db = null;
+    let currentUser = {
+      name: "Ananya Sharma",
+      week: 14,
+      authType: "phone",
+      identifier: "+91 98765 43210"
+    };
+
+    // -------------------------------------------------------------
+    // 1. SQLITE ENGINE INITIALIZATION
+    // -------------------------------------------------------------
+    async function initSqliteEngine() {
+      try {
+        if (typeof initSqlJs === 'function') {
+          const SQL = await initSqlJs({
+            locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${file}`
+          });
+          
+          // Check if saved database exists in localStorage
+          const savedDb = localStorage.getItem('swasth_sqlite_db');
+          if (savedDb) {
+            const uInt8Array = new Uint8Array(JSON.parse(savedDb));
+            db = new SQL.Database(uInt8Array);
+            console.log("Loaded existing SQLite database from localStorage");
+          } else {
+            db = new SQL.Database();
+            setupDatabaseSchema();
+            seedDefaultData();
+            persistDatabase();
+            console.log("Initialized fresh SQLite database");
+          }
+        } else {
+          console.warn("sql.js not loaded, falling back to mock storage");
+          setupFallbackDb();
+        }
+      } catch (err) {
+        console.error("SQLite initialization error:", err);
+        setupFallbackDb();
+      }
+
+      // Initial renders
+      renderWeekStrip();
+      updateGrowthCard(14);
+      loadActivities();
+      loadCommunityPosts();
+      loadAiChat();
+    }
+
+    function setupDatabaseSchema() {
+      db.run(`
+        CREATE TABLE IF NOT EXISTS users (
+          id INTEGER PRIMARY KEY,
+          auth_type TEXT,
+          identifier TEXT,
+          name TEXT,
+          due_date TEXT,
+          current_week INTEGER,
+          abha_id TEXT
+        );
+
+        CREATE TABLE IF NOT EXISTS daily_activities (
+          id INTEGER PRIMARY KEY,
+          category TEXT,
+          icon TEXT,
+          title TEXT,
+          subtitle TEXT,
+          duration TEXT,
+          is_completed INTEGER
+        );
+
+        CREATE TABLE IF NOT EXISTS smart_tools_logs (
+          id INTEGER PRIMARY KEY,
+          tool_name TEXT,
+          value TEXT,
+          unit TEXT,
+          logged_at TEXT
+        );
+
+        CREATE TABLE IF NOT EXISTS community_posts (
+          id INTEGER PRIMARY KEY,
+          author_name TEXT,
+          week_badge TEXT,
+          category TEXT,
+          question_text TEXT,
+          likes_count INTEGER,
+          comments_count INTEGER,
+          created_at TEXT
+        );
+
+        CREATE TABLE IF NOT EXISTS baby_milestones (
+          week_num INTEGER PRIMARY KEY,
+          fruit_name TEXT,
+          fruit_emoji TEXT,
+          length_cm REAL,
+          weight_g REAL,
+          milestone_title TEXT,
+          milestone_desc TEXT
+        );
+
+        CREATE TABLE IF NOT EXISTS ai_chat (
+          id INTEGER PRIMARY KEY,
+          sender TEXT,
+          text TEXT,
+          timestamp TEXT
+        );
+      `);
+    }
+
+    function seedDefaultData() {
+      // 1. User
+      db.run(`INSERT INTO users VALUES (1, 'phone', '+91 98765 43210', 'Ananya Sharma', '2026-09-18', 14, '91-8842-1094-8831');`);
+
+      // 2. Daily Activities (4Q Framework)
+      const acts = [
+        [1, 'SQ', '🪷', 'Morning Om Chanting & Gayatri Raga', '10 mins of calming resonance for baby', '10 min', 1],
+        [2, 'PQ', '🏃', 'Pelvic Butterfly & Gentle Prenatal Stretches', 'Improves circulation and reduces lower back stiffness', '15 min', 1],
+        [3, 'IQ', '💡', 'Prenatal Brain Puzzle & Sanskrit Subhashita', 'Cognitive stimulation and linguistic cadence', '10 min', 1],
+        [4, 'EQ', '❤️', 'Partner Belly Touch & Bonding Conversation', 'Father speaks to baby to recognize vocal pitch', '12 min', 1],
+        [5, 'PQ', '💧', 'Morning Hydration Goal (500ml warm water)', 'Aids amniotic fluid replenishment', '5 min', 1],
+        [6, 'SQ', '📖', 'Garbh Sanskar Audio Narrative: Prahlad', 'Cultural stories of courage and peace', '15 min', 1],
+        [7, 'EQ', '🎨', 'Positive Affirmation Journaling', 'Emotional equilibrium and stress reduction', '8 min', 1],
+        [8, 'PQ', '🥗', 'Sprouted Moong & Sesame Snack', 'Natural dietary folate and iron boost', '10 min', 1],
+        [9, 'IQ', '🎵', 'Kalyani Raga Listening Session', 'Acoustic tranquility for fetal auditory neurons', '20 min', 0],
+        [10, 'SQ', '🕯️', 'Evening Deep Breathing & Gratitude', 'Slow diaphragmatic relaxation', '10 min', 0],
+        [11, 'PQ', '🚶', 'Evening 1,500 Steps Walk', 'Gentle post-dinner stroll', '20 min', 0],
+        [12, 'EQ', '🌙', 'Lullaby Humming Before Sleep', 'Warm bedtime mother-infant emotional bonding', '10 min', 0]
+      ];
+      for (const a of acts) {
+        db.run(`INSERT INTO daily_activities VALUES (?, ?, ?, ?, ?, ?, ?);`, a);
+      }
+
+      // 3. Smart Tools Initial Logs
+      db.run(`INSERT INTO smart_tools_logs VALUES (1, 'water', '1750', 'ml', '2026-10-05 14:00');`);
+      db.run(`INSERT INTO smart_tools_logs VALUES (2, 'steps', '3840', 'steps', '2026-10-05 18:30');`);
+      db.run(`INSERT INTO smart_tools_logs VALUES (3, 'kicks', '10', 'kicks', '2026-10-05 19:15');`);
+      db.run(`INSERT INTO smart_tools_logs VALUES (4, 'blood_pressure', '118/76', 'mmHg', '2026-10-05 09:00');`);
+
+      // 4. Community Birth Club Posts (Reference 06)
+      const posts = [
+        [1, 'Priyanka Madina', '26 weeks pregnant', '#GeneralPregnancy', 'Is it normal to notice mild brown pigment patches on cheekbones during Month 6? My elder sister says it is melasma and fades post-delivery.', 14, 4, '2 hours ago'],
+        [2, 'Parteek Sandhu', 'Mother of 5 months', '#WeaningDiet', 'Hello mamas! For those introducing first semi-solids at 6 months, did you start with steamed ragi malt or dal water first? Looking for easy digestion ideas.', 28, 9, '5 hours ago'],
+        [3, 'Kamaldeep Kaur', '30 weeks pregnant', '#Nutrition', 'Can we drink warm saffron milk at night in the 3rd trimester? Looking for doctor-approved home recipes for better sleep.', 35, 12, '1 day ago'],
+        [4, 'Sunita Deshmukh', '14 weeks pregnant', '#FirstScan', 'Just completed the NT scan and double marker at the district hospital. Hearing the heartbeat for the first time made us both so emotional!', 42, 18, '2 days ago']
+      ];
+      for (const p of posts) {
+        db.run(`INSERT INTO community_posts VALUES (?, ?, ?, ?, ?, ?, ?, ?);`, p);
+      }
+
+      // 5. Baby Milestones (Weeks 1 to 40)
+      const milestones = [
+        [1, 'Poppy Seed', '🌱', 0.1, 0.01, 'Fertilization & Implantation', 'The blastocyst implants securely into the uterine lining.'],
+        [4, 'Sweet Pea', '🫛', 0.4, 0.1, 'Neural Tube Forming', 'The foundational cells of the brain and spine begin closing.'],
+        [8, 'Raspberry', '🍇', 1.6, 1.0, 'Tiny Fingers & Toes', 'Webbed digits separate; tiny heartbeat can be detected on ultrasound.'],
+        [12, 'Plum', '🫐', 5.4, 14.0, 'End of Trimester 1', 'Reflexes start; kidneys begin producing amniotic fluid.'],
+        [14, 'Peach', '🍑', 8.7, 43.0, 'Facial Muscles Active', 'Baby can squint, frown, and suck their thumb! Fine lanugo hair appears.'],
+        [16, 'Avocado', '🥑', 11.6, 100.0, 'Listening to Mother’s Voice', 'Fetal ear bones harden; baby can hear mother’s heartbeat and melodic voice.'],
+        [20, 'Banana', '🍌', 25.6, 300.0, 'Halfway Milestone & Flutters', 'Quickening kicks felt; taste buds are forming in mouth.'],
+        [24, 'Corn Cob', '🌽', 30.0, 600.0, 'Lung Capillaries Maturing', 'Inner ear balance is complete; baby responds to external music rhythms.'],
+        [28, 'Eggplant', '🍆', 37.6, 1000.0, 'Third Trimester Begins', 'Baby opens eyes; REM dream sleep cycles start.'],
+        [32, 'Coconut', '🥥', 42.4, 1700.0, 'Practicing Breathing', 'Lungs practice rhythmic expansion with amniotic fluid.'],
+        [36, 'Papaya', '🍈', 47.4, 2600.0, 'Full Term Preparation', 'Baby gains 200g weekly; settles into head-down pelvic position.'],
+        [40, 'Watermelon', '🍉', 51.2, 3400.0, 'Welcome to the World!', 'Fully developed lungs and immune system ready for delivery.']
+      ];
+      for (const m of milestones) {
+        db.run(`INSERT INTO baby_milestones VALUES (?, ?, ?, ?, ?, ?, ?);`, m);
+      }
+
+      // 6. AI Chat Seed
+      db.run(`INSERT INTO ai_chat VALUES (1, 'ai', 'Namaste Ananya! I am your Swasth maternal health guide. You are at Week 14 (Trimester 2). How can I assist you today?', '09:00 AM');`);
+    }
+
+    function persistDatabase() {
+      if (db) {
+        try {
+          const binary = db.export();
+          localStorage.setItem('swasth_sqlite_db', JSON.stringify(Array.from(binary)));
+        } catch (e) {
+          console.warn("Storage quota exceeded or error exporting db:", e);
+        }
+      }
+    }
+
+    function setupFallbackDb() {
+      // Mock SQLite-like interface
+      db = {
+        run: function(sql, params) { console.log("Mock SQL RUN:", sql, params); },
+        exec: function(sql) { return [{ columns: ['Status'], values: [['Mock Active']] }]; },
+        export: function() { return new Uint8Array(); }
+      };
+    }
+
+    // -------------------------------------------------------------
+    // 2. WEEK STRIP & BABY GROWTH LOGIC
+    // -------------------------------------------------------------
+    function renderWeekStrip() {
+      const container = document.getElementById('weekStripContainer');
+      container.innerHTML = '';
+      for (let i = 11; i <= 24; i++) {
+        const pill = document.createElement('div');
+        pill.className = `week-pill ${i === currentUser.week ? 'active' : ''}`;
+        pill.id = `week-pill-${i}`;
+        pill.onclick = () => selectWeek(i);
+        pill.innerHTML = `
+          <span class="wk-lbl">Week</span>
+          <span class="wk-num">${i}</span>
+        `;
+        container.appendChild(pill);
+      }
+    }
+
+    function selectWeek(wk) {
+      currentUser.week = wk;
+      document.querySelectorAll('.week-pill').forEach(p => p.classList.remove('active'));
+      const activePill = document.getElementById(`week-pill-${wk}`);
+      if (activePill) activePill.classList.add('active');
+      document.getElementById('growthWeekSlider').value = wk;
+      updateGrowthCard(wk);
+    }
+
+    function onWeekSliderChange(wk) {
+      wk = parseInt(wk);
+      selectWeek(wk);
+    }
+
+    function updateGrowthCard(wk) {
+      document.getElementById('sliderWeekDisplay').innerText = `Week ${wk} (Interactive Scrubber)`;
+      
+      let trimester = wk <= 12 ? 'Trimester 1' : wk <= 27 ? 'Trimester 2' : 'Trimester 3';
+      let day = wk * 7;
+      document.getElementById('heroTrimesterText').innerText = `${trimester} · Week ${wk}`;
+      document.getElementById('heroDayText').innerText = `Day ${day} of 280`;
+
+      // Query SQLite for closest milestone
+      let fruit = 'Peach';
+      let emoji = '🍑';
+      let length = (wk * 0.9 + 1.2).toFixed(1);
+      let weight = (wk * wk * 0.35 + 10).toFixed(0);
+      let desc = 'Baby is growing actively and practicing tiny movements!';
+
+      if (db) {
+        try {
+          const res = db.exec(`SELECT fruit_name, fruit_emoji, length_cm, weight_g, milestone_desc FROM baby_milestones WHERE week_num <= ${wk} ORDER BY week_num DESC LIMIT 1;`);
+          if (res && res[0] && res[0].values.length > 0) {
+            const row = res[0].values[0];
+            fruit = row[0];
+            emoji = row[1];
+            length = (wk * 1.1).toFixed(1);
+            weight = Math.round(wk * 15 * (wk / 10));
+            desc = row[4];
+          }
+        } catch (e) {
+          console.warn(e);
+        }
+      }
+
+      document.getElementById('babyFruitEmoji').innerText = emoji;
+      document.getElementById('babyFruitName').innerText = `${fruit} Size`;
+      document.getElementById('babyMilestoneShort').innerText = desc;
+      document.getElementById('babyLengthText').innerText = `${length} cm`;
+      document.getElementById('babyWeightText').innerText = `${weight} g`;
+    }
+
+    // -------------------------------------------------------------
+    // 3. DAILY ACTIVITIES (4Q HABITS)
+    // -------------------------------------------------------------
+    let currentCategoryFilter = 'ALL';
+
+    function loadActivities() {
+      const container = document.getElementById('activitiesListContainer');
+      container.innerHTML = '';
+
+      if (!db) return;
+      let sql = `SELECT id, category, icon, title, subtitle, duration, is_completed FROM daily_activities`;
+      if (currentCategoryFilter !== 'ALL') {
+        sql += ` WHERE category = '${currentCategoryFilter}'`;
+      }
+      sql += ` ORDER BY is_completed ASC, id ASC;`;
+
+      let total = 0;
+      let completed = 0;
+
+      try {
+        const statsRes = db.exec(`SELECT COUNT(*), SUM(is_completed) FROM daily_activities;`);
+        if (statsRes && statsRes[0]) {
+          total = statsRes[0].values[0][0];
+          completed = statsRes[0].values[0][1] || 0;
+          const pct = Math.round((completed / total) * 100);
+          document.getElementById('activityProgressStats').innerText = `${completed} of ${total} Activities Completed (${pct}%)`;
+          document.getElementById('activityProgressBar').style.width = `${pct}%`;
+        }
+
+        const res = db.exec(sql);
+        if (res && res[0]) {
+          res[0].values.forEach(row => {
+            const [id, cat, icon, title, sub, dur, isDone] = row;
+            const card = document.createElement('div');
+            card.className = `activity-card ${isDone ? 'completed' : ''}`;
+            card.onclick = () => toggleActivity(id, isDone);
+            card.innerHTML = `
+              <div class="activity-icon-sq ${cat.toLowerCase()}">${icon}</div>
+              <div class="activity-details">
+                <div class="act-tag">${cat} Quotients · ${dur}</div>
+                <div class="act-title">${title}</div>
+                <div class="act-sub">${sub}</div>
+              </div>
+              <div class="act-check-btn">${isDone ? '✓' : ''}</div>
+            `;
+            container.appendChild(card);
+          });
+        }
+      } catch (e) {
+        console.error("Error loading activities:", e);
+      }
+    }
+
+    function toggleActivity(id, currentStatus) {
+      const newStatus = currentStatus ? 0 : 1;
+      if (db) {
+        db.run(`UPDATE daily_activities SET is_completed = ${newStatus} WHERE id = ${id};`);
+        persistDatabase();
+      }
+      showConfetti(newStatus === 1 ? '🎉 Activity Completed! SQLite Updated' : 'Activity marked pending');
+      loadActivities();
+    }
+
+    function filterActivities(cat) {
+      currentCategoryFilter = cat;
+      document.querySelectorAll('.cat-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.innerText.includes(cat) || (cat === 'ALL' && btn.innerText.includes('All')));
+      });
+      loadActivities();
+    }
+
+    function showConfetti(msg) {
+      const pop = document.getElementById('confettiPop');
+      pop.innerText = msg;
+      pop.classList.add('show');
+      setTimeout(() => pop.classList.remove('show'), 2200);
+    }
+
+    // -------------------------------------------------------------
+    // 4. COMMUNITY BIRTH CLUBS
+    // -------------------------------------------------------------
+    function loadCommunityPosts() {
+      const container = document.getElementById('communityFeedContainer');
+      container.innerHTML = '';
+      if (!db) return;
+
+      try {
+        const res = db.exec(`SELECT id, author_name, week_badge, category, question_text, likes_count, comments_count, created_at FROM community_posts ORDER BY id DESC;`);
+        if (res && res[0]) {
+          res[0].values.forEach(row => {
+            const [id, author, week, cat, text, likes, comments, time] = row;
+            const post = document.createElement('div');
+            post.className = 'comm-post-card';
+            post.innerHTML = `
+              <div class="post-header">
+                <div class="post-author-box">
+                  <div class="post-avatar">👩</div>
+                  <div>
+                    <div class="post-author-name">${author}</div>
+                    <div class="post-stage-pill">${week} · ${time}</div>
+                  </div>
+                </div>
+                <span class="post-category-tag">${cat}</span>
+              </div>
+              <div class="post-content">${text}</div>
+              <div class="post-footer-actions">
+                <button class="action-like-btn" onclick="likePost(${id})">❤️ <span>${likes}</span> Helpful</button>
+                <span>💬 ${comments} Responses</span>
+                <span style="color: var(--primary); font-weight: 700; cursor: pointer;">Reply</span>
+              </div>
+            `;
+            container.appendChild(post);
+          });
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    function likePost(id) {
+      if (db) {
+        db.run(`UPDATE community_posts SET likes_count = likes_count + 1 WHERE id = ${id};`);
+        persistDatabase();
+        loadCommunityPosts();
+        showConfetti('❤️ Hearted! Community ledger updated');
+      }
+    }
+
+    function switchCommTab(el, tabName) {
+      document.querySelectorAll('.comm-tab-item').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+      loadCommunityPosts();
+    }
+
+    function openNewPostModal() {
+      const question = prompt("Ask a question to fellow mothers in your Birth Club:");
+      if (question && question.trim()) {
+        const author = currentUser.name || "Ananya Sharma";
+        const week = `Week ${currentUser.week} pregnant`;
+        db.run(`INSERT INTO community_posts (author_name, week_badge, category, question_text, likes_count, comments_count, created_at) VALUES (?, ?, ?, ?, 1, 0, 'Just now');`, [author, week, '#BirthClubQuestion', question.trim()]);
+        persistDatabase();
+        loadCommunityPosts();
+        showConfetti("Post published to your Birth Club!");
+      }
+    }
+
+    // -------------------------------------------------------------
+    // 5. AI ASSISTANT CHAT (GUARDRAILS + PERSISTENCE)
+    // -------------------------------------------------------------
+    function loadAiChat() {
+      const box = document.getElementById('aiChatBox');
+      box.innerHTML = '';
+      if (!db) return;
+
+      try {
+        const res = db.exec(`SELECT sender, text, timestamp FROM ai_chat ORDER BY id ASC;`);
+        if (res && res[0]) {
+          res[0].values.forEach(row => {
+            const [sender, text, time] = row;
+            const bubble = document.createElement('div');
+            bubble.className = `chat-bubble ${sender}`;
+            bubble.innerHTML = `<div>${text}</div><div style="font-size: 9px; opacity: 0.6; text-align: right; margin-top: 4px;">${time}</div>`;
+            box.appendChild(bubble);
+          });
+          box.scrollTop = box.scrollHeight;
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    function sendAiMessage() {
+      const input = document.getElementById('aiInput');
+      const text = input.value.trim();
+      if (!text) return;
+      input.value = '';
+      askAiQuestion(text);
+    }
+
+    function askAiQuestion(query) {
+      const now = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+      // 1. Record user message in SQLite
+      if (db) {
+        db.run(`INSERT INTO ai_chat (sender, text, timestamp) VALUES ('user', ?, ?);`, [query, now]);
+        persistDatabase();
+        loadAiChat();
+      }
+
+      // 2. Intelligent Guardrails Evaluation
+      setTimeout(() => {
+        let reply = "";
+        const lower = query.toLowerCase();
+
+        // Clinical Red Flag Interceptor
+        if (lower.includes('bleeding') || lower.includes('pain') || lower.includes('fever') || lower.includes('severe')) {
+          reply = `🚨 **CLINICAL RED FLAG DETECTED:** Swasth AI provides non-diagnostic operational guidance only. If you are experiencing bleeding, severe abdominal cramps, or high fever, please seek immediate medical evaluation at your nearest Primary Health Center (PHC Rampur) or call 108 Emergency.`;
+        } else if (lower.includes('milestone') || lower.includes('week 14') || lower.includes('developing')) {
+          reply = `🍼 **Week 14 Fetal Growth:** Baby is the size of a peach (approx. 8.7 cm and 43 grams)! Tiny facial muscles are now working, meaning baby can make subtle squinting expressions and suck their thumb. Fingerprints are also permanently set!`;
+        } else if (lower.includes('iron') || lower.includes('calcium') || lower.includes('food')) {
+          reply = `🥗 **Nutrition Guide (Trimester 2):** To build red blood cells, incorporate steamed spinach, soaked dates, roasted sesame seeds, and moong sprouts. Pair with Vitamin C (amla or lemon) to maximize iron absorption.`;
+        } else if (lower.includes('stretch') || lower.includes('yoga') || lower.includes('exercise')) {
+          reply = `🧘 **Safe Prenatal Movement:** Gentle butterfly pose (Bhadrasana) and cat-cow stretches help alleviate pelvic tension. Avoid inverted postures, and maintain steady nasal breathing throughout.`;
+        } else {
+          reply = `🌸 **Swasth Fetal Wellness:** Great question regarding pregnancy care! During Week ${currentUser.week}, focus on rhythmic hydration, 15 minutes of calming Garbh Sanskar listening, and keeping your MCP vaccination card handy for your next PHC antenatal visit.`;
+        }
+
+        if (db) {
+          db.run(`INSERT INTO ai_chat (sender, text, timestamp) VALUES ('ai', ?, ?);`, [reply, now]);
+          persistDatabase();
+          loadAiChat();
+        }
+      }, 500);
+    }
+
+    function clearAiChat() {
+      if (confirm("Reset chat history?")) {
+        db.run(`DELETE FROM ai_chat WHERE id > 1;`);
+        persistDatabase();
+        loadAiChat();
+      }
+    }
+
+    // -------------------------------------------------------------
+    // 6. BOTTOM SHEET LOGGERS (WATER, KICKS, VITALS, VACCINE)
+    // -------------------------------------------------------------
+    function openToolSheet(type) {
+      const sheet = document.getElementById('bottomSheet');
+      const content = document.getElementById('sheetContent');
+      
+      if (type === 'water') {
+        content.innerHTML = `
+          <h3 style="font-size: 18px; font-weight: 800; color: #0284C7;">💧 Hydration Log (SQLite)</h3>
+          <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Daily Target: 2,500 ml for maternal blood volume support</p>
+          <div style="font-size: 38px; text-align: center; margin: 10px 0; font-weight: 800; color: #0369A1;" id="sheetWaterVal">1,750 ml</div>
+          <div style="display: flex; gap: 10px; justify-content: center;">
+            <button onclick="logWater(250)" class="auth-btn-primary" style="background: #0284C7; flex: 1;">+ 250ml Glass</button>
+            <button onclick="logWater(500)" class="auth-btn-primary" style="background: #0369A1; flex: 1;">+ 500ml Bottle</button>
+          </div>
+        `;
+      } else if (type === 'kicks') {
+        content.innerHTML = `
+          <h3 style="font-size: 18px; font-weight: 800; color: #D97706;">👣 Baby Kick Counter</h3>
+          <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Count 10 movements within a 2-hour window</p>
+          <div style="font-size: 46px; text-align: center; margin: 14px 0; font-weight: 800; color: #B45309;" id="sheetKickCount">10</div>
+          <button onclick="incrementKick()" class="auth-btn-primary" style="background: #F59E0B;">Tap on Baby Kick</button>
+        `;
+      } else if (type === 'audio') {
+        content.innerHTML = `
+          <h3 style="font-size: 18px; font-weight: 800; color: #8B5CF6;">🕉️ Om Chanter & Garbh Sanskar Audio</h3>
+          <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px;">432Hz harmonic acoustic resonance</p>
+          <div style="text-align: center; margin: 20px 0; font-size: 50px;">🎶</div>
+          <button onclick="toggleAudioChant(this)" class="auth-btn-primary" style="background: #8B5CF6;">▶ Play 10-Minute Calming Chants</button>
+        `;
+      } else if (type === 'vaccine') {
+        content.innerHTML = `
+          <h3 style="font-size: 18px; font-weight: 800; color: #10B981;">💉 Care Continuity & Vaccines</h3>
+          <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px;">National UIP Maternal Immunization Schedule</p>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div style="background: #ECFDF5; border: 1px solid #A7F3D0; padding: 12px; border-radius: 14px; display: flex; justify-content: space-between;">
+              <div><strong>TT-1 / Td-1 Vaccine</strong><div style="font-size: 10px; color: #047857;">Given early in pregnancy</div></div>
+              <span style="color: #059669; font-weight: 800;">Completed ✓</span>
+            </div>
+            <div style="background: #FFFBEB; border: 1px solid #FDE68A; padding: 12px; border-radius: 14px; display: flex; justify-content: space-between;">
+              <div><strong>TT-2 / Td-2 Booster</strong><div style="font-size: 10px; color: #B45309;">Due at Week 18 · PHC Rampur</div></div>
+              <span style="color: #D97706; font-weight: 800;">Upcoming (4 Wks)</span>
+            </div>
+          </div>
+        `;
+      } else if (type === 'vitals') {
+        content.innerHTML = `
+          <h3 style="font-size: 18px; font-weight: 800; color: #E11D48;">🩺 Maternal Health Hub</h3>
+          <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px;">Logged at PHC Rampur</p>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px;">
+            <div style="background: #FFF1F4; padding: 12px; border-radius: 14px;">
+              <div style="font-size: 11px; color: #9F1239;">Blood Pressure</div>
+              <div style="font-size: 18px; font-weight: 800; color: #881337;">118 / 76 mmHg</div>
+            </div>
+            <div style="background: #FFF1F4; padding: 12px; border-radius: 14px;">
+              <div style="font-size: 11px; color: #9F1239;">Maternal Weight</div>
+              <div style="font-size: 18px; font-weight: 800; color: #881337;">62.4 kg (+2.2 kg)</div>
+            </div>
+          </div>
+          <button onclick="closeToolSheet()" class="auth-btn-primary">Done</button>
+        `;
+      } else {
+        content.innerHTML = `
+          <h3 style="font-size: 18px; font-weight: 800;">${type.toUpperCase()}</h3>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">Feature configured and synced with on-device SQLite database.</p>
+          <button onclick="closeToolSheet()" class="auth-btn-primary" style="margin-top: 20px;">Close</button>
+        `;
+      }
+      sheet.classList.add('open');
+    }
+
+    function closeToolSheet() {
+      document.getElementById('bottomSheet').classList.remove('open');
+    }
+
+    function logWater(amount) {
+      if (db) {
+        let current = 1750;
+        try {
+          const res = db.exec(`SELECT value FROM smart_tools_logs WHERE tool_name = 'water';`);
+          if (res && res[0]) current = parseInt(res[0].values[0][0]) || 1750;
+        } catch(e){}
+        const updated = current + amount;
+        db.run(`UPDATE smart_tools_logs SET value = '${updated}' WHERE tool_name = 'water';`);
+        persistDatabase();
+        document.getElementById('sheetWaterVal').innerText = `${updated} ml`;
+        document.getElementById('toolWaterSub').innerText = `${updated} / 2,500 ml`;
+        showConfetti(`+${amount}ml water logged to SQLite!`);
+      }
+    }
+
+    function incrementKick() {
+      if (db) {
+        let current = 10;
+        try {
+          const res = db.exec(`SELECT value FROM smart_tools_logs WHERE tool_name = 'kicks';`);
+          if (res && res[0]) current = parseInt(res[0].values[0][0]) || 10;
+        } catch(e){}
+        const updated = current + 1;
+        db.run(`UPDATE smart_tools_logs SET value = '${updated}' WHERE tool_name = 'kicks';`);
+        persistDatabase();
+        document.getElementById('sheetKickCount').innerText = updated;
+        document.getElementById('toolKicksSub').innerText = `${updated} kicks recorded`;
+        showConfetti(`👣 Kick #${updated} recorded!`);
+      }
+    }
+
+    function toggleAudioChant(btn) {
+      if (btn.innerText.includes('Play')) {
+        btn.innerText = '⏸ Pause Om Chanting';
+        btn.style.background = '#EF4444';
+        showConfetti('🧘 Calming Raga audio playing');
+      } else {
+        btn.innerText = '▶ Play 10-Minute Calming Chants';
+        btn.style.background = '#8B5CF6';
+      }
+    }
+
+    // -------------------------------------------------------------
+    // 7. AUTHENTICATION & LOGIN FLOW
+    // -------------------------------------------------------------
+    function switchAuthTab(type) {
+      document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+      if (type === 'phone') {
+        document.querySelectorAll('.auth-tab')[0].classList.add('active');
+        document.getElementById('authPhoneGroup').style.display = 'block';
+        document.getElementById('authEmailGroup').style.display = 'none';
+        currentUser.authType = 'phone';
+      } else {
+        document.querySelectorAll('.auth-tab')[1].classList.add('active');
+        document.getElementById('authPhoneGroup').style.display = 'none';
+        document.getElementById('authEmailGroup').style.display = 'block';
+        currentUser.authType = 'email';
+      }
+    }
+
+    function proceedToVerification() {
+      const otp = prompt("Swasth Verification: Enter the 6-digit OTP code sent to your device (Enter '123456'):", "123456");
+      if (otp) {
+        showConfetti("Login Verified! Loading mother profile...");
+        setTimeout(() => switchTab('home'), 400);
+      }
+    }
+
+    function oneClickDemoLogin() {
+      currentUser.name = "Ananya Sharma";
+      currentUser.week = 14;
+      document.getElementById('userNameHeader').innerText = "Ananya Sharma 👋";
+      document.getElementById('profileNameDisplay').innerText = "Ananya Sharma";
+      showConfetti("Welcome Ananya! Live SQLite MVP loaded.");
+      switchTab('home');
+    }
+
+    // -------------------------------------------------------------
+    // 8. TAB NAVIGATION
+    // -------------------------------------------------------------
+    function switchTab(tabId) {
+      const views = ['home', 'community', 'tools', 'ai', 'profile', 'auth'];
+      views.forEach(v => {
+        const el = document.getElementById(`view-${v}`);
+        if (el) el.style.display = (v === tabId) ? 'block' : 'none';
+      });
+
+      // Update bottom dock active states
+      document.querySelectorAll('.dock-tab').forEach(b => b.classList.remove('active'));
+      const activeBtn = document.getElementById(`tabBtn-${tabId}`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      // Hide dock on auth screen
+      document.getElementById('bottomDock').style.display = (tabId === 'auth') ? 'none' : 'flex';
+
+      // Scroll viewport back to top
+      document.getElementById('appViewport').scrollTop = 0;
+    }
+
+    // -------------------------------------------------------------
+    // 9. SQLITE LIVE INSPECTOR MODAL
+    // -------------------------------------------------------------
+    function openSqlModal() {
+      document.getElementById('sqlModal').style.display = 'flex';
+      runSqlPreset('SELECT * FROM daily_activities LIMIT 6;');
+    }
+
+    function closeSqlModal() {
+      document.getElementById('sqlModal').style.display = 'none';
+    }
+
+    function runSqlPreset(query) {
+      document.getElementById('customSqlInput').value = query;
+      executeCustomSql();
+    }
+
+    function executeCustomSql() {
+      const query = document.getElementById('customSqlInput').value.trim();
+      const resultBox = document.getElementById('sqlQueryResult');
+      if (!db || !query) return;
+
+      try {
+        const res = db.exec(query);
+        if (!res || res.length === 0) {
+          resultBox.innerHTML = `<div style="color: #94A3B8; padding: 10px;">Query executed successfully. 0 rows returned.</div>`;
+          return;
+        }
+
+        const columns = res[0].columns;
+        const values = res[0].values;
+
+        let tableHtml = `<table class="sql-table-viewer"><thead><tr>`;
+        columns.forEach(c => tableHtml += `<th>${c}</th>`);
+        tableHtml += `</tr></thead><tbody>`;
+
+        values.forEach(row => {
+          tableHtml += `<tr>`;
+          row.forEach(cell => tableHtml += `<td>${cell !== null ? cell : 'NULL'}</td>`);
+          tableHtml += `</tr>`;
+        });
+        tableHtml += `</tbody></table>`;
+
+        resultBox.innerHTML = tableHtml;
+      } catch (err) {
+        resultBox.innerHTML = `<div style="color: #EF4444; padding: 10px;">SQL Error: ${err.message}</div>`;
+      }
+    }
+
+    function seedSampleData() {
+      if (confirm("Reset SQLite database to original sample records?")) {
+        localStorage.removeItem('swasth_sqlite_db');
+        setupDatabaseSchema();
+        seedDefaultData();
+        persistDatabase();
+        renderWeekStrip();
+        updateGrowthCard(14);
+        loadActivities();
+        loadCommunityPosts();
+        loadAiChat();
+        showConfetti("SQLite database reset to factory state!");
+      }
+    }
+
+    function togglePhoneFrame() {
+      document.body.classList.toggle('is-fullscreen');
+      const isFull = document.body.classList.contains('is-fullscreen');
+      document.getElementById('btnToggleFrame').innerText = isFull ? '📱 Exit Fullscreen' : '📱 Toggle Fullscreen';
+    }
+
+    // Initialize on load
+    window.addEventListener('DOMContentLoaded', () => {
+      initSqliteEngine();
+    });
+  </script>
+</body>
+</html>

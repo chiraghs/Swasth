@@ -231,7 +231,10 @@
       <li><a href="#architecture">Enterprise Stack</a></li>
       <li><a href="#safety">Clinical Safety</a></li>
     </ul>
-    <a href="./deck/Swasth_App_Design_5_Slides.pdf" target="_blank" class="nav-cta">View 5-Slide App Design PDF</a>
+    <div style="display: flex; gap: 12px; align-items: center;">
+      <a href="./app/" target="_blank" class="nav-cta" style="background: linear-gradient(135deg, #FF3B69 0%, #FF6F91 100%);">🚀 Launch Live Web App (MVP)</a>
+      <a href="./deck/Swasth_App_Design_5_Slides.pdf" target="_blank" class="nav-cta" style="background: var(--dark-card); border: 1px solid var(--border-dark);">View Design PDF</a>
+    </div>
   </nav>
 
   <!-- HERO -->
@@ -247,66 +250,21 @@
         Swasth solves the 1,000-day drop-off cliff by blending daily <strong>Garbh Sanskar rituals</strong> and <strong>Hyperlocal Birth Clubs</strong> with automated, multilingual vaccination and healthcare milestone continuity.
       </p>
       <div class="hero-btn-row">
-        <a href="#screens" class="btn-primary">Explore Interactive Design ➔</a>
+        <a href="./app/" target="_blank" class="btn-primary" style="background: linear-gradient(135deg, #FF3B69 0%, #FF6F91 100%); box-shadow: 0 10px 30px rgba(255, 59, 105, 0.4);">
+          🚀 Launch Live App Demo (SQLite MVP) ➔
+        </a>
+        <a href="#screens" class="btn-secondary">Explore Design System</a>
       </div>
     </div>
 
-    <!-- MOCKUP FRAME -->
+    <!-- MOCKUP FRAME (LIVE INTERACTIVE APP) -->
     <div class="interactive-frame-wrap">
-      <div class="phone-mockup">
-        <div class="dynamic-island"></div>
-        <div class="phone-screen" id="appScreenContainer">
-          
-          <!-- Screen 1: 3D Stage & Trimesters -->
-          <div style="padding: 40px 14px 14px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-              <div style="font-size: 14px; font-weight: 800;">Week 15 · Trimester 2</div>
-              <span style="background: #E93B67; color: white; font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 10px;">Day 101</span>
-            </div>
-
-            <div style="background: linear-gradient(135deg, #FDF2F8 0%, #F5F3FF 100%); border-radius: 20px; padding: 18px; text-align: center; border: 1px solid #FBCFE8; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
-              <div style="font-size: 54px; margin-bottom: 4px;">👶</div>
-              <div style="font-size: 18px; font-weight: 800; color: #1E293B;">Baby Size: Apple 🍎</div>
-              <div style="font-size: 11px; color: #64748B; margin-top: 2px;">Length: 10.1 cm · Weight: 70g</div>
-              <div style="display: flex; justify-content: center; gap: 14px; margin-top: 14px;">
-                <div style="background: white; padding: 6px 12px; border-radius: 10px; font-size: 11px; font-weight: 700; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">15 Wk Done</div>
-                <div style="background: white; padding: 6px 12px; border-radius: 10px; font-size: 11px; font-weight: 700; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">25 Wk Left</div>
-              </div>
-            </div>
-
-            <!-- Trimester Bar -->
-            <div style="background: white; border-radius: 14px; padding: 12px; margin-top: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
-              <div style="display: flex; justify-content: space-between; font-size: 10px; font-weight: 700; color: #64748B; margin-bottom: 6px;">
-                <span>12w</span>
-                <span style="color: #E93B67;">Week 15 (Active)</span>
-                <span>28w</span>
-              </div>
-              <div style="height: 6px; background: #E2E8F0; border-radius: 999px; overflow: hidden;">
-                <div style="width: 55%; height: 100%; background: linear-gradient(90deg, #8B5CF6, #E93B67);"></div>
-              </div>
-            </div>
-
-            <!-- Daily Micro-Activity -->
-            <div style="background: white; border-radius: 14px; padding: 12px; margin-top: 10px; display: flex; align-items: center; gap: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
-              <div style="width: 40px; height: 40px; border-radius: 10px; background: #FFF1F4; display: flex; align-items: center; justify-content: center; font-size: 18px;">🪷</div>
-              <div style="flex: 1;">
-                <div style="font-size: 9px; font-weight: 800; color: #E93B67; text-transform: uppercase;">Garbh Sanskar Daily</div>
-                <div style="font-size: 12px; font-weight: 700; color: #1E293B;">Baby Bonding & Flute Raga</div>
-              </div>
-              <span style="font-size: 12px; color: #E93B67; font-weight: 800;">▶</span>
-            </div>
-
-            <!-- Next Clinic Appointment -->
-            <div style="background: #ECFDF5; border: 1px solid #A7F3D0; border-radius: 14px; padding: 10px 12px; margin-top: 10px; display: flex; align-items: center; justify-content: space-between;">
-              <div>
-                <div style="font-size: 11px; font-weight: 800; color: #065F46;">Ultrasound Scan Slot</div>
-                <div style="font-size: 9px; color: #047857;">PHC Rampur · Carry MCP Card</div>
-              </div>
-              <span style="background: #10B981; color: white; font-size: 9px; font-weight: 800; padding: 3px 8px; border-radius: 6px;">In 5 Days</span>
-            </div>
-
-          </div>
-        </div>
+      <div style="position: absolute; top: -34px; right: 20px; font-size: 11px; font-weight: 700; color: #38BDF8; display: flex; align-items: center; gap: 6px;">
+        <span style="width: 8px; height: 8px; background: #38BDF8; border-radius: 50%; box-shadow: 0 0 8px #38BDF8;"></span>
+        Interactive Live Preview (Tap below!)
+      </div>
+      <div class="phone-mockup" style="height: 760px; box-shadow: 0 40px 100px -20px rgba(0,0,0,0.9), 0 0 0 10px #1E293B, 0 0 0 12px #334155;">
+        <iframe src="./app/index.html" style="width: 100%; height: 100%; border: none; border-radius: 44px;" title="Swasth Live App Demo"></iframe>
       </div>
     </div>
   </section>
