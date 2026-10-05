@@ -3,14 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Swasth - Live Interactive Maternal Health Web App (MVP)</title>
+  <title>Swasth - Live Interactive Maternal Health Web App</title>
   
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   
-  <!-- sql.js (WebAssembly SQLite) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
 
   <style>
@@ -28,17 +26,21 @@
       --canvas: #FFF5F7;
       --canvas-surface: #FAF8F9;
       --card-white: #FFFFFF;
-      --dock-bg: rgba(255, 255, 255, 0.88);
+      
+      /* Navigation Pill Colors */
+      --nav-bg: #FFFFFF;
+      --nav-text-idle: #881337;
+      --nav-stroke-idle: #9F1239;
+      --nav-active: #FF3B69;
       
       --text-main: #18181B;
       --text-muted: #64748B;
       --text-subtle: #94A3B8;
       --border-soft: rgba(0, 0, 0, 0.06);
-      --border-card: rgba(255, 59, 105, 0.08);
       
       --shadow-sm: 0 4px 12px rgba(255, 59, 105, 0.04);
       --shadow-md: 0 10px 25px rgba(255, 59, 105, 0.08);
-      --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.08);
+      --shadow-dock: 0 14px 34px rgba(0, 0, 0, 0.1), 0 2px 10px rgba(0, 0, 0, 0.04);
     }
 
     * {
@@ -60,7 +62,7 @@
       overflow-x: hidden;
     }
 
-    /* DESKTOP WRAPPER & TOOLBAR */
+    /* DESKTOP TOOLBAR */
     .desktop-toolbar {
       position: fixed;
       top: 16px;
@@ -87,6 +89,7 @@
       align-items: center;
       gap: 6px;
       transition: all 0.2s;
+      text-decoration: none;
     }
     .tool-btn:hover, .tool-btn.active {
       color: white;
@@ -120,7 +123,6 @@
       transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    /* FULLSCREEN TOGGLE FOR MOBILE SCREENS */
     body.is-fullscreen .phone-container {
       max-width: 100%;
       height: 100vh;
@@ -177,13 +179,11 @@
       flex: 1;
       overflow-y: auto;
       overflow-x: hidden;
-      padding-bottom: 96px; /* space for frosted dock */
+      padding-bottom: 100px; /* space for pill dock */
       position: relative;
       scroll-behavior: smooth;
     }
-    .app-screen-viewport::-webkit-scrollbar {
-      display: none;
-    }
+    .app-screen-viewport::-webkit-scrollbar { display: none; }
 
     /* TOP HEADER */
     .app-header {
@@ -199,22 +199,21 @@
     }
     .user-avatar-wrap {
       position: relative;
-      width: 44px;
-      height: 44px;
+      width: 46px;
+      height: 46px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #FFB088, #FF3B69);
-      padding: 2px;
+      background: linear-gradient(135deg, #FF3B69, #FFB088);
+      padding: 2.5px;
       cursor: pointer;
+      box-shadow: 0 4px 12px rgba(255, 59, 105, 0.2);
     }
     .user-avatar-img {
       width: 100%;
       height: 100%;
       border-radius: 50%;
-      background: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
+      object-fit: cover;
+      border: 1.5px solid white;
+      display: block;
     }
     .user-status-dot {
       position: absolute;
@@ -247,38 +246,38 @@
       gap: 8px;
     }
     .icon-badge-btn {
-      width: 38px;
-      height: 38px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
       background: var(--card-white);
       border: 1px solid var(--border-soft);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 16px;
+      color: #475569;
       cursor: pointer;
       position: relative;
       box-shadow: var(--shadow-sm);
+      transition: all 0.2s;
     }
-    .badge-num {
+    .icon-badge-btn:hover {
+      color: var(--primary);
+      border-color: rgba(255, 59, 105, 0.3);
+    }
+    .badge-dot {
       position: absolute;
-      top: -2px;
-      right: -2px;
+      top: 9px;
+      right: 9px;
       background: var(--primary);
-      color: white;
-      font-size: 9px;
-      font-weight: 800;
-      width: 16px;
-      height: 16px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      border: 1.5px solid white;
     }
 
     /* WEEK STRIP SELECTOR */
     .week-strip-wrap {
-      padding: 10px 20px;
+      padding: 8px 20px 12px;
       overflow-x: auto;
       display: flex;
       gap: 8px;
@@ -288,7 +287,7 @@
     .week-pill {
       background: var(--card-white);
       border: 1px solid var(--border-soft);
-      border-radius: 20px;
+      border-radius: 18px;
       padding: 8px 14px;
       display: flex;
       flex-direction: column;
@@ -313,17 +312,15 @@
       border-color: transparent;
       box-shadow: 0 4px 14px var(--primary-glow);
     }
-    .week-pill.active .wk-lbl, .week-pill.active .wk-num {
-      color: white;
-    }
+    .week-pill.active .wk-lbl, .week-pill.active .wk-num { color: white; }
 
-    /* HERO BABY GROWTH CARD (SWASTH 15, 17, 25) */
+    /* HERO BABY GROWTH CARD */
     .hero-growth-card {
-      margin: 10px 20px 16px;
+      margin: 4px 20px 16px;
       background: linear-gradient(135deg, #FFF0F3 0%, #FFE4E9 50%, #FFF5F7 100%);
       border: 1.5px solid rgba(255, 59, 105, 0.15);
       border-radius: 28px;
-      padding: 22px 20px;
+      padding: 20px;
       box-shadow: var(--shadow-md);
       position: relative;
       overflow: hidden;
@@ -343,7 +340,7 @@
       border-radius: 999px;
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
     }
     .day-count-badge {
       font-size: 11px;
@@ -356,27 +353,24 @@
     .baby-visual-row {
       display: flex;
       align-items: center;
-      gap: 18px;
+      gap: 16px;
       margin: 8px 0 16px;
     }
     .baby-fruit-3d {
-      width: 80px;
-      height: 80px;
+      width: 76px;
+      height: 76px;
       background: var(--card-white);
-      border-radius: 24px;
+      border-radius: 22px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 44px;
       box-shadow: 0 8px 20px rgba(255, 59, 105, 0.12);
       border: 1px solid rgba(255, 255, 255, 0.8);
-      position: relative;
+      color: var(--primary);
     }
-    .baby-growth-info {
-      flex: 1;
-    }
+    .baby-growth-info { flex: 1; }
     .fruit-title {
-      font-size: 20px;
+      font-size: 19px;
       font-weight: 800;
       font-family: 'Outfit', sans-serif;
       color: #831843;
@@ -385,6 +379,7 @@
       font-size: 12px;
       color: #9D174D;
       margin-top: 2px;
+      line-height: 1.4;
     }
     .metrics-pills-row {
       display: flex;
@@ -400,14 +395,11 @@
       font-weight: 700;
       color: #475569;
     }
-    .metric-pill strong {
-      color: var(--primary);
-    }
-    
-    /* INTERACTIVE SCRUBBER SLIDER */
+    .metric-pill strong { color: var(--primary); }
+
     .slider-track-wrap {
       margin-top: 14px;
-      background: rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.75);
       padding: 10px 14px;
       border-radius: 16px;
       border: 1px solid rgba(255, 59, 105, 0.08);
@@ -427,7 +419,7 @@
       height: 6px;
     }
 
-    /* STORY CIRCLES (SWASTH STYLE) */
+    /* STORY CIRCLES */
     .story-section {
       padding: 0 20px 14px;
       display: flex;
@@ -440,7 +432,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
       cursor: pointer;
       min-width: 60px;
     }
@@ -463,7 +455,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
+      color: #475569;
     }
     .story-lbl {
       font-size: 10px;
@@ -472,7 +464,7 @@
       text-align: center;
     }
 
-    /* SECTION TITLES */
+    /* SECTION HEADING */
     .section-heading {
       padding: 10px 20px 8px;
       display: flex;
@@ -493,7 +485,7 @@
       cursor: pointer;
     }
 
-    /* DAILY ACTIVITIES (REF 02) */
+    /* DAILY ACTIVITIES */
     .daily-activities-wrap {
       padding: 0 20px;
       display: flex;
@@ -536,7 +528,7 @@
     .cat-btn {
       background: var(--card-white);
       border: 1px solid var(--border-soft);
-      padding: 6px 12px;
+      padding: 6px 14px;
       border-radius: 999px;
       font-size: 11px;
       font-weight: 700;
@@ -544,8 +536,9 @@
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
       white-space: nowrap;
+      transition: all 0.2s;
     }
     .cat-btn.active {
       background: #18181B;
@@ -568,22 +561,21 @@
       background: #F0FDF4;
       border-color: #BBF7D0;
     }
-    .activity-icon-sq {
+    .act-icon-box {
       width: 42px;
       height: 42px;
       border-radius: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
+      color: var(--primary);
       background: #FFF1F4;
     }
-    .activity-icon-sq.iq { background: #FEF9C3; }
-    .activity-icon-sq.eq { background: #EDE9FE; }
-    .activity-icon-sq.pq { background: #DCFCE7; }
-    .activity-details {
-      flex: 1;
-    }
+    .act-icon-box.iq { background: #FEF9C3; color: #CA8A04; }
+    .act-icon-box.eq { background: #EDE9FE; color: #7C3AED; }
+    .act-icon-box.pq { background: #DCFCE7; color: #16A34A; }
+
+    .activity-details { flex: 1; }
     .act-tag {
       font-size: 9px;
       font-weight: 800;
@@ -610,7 +602,6 @@
       align-items: center;
       justify-content: center;
       color: white;
-      font-size: 14px;
       transition: all 0.2s;
     }
     .activity-card.completed .act-check-btn {
@@ -618,7 +609,7 @@
       border-color: #10B981;
     }
 
-    /* SMART TOOLS 2-COL GRID (REF 01) */
+    /* SMART TOOLS 2-COL GRID */
     .smart-tools-grid {
       padding: 0 20px;
       display: grid;
@@ -634,11 +625,10 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      height: 110px;
+      height: 112px;
       cursor: pointer;
       transition: all 0.2s;
       position: relative;
-      overflow: hidden;
     }
     .tool-tile:hover {
       transform: translateY(-2px);
@@ -663,12 +653,12 @@
       color: #64748B;
       margin-top: 2px;
     }
-    .tile-icon-bubble {
+    .tile-icon-svg {
       align-self: flex-end;
-      font-size: 30px;
+      color: var(--primary);
     }
 
-    /* COMMUNITY BIRTH CLUBS (REF 06) */
+    /* COMMUNITY VIEW */
     .community-view-wrap {
       padding: 0 20px;
       display: flex;
@@ -689,9 +679,7 @@
       cursor: pointer;
       position: relative;
     }
-    .comm-tab-item.active {
-      color: var(--primary);
-    }
+    .comm-tab-item.active { color: var(--primary); }
     .comm-tab-item.active::after {
       content: '';
       position: absolute;
@@ -722,15 +710,15 @@
       align-items: center;
       gap: 10px;
     }
-    .post-avatar {
+    .post-avatar-circle {
       width: 36px;
       height: 36px;
       border-radius: 50%;
-      background: #E2E8F0;
+      background: #FFF1F4;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 16px;
+      color: var(--primary);
     }
     .post-author-name {
       font-size: 13px;
@@ -766,7 +754,7 @@
     .action-like-btn {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
       background: transparent;
       border: none;
       color: var(--text-muted);
@@ -775,7 +763,7 @@
     }
     .action-like-btn.liked { color: var(--primary); }
 
-    /* AI PREGNANCY ASSISTANT CHAT (REF 30) */
+    /* AI CHAT */
     .ai-chat-wrap {
       padding: 10px 20px;
       display: flex;
@@ -783,36 +771,28 @@
       height: calc(100% - 100px);
     }
     .ai-hero-banner {
-      background: linear-gradient(135deg, #E0F2FE 0%, #EDE9FE 100%);
+      background: linear-gradient(135deg, #FFF1F4 0%, #EDE9FE 100%);
       border-radius: 24px;
       padding: 20px;
       text-align: center;
       margin-bottom: 14px;
-      border: 1px solid rgba(56, 189, 248, 0.2);
+      border: 1px solid rgba(255, 59, 105, 0.15);
     }
-    .ai-sparkle-glyph {
-      width: 56px;
-      height: 56px;
-      background: #38BDF8;
-      border-radius: 50%;
-      margin: 0 auto 8px;
+    .ai-logo-badge {
+      width: 58px;
+      height: 58px;
+      border-radius: 20px;
+      background: var(--primary-gradient);
+      margin: 0 auto 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 28px;
-      box-shadow: 0 8px 20px rgba(56, 189, 248, 0.35);
-    }
-    .ai-prompt-chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      justify-content: center;
-      margin-top: 10px;
+      box-shadow: 0 8px 24px var(--primary-glow);
     }
     .prompt-chip {
       background: var(--card-white);
       border: 1px solid rgba(0,0,0,0.06);
-      padding: 5px 12px;
+      padding: 6px 14px;
       border-radius: 999px;
       font-size: 11px;
       font-weight: 700;
@@ -873,11 +853,10 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 14px;
       cursor: pointer;
     }
 
-    /* AUTH SCREEN (PHONE / EMAIL LOGIN) */
+    /* AUTH SCREEN */
     .auth-screen-wrap {
       padding: 30px 24px;
       display: flex;
@@ -885,20 +864,16 @@
       justify-content: center;
       min-height: 680px;
     }
-    .auth-logo-box {
-      text-align: center;
-      margin-bottom: 28px;
-    }
+    .auth-logo-box { text-align: center; margin-bottom: 28px; }
     .auth-logo-icon {
-      width: 72px;
-      height: 72px;
+      width: 68px;
+      height: 68px;
+      border-radius: 22px;
       background: var(--primary-gradient);
-      border-radius: 24px;
       margin: 0 auto 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 36px;
       box-shadow: 0 10px 25px var(--primary-glow);
     }
     .auth-tab-row {
@@ -923,17 +898,6 @@
       color: var(--text-main);
       box-shadow: 0 2px 6px rgba(0,0,0,0.06);
     }
-    .auth-input-group {
-      margin-bottom: 16px;
-    }
-    .auth-input-group label {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      margin-bottom: 6px;
-      display: block;
-    }
     .auth-input {
       width: 100%;
       padding: 12px 16px;
@@ -942,11 +906,6 @@
       background: var(--card-white);
       font-size: 14px;
       outline: none;
-      transition: all 0.2s;
-    }
-    .auth-input:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(255, 59, 105, 0.15);
     }
     .auth-btn-primary {
       width: 100%;
@@ -960,6 +919,10 @@
       cursor: pointer;
       box-shadow: 0 8px 20px var(--primary-glow);
       margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
     }
     .demo-mama-btn {
       width: 100%;
@@ -975,78 +938,98 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
+      gap: 8px;
     }
 
-    /* FLOATING FROSTED DOCK (SWASTH 15, 17, 20) */
-    .frosted-dock {
+    /* ========================================================
+       NAVIGATION DOCK (MATCHING REFERENCE media_1791232095554)
+       ======================================================== */
+    .reference-nav-dock {
       position: absolute;
-      bottom: 16px;
-      left: 18px;
-      right: 18px;
-      height: 68px;
-      background: var(--dock-bg);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-radius: 34px;
-      border: 1px solid rgba(255, 255, 255, 0.8);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(255, 59, 105, 0.08);
+      bottom: 14px;
+      left: 16px;
+      right: 16px;
+      height: 72px;
+      background: var(--nav-bg);
+      border-radius: 38px;
+      box-shadow: var(--shadow-dock);
       display: flex;
       align-items: center;
-      justify-content: space-around;
-      padding: 0 8px;
+      justify-content: space-between;
+      padding: 0 14px;
       z-index: 500;
+      border: 1px solid rgba(0, 0, 0, 0.04);
     }
-    .dock-tab {
+    .ref-nav-tab {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 2px;
-      width: 52px;
-      height: 52px;
-      border-radius: 20px;
-      cursor: pointer;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-      color: #94A3B8;
-      text-decoration: none;
+      gap: 4px;
+      width: 54px;
+      height: 60px;
       border: none;
       background: transparent;
+      cursor: pointer;
+      color: var(--nav-stroke-idle);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .dock-tab .dock-icon {
-      font-size: 20px;
-    }
-    .dock-tab .dock-lbl {
-      font-size: 9px;
-      font-weight: 700;
-    }
-    .dock-tab.active {
-      color: var(--primary);
-    }
-    .dock-tab.active .dock-icon {
-      transform: scale(1.1);
-    }
-    .dock-tab-orb {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      background: var(--primary-gradient);
-      color: white;
+    .ref-nav-tab .tab-icon-wrap {
+      width: 24px;
+      height: 24px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 22px;
-      box-shadow: 0 6px 18px var(--primary-glow);
-      transform: translateY(-8px);
-      border: 3px solid white;
-      cursor: pointer;
-      transition: transform 0.2s;
+      stroke: var(--nav-stroke-idle);
     }
-    .dock-tab-orb:hover {
-      transform: translateY(-11px) scale(1.05);
+    .ref-nav-tab .tab-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--nav-text-idle);
+    }
+    .ref-nav-tab.active .tab-icon-wrap {
+      stroke: var(--nav-active);
+      color: var(--nav-active);
+      transform: translateY(-1px);
+    }
+    .ref-nav-tab.active .tab-label {
+      color: var(--nav-active);
+      font-weight: 800;
+    }
+    
+    /* Center Elevated Circular Button (Like Reference) */
+    .ref-nav-center-wrap {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transform: translateY(-8px);
+    }
+    .ref-center-circle-btn {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #FF3B69 0%, #FF5E8A 100%);
+      border: 3.5px solid #FFFFFF;
+      box-shadow: 0 8px 22px rgba(255, 59, 105, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .ref-center-circle-btn:hover {
+      transform: scale(1.05);
+    }
+    .ref-center-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--nav-active);
+      margin-top: 3px;
     }
 
-    /* SQL CONSOLE MODAL */
+    /* SQL MODAL */
     .sql-modal-overlay {
       position: fixed;
       inset: 0;
@@ -1078,16 +1061,8 @@
       justify-content: space-between;
       align-items: center;
     }
-    .sql-body {
-      padding: 20px 24px;
-      overflow-y: auto;
-      flex: 1;
-    }
-    .sql-query-row {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
+    .sql-body { padding: 20px 24px; overflow-y: auto; flex: 1; }
+    .sql-query-row { display: flex; gap: 10px; margin-bottom: 16px; }
     .sql-input {
       flex: 1;
       background: #1E293B;
@@ -1110,12 +1085,9 @@
       padding: 8px 12px;
       text-align: left;
     }
-    .sql-table-viewer th {
-      background: #1E293B;
-      color: #A5B4FC;
-    }
-    
-    /* MODAL FOR TOOLS / LOGGERS */
+    .sql-table-viewer th { background: #1E293B; color: #A5B4FC; }
+
+    /* BOTTOM SHEET */
     .app-bottom-sheet {
       position: absolute;
       bottom: 0;
@@ -1129,18 +1101,16 @@
       transform: translateY(100%);
       transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .app-bottom-sheet.open {
-      transform: translateY(0);
-    }
+    .app-bottom-sheet.open { transform: translateY(0); }
     .sheet-handle {
       width: 40px;
       height: 4px;
       background: #CBD5E1;
       border-radius: 999px;
       margin: 0 auto 16px;
+      cursor: pointer;
     }
 
-    /* CONFETTI BANNER */
     .confetti-pop {
       position: absolute;
       top: 60px;
@@ -1168,29 +1138,38 @@
 
   <!-- DESKTOP TOP TOOLBAR -->
   <div class="desktop-toolbar">
-    <a href="../index.html" class="tool-btn">⬅ Back to Showcase</a>
-    <button class="tool-btn sql-btn" onclick="openSqlModal()">⚡ SQLite Live Inspector</button>
-    <button class="tool-btn" id="btnToggleFrame" onclick="togglePhoneFrame()">📱 Toggle Fullscreen</button>
-    <button class="tool-btn primary" onclick="seedSampleData()">↺ Reset Demo Data</button>
+    <a href="../index.html" class="tool-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Back to Showcase
+    </a>
+    <button class="tool-btn sql-btn" onclick="openSqlModal()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+      SQLite Live Inspector
+    </button>
+    <button class="tool-btn" id="btnToggleFrame" onclick="togglePhoneFrame()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="3"/><line x1="12" y1="18" x2="12" y2="18"/></svg>
+      Toggle Fullscreen
+    </button>
+    <button class="tool-btn primary" onclick="seedSampleData()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+      Reset Demo Data
+    </button>
   </div>
 
   <!-- PHONE CONTAINER -->
   <div class="phone-container" id="phoneContainer">
-    <!-- DYNAMIC ISLAND -->
     <div class="dynamic-island">
       <span>9:41</span>
       <div class="island-cam"></div>
       <span>5G</span>
     </div>
 
-    <!-- STATUS BAR -->
     <div class="status-bar">
       <span>9:41</span>
-      <span>●●● 100%</span>
+      <span>100%</span>
     </div>
 
-    <!-- CONFETTI POPUP -->
-    <div class="confetti-pop" id="confettiPop">🎉 Activity Completed! SQLite Updated</div>
+    <div class="confetti-pop" id="confettiPop">Activity Completed! SQLite Updated</div>
 
     <!-- MAIN APP SCROLLABLE VIEWPORT -->
     <div class="app-screen-viewport" id="appViewport">
@@ -1200,7 +1179,14 @@
            ============================================== -->
       <div id="view-auth" class="auth-screen-wrap" style="display: none;">
         <div class="auth-logo-box">
-          <div class="auth-logo-icon">🌸</div>
+          <div class="auth-logo-icon">
+            <svg viewBox="0 0 100 100" fill="none" style="width: 42px; height: 42px;">
+              <path d="M50 82 C32 82 18 66 18 50 C18 34 28 24 38 20 C34 32 37 46 45 56 C47 58 50 64 50 82 Z" fill="#FFFFFF"/>
+              <path d="M50 82 C68 82 82 66 82 50 C82 34 72 24 62 20 C66 32 63 46 55 56 C53 58 50 64 50 82 Z" fill="#FFE4E9"/>
+              <path d="M50 22 C42 36 42 50 50 66 C58 50 58 36 50 22 Z" fill="#FFFFFF"/>
+              <circle cx="50" cy="44" r="5" fill="#FF3B69"/>
+            </svg>
+          </div>
           <h2 style="font-size: 24px; font-weight: 800; font-family: 'Outfit', sans-serif;">Welcome to Swasth</h2>
           <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Your Daily Maternal Health & Garbh Sanskar Companion</p>
         </div>
@@ -1210,81 +1196,89 @@
           <div class="auth-tab" onclick="switchAuthTab('email')">Email Address</div>
         </div>
 
-        <div id="authPhoneGroup" class="auth-input-group">
-          <label>Mobile Number (+91)</label>
+        <div id="authPhoneGroup" style="margin-bottom: 16px;">
+          <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Mobile Number (+91)</label>
           <input type="tel" id="inputPhone" class="auth-input" placeholder="98765 43210" value="9876543210">
         </div>
 
-        <div id="authEmailGroup" class="auth-input-group" style="display: none;">
-          <label>Email Address</label>
+        <div id="authEmailGroup" style="margin-bottom: 16px; display: none;">
+          <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Email Address</label>
           <input type="email" id="inputEmail" class="auth-input" placeholder="ananya@example.com" value="ananya@swasth.org">
         </div>
 
-        <button class="auth-btn-primary" onclick="proceedToVerification()">Get One-Time Passcode (OTP)</button>
+        <button class="auth-btn-primary" onclick="proceedToVerification()">
+          Get One-Time Passcode (OTP)
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
 
         <div style="text-align: center; margin: 16px 0 8px; font-size: 11px; color: var(--text-subtle);">— OR FAST-TRACK DEMO —</div>
 
         <button class="demo-mama-btn" onclick="oneClickDemoLogin()">
-          <span>✨</span> Try Live Demo as Ananya (Week 14)
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+          Try Live Demo as Ananya (Week 14)
         </button>
 
         <p style="font-size: 10px; color: var(--text-subtle); text-align: center; margin-top: 18px;">
-          🔒 ABDM & ABHA Compliant. Data stored locally on encrypted SQLite.
+          ABDM & ABHA Compliant. Data stored locally on encrypted SQLite.
         </p>
       </div>
 
 
       <!-- ==============================================
-           SCREEN 1: HOME DASHBOARD (SWASTH 15, 17, 25)
+           SCREEN 1: HOME DASHBOARD
            ============================================== -->
       <div id="view-home">
         <!-- TOP APP BAR -->
         <div class="app-header">
           <div class="header-user">
             <div class="user-avatar-wrap" onclick="switchTab('profile')">
-              <img src="../assets/ananya_profile.png" class="user-avatar-img" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;" alt="Ananya">
+              <img src="../assets/ananya_profile.png" class="user-avatar-img" alt="Ananya">
               <div class="user-status-dot"></div>
             </div>
             <div class="header-greeting">
               <span class="greeting-sub">Good Morning,</span>
-              <span class="greeting-name" id="userNameHeader">Ananya Sharma 👋</span>
+              <span class="greeting-name" id="userNameHeader">Ananya Sharma</span>
             </div>
           </div>
           <div class="header-actions">
-            <div class="icon-badge-btn" onclick="openToolSheet('vaccine')">
-              <span>💉</span>
-              <span class="badge-num">1</span>
+            <div class="icon-badge-btn" onclick="openToolSheet('vaccine')" title="Immunization Schedule">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              <div class="badge-dot"></div>
             </div>
             <div class="icon-badge-btn" onclick="switchTab('ai')" title="Swasth AI">
               <svg viewBox="0 0 100 100" fill="none" style="width: 20px; height: 20px;">
-              <path d="M50 82 C32 82 18 66 18 50 C18 34 28 24 38 20 C34 32 37 46 45 56 C47 58 50 64 50 82 Z" fill="#FF3B69"/>
-              <path d="M50 82 C68 82 82 66 82 50 C82 34 72 24 62 20 C66 32 63 46 55 56 C53 58 50 64 50 82 Z" fill="#FF7597"/>
-              <path d="M50 22 C42 36 42 50 50 66 C58 50 58 36 50 22 Z" fill="#FF3B69"/>
-              <circle cx="50" cy="44" r="4.5" fill="#FFB088"/>
-            </svg>
+                <path d="M50 82 C32 82 18 66 18 50 C18 34 28 24 38 20 C34 32 37 46 45 56 C47 58 50 64 50 82 Z" fill="#FF3B69"/>
+                <path d="M50 82 C68 82 82 66 82 50 C82 34 72 24 62 20 C66 32 63 46 55 56 C53 58 50 64 50 82 Z" fill="#FF7597"/>
+                <path d="M50 22 C42 36 42 50 50 66 C58 50 58 36 50 22 Z" fill="#FF3B69"/>
+                <circle cx="50" cy="44" r="4.5" fill="#FFB088"/>
+              </svg>
             </div>
           </div>
         </div>
 
         <!-- HORIZONTAL WEEK STRIP (1 to 40) -->
-        <div class="week-strip-wrap" id="weekStripContainer">
-          <!-- Populated dynamically via JS -->
-        </div>
+        <div class="week-strip-wrap" id="weekStripContainer"></div>
 
         <!-- HERO BABY GROWTH CARD -->
         <div class="hero-growth-card">
           <div class="card-top-tag">
             <div class="stage-badge">
-              <span>🌱</span> <span id="heroTrimesterText">Trimester 2 · Week 14</span>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2a10 10 0 0 1 10 10c0 5.5-4.5 10-10 10S2 17.5 2 12A10 10 0 0 1 12 2z"/></svg>
+              <span id="heroTrimesterText">Trimester 2 · Week 14</span>
             </div>
             <div class="day-count-badge" id="heroDayText">Day 98 of 280</div>
           </div>
 
           <div class="baby-visual-row">
-            <div class="baby-fruit-3d" id="babyFruitEmoji">🍑</div>
+            <div class="baby-fruit-3d">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9"/>
+                <path d="M12 7v5l3 3"/>
+              </svg>
+            </div>
             <div class="baby-growth-info">
               <div class="fruit-title" id="babyFruitName">Peach Size</div>
-              <div class="fruit-analogy" id="babyMilestoneShort">Baby is flexing tiny facial muscles and sucking thumb!</div>
+              <div class="fruit-analogy" id="babyMilestoneShort">Baby is flexing tiny facial muscles and practicing thumb movements.</div>
               <div class="metrics-pills-row">
                 <div class="metric-pill">Length: <strong id="babyLengthText">8.7 cm</strong></div>
                 <div class="metric-pill">Weight: <strong id="babyWeightText">43 g</strong></div>
@@ -1303,43 +1297,66 @@
           </div>
         </div>
 
-        <!-- STORY ACTION CIRCLES -->
+        <!-- STORY ACTION CIRCLES (OUTLINE VECTOR ICONS) -->
         <div class="story-section">
           <div class="story-circle-item" onclick="switchTab('ai')">
-            <div class="story-ring"><div class="story-inner"><svg viewBox="0 0 100 100" fill="none" style="width: 26px; height: 26px;">
-            <path d="M50 82 C32 82 18 66 18 50 C18 34 28 24 38 20 C34 32 37 46 45 56 C47 58 50 64 50 82 Z" fill="#FF3B69"/>
-            <path d="M50 82 C68 82 82 66 82 50 C82 34 72 24 62 20 C66 32 63 46 55 56 C53 58 50 64 50 82 Z" fill="#FF7597"/>
-            <path d="M50 22 C42 36 42 50 50 66 C58 50 58 36 50 22 Z" fill="#FF3B69"/>
-            <circle cx="50" cy="44" r="4.5" fill="#FFB088"/>
-          </svg></div></div>
+            <div class="story-ring">
+              <div class="story-inner">
+                <svg viewBox="0 0 100 100" fill="none" style="width: 26px; height: 26px;">
+                  <path d="M50 82 C32 82 18 66 18 50 C18 34 28 24 38 20 C34 32 37 46 45 56 C47 58 50 64 50 82 Z" fill="#FF3B69"/>
+                  <path d="M50 82 C68 82 82 66 82 50 C82 34 72 24 62 20 C66 32 63 46 55 56 C53 58 50 64 50 82 Z" fill="#FF7597"/>
+                  <path d="M50 22 C42 36 42 50 50 66 C58 50 58 36 50 22 Z" fill="#FF3B69"/>
+                  <circle cx="50" cy="44" r="4.5" fill="#FFB088"/>
+                </svg>
+              </div>
+            </div>
             <span class="story-lbl">Swasth AI</span>
           </div>
-          <div class="story-circle-item" onclick="switchTab('tools')">
-            <div class="story-ring"><div class="story-inner">💧</div></div>
+
+          <div class="story-circle-item" onclick="openToolSheet('water')">
+            <div class="story-ring">
+              <div class="story-inner">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="2" stroke-linecap="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+              </div>
+            </div>
             <span class="story-lbl">Hydration</span>
           </div>
+
           <div class="story-circle-item" onclick="openToolSheet('audio')">
-            <div class="story-ring"><div class="story-inner">🧘</div></div>
+            <div class="story-ring">
+              <div class="story-inner">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M6 12a6 6 0 0 1 12 0"/><path d="M3 12a9 9 0 0 1 18 0"/></svg>
+              </div>
+            </div>
             <span class="story-lbl">Om Chant</span>
           </div>
+
           <div class="story-circle-item" onclick="switchTab('community')">
-            <div class="story-ring"><div class="story-inner">👥</div></div>
+            <div class="story-ring">
+              <div class="story-inner">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FF3B69" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              </div>
+            </div>
             <span class="story-lbl">Birth Club</span>
           </div>
+
           <div class="story-circle-item" onclick="openToolSheet('diet')">
-            <div class="story-ring"><div class="story-inner">🥗</div></div>
+            <div class="story-ring">
+              <div class="story-inner">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 19 2c0 3 0 5-1.5 8.5A7 7 0 0 1 11 20z"/></svg>
+              </div>
+            </div>
             <span class="story-lbl">Diet Plan</span>
           </div>
         </div>
 
-        <!-- TODAY'S SCHEDULE & 4Q GARBH SANSKAR (REF 02) -->
+        <!-- TODAY'S SCHEDULE (4Q HABITS) -->
         <div class="section-heading">
           <span class="heading-title">Today's Schedule (4Q Habits)</span>
           <span class="heading-link" onclick="filterActivities('ALL')">View All</span>
         </div>
 
         <div class="daily-activities-wrap">
-          <!-- Overall Daily Progress Card -->
           <div class="activity-progress-card">
             <div>
               <div style="font-size: 13px; font-weight: 800; color: #1E293B;">Daily Garbh Sanskar Routine</div>
@@ -1348,22 +1365,22 @@
                 <div class="progress-bar-fill" id="activityProgressBar"></div>
               </div>
             </div>
-            <div style="font-size: 26px;">🪷</div>
+            <div style="color: var(--primary);">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.5h-2v-2h2zm0-4h-2V7h2z"/></svg>
+            </div>
           </div>
 
           <!-- Category Filter Strip -->
           <div class="category-filter-strip">
             <button class="cat-btn active" onclick="filterActivities('ALL')">All (12)</button>
-            <button class="cat-btn" onclick="filterActivities('SQ')">🪷 SQ Spiritual</button>
-            <button class="cat-btn" onclick="filterActivities('IQ')">💡 IQ Intellectual</button>
-            <button class="cat-btn" onclick="filterActivities('EQ')">❤️ EQ Emotional</button>
-            <button class="cat-btn" onclick="filterActivities('PQ')">🏃 PQ Physical</button>
+            <button class="cat-btn" onclick="filterActivities('SQ')">SQ Spiritual</button>
+            <button class="cat-btn" onclick="filterActivities('IQ')">IQ Intellectual</button>
+            <button class="cat-btn" onclick="filterActivities('EQ')">EQ Emotional</button>
+            <button class="cat-btn" onclick="filterActivities('PQ')">PQ Physical</button>
           </div>
 
           <!-- Dynamic List of Activities -->
-          <div id="activitiesListContainer" style="display: flex; flex-direction: column; gap: 8px;">
-            <!-- Populated from SQLite -->
-          </div>
+          <div id="activitiesListContainer" style="display: flex; flex-direction: column; gap: 8px;"></div>
         </div>
 
         <!-- UPCOMING CLINIC APPOINTMENT -->
@@ -1379,17 +1396,19 @@
 
 
       <!-- ==============================================
-           SCREEN 2: COMMUNITY BIRTH CLUBS (REF 06)
+           SCREEN 2: COMMUNITY BIRTH CLUBS
            ============================================== -->
       <div id="view-community" style="display: none;">
         <div class="app-header">
           <div>
-            <div style="font-size: 12px; font-weight: 700; color: #10B981; display: flex; align-items: center; gap: 4px;">
+            <div style="font-size: 12px; font-weight: 700; color: #10B981; display: flex; align-items: center; gap: 6px;">
               <span style="width: 8px; height: 8px; background: #10B981; border-radius: 50%;"></span> 9,388 Mothers Online
             </div>
             <h2 style="font-size: 20px; font-weight: 800; font-family: 'Outfit', sans-serif;">Maternal Community</h2>
           </div>
-          <button class="icon-badge-btn" onclick="openNewPostModal()">✏️</button>
+          <button class="icon-badge-btn" onclick="openNewPostModal()" title="Ask Question">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          </button>
         </div>
 
         <div class="community-view-wrap">
@@ -1399,21 +1418,18 @@
             <div class="comm-tab-item" onclick="switchCommTab(this, 'HEALTH')">HEALTH SUPPORT</div>
           </div>
 
-          <!-- Non-Medical Disclaimer Banner -->
-          <div style="background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 14px; padding: 10px 12px; font-size: 11px; color: #1E40AF;">
-            🛡️ <strong>Safe Peer Circle:</strong> Shared experiences for peer support. Always consult your PHC medical officer for clinical conditions.
+          <div style="background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 14px; padding: 10px 12px; font-size: 11px; color: #1E40AF; display: flex; align-items: center; gap: 8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <div><strong>Safe Peer Circle:</strong> Shared experiences for peer support. Always consult PHC doctors for clinical diagnosis.</div>
           </div>
 
-          <!-- Community Posts Feed Container -->
-          <div id="communityFeedContainer" style="display: flex; flex-direction: column; gap: 12px;">
-            <!-- Populated from SQLite -->
-          </div>
+          <div id="communityFeedContainer" style="display: flex; flex-direction: column; gap: 12px;"></div>
         </div>
       </div><!-- End view-community -->
 
 
       <!-- ==============================================
-           SCREEN 3: SMART TOOLS (REF 01)
+           SCREEN 3: SMART TOOLS (OUTLINE VECTOR GRID)
            ============================================== -->
       <div id="view-tools" style="display: none;">
         <div class="app-header">
@@ -1423,31 +1439,34 @@
           </div>
         </div>
 
-        <!-- Banner -->
         <div style="margin: 0 20px 16px; background: linear-gradient(135deg, #10B981 0%, #059669 100%); border-radius: 22px; padding: 18px 20px; color: white; display: flex; justify-content: space-between; align-items: center;">
           <div>
             <div style="font-size: 18px; font-weight: 800; font-family: 'Outfit', sans-serif;">Daily Health Toolkit</div>
-            <div style="font-size: 11px; opacity: 0.9; margin-top: 2px;">Track hydration, vitals, kicks & sounds</div>
+            <div style="font-size: 11px; opacity: 0.9; margin-top: 2px;">Track hydration, vitals, kicks & sound therapy</div>
           </div>
-          <div style="font-size: 34px;">🧰</div>
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
         </div>
 
-        <!-- 2-Column Grid (Reference 01) -->
+        <!-- 2-Column Vector Grid -->
         <div class="smart-tools-grid">
           <div class="tool-tile pastel-cyan" onclick="openToolSheet('water')">
             <div>
               <div class="tile-title">Water Hydration</div>
               <div class="tile-sub" id="toolWaterSub">1,750 / 2,500 ml</div>
             </div>
-            <div class="tile-icon-bubble">💧</div>
+            <div class="tile-icon-svg">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="2" stroke-linecap="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+            </div>
           </div>
 
           <div class="tool-tile pastel-pink" onclick="openToolSheet('baby_size')">
             <div>
               <div class="tile-title">Baby Size</div>
-              <div class="tile-sub">Week 14 · Peach 🍑</div>
+              <div class="tile-sub">Week 14 · Peach Stage</div>
             </div>
-            <div class="tile-icon-bubble">👶</div>
+            <div class="tile-icon-svg">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#E11D48" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>
+            </div>
           </div>
 
           <div class="tool-tile pastel-mint" onclick="openToolSheet('steps')">
@@ -1455,7 +1474,9 @@
               <div class="tile-title">Daily Steps</div>
               <div class="tile-sub" id="toolStepsSub">3,840 / 5,000 steps</div>
             </div>
-            <div class="tile-icon-bubble">👟</div>
+            <div class="tile-icon-svg">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2" stroke-linecap="round"><path d="M4 16v-2a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v2"/><circle cx="12" cy="7" r="3"/></svg>
+            </div>
           </div>
 
           <div class="tool-tile pastel-apricot" onclick="openToolSheet('audio')">
@@ -1463,7 +1484,9 @@
               <div class="tile-title">Om Chanter</div>
               <div class="tile-sub">432Hz Sound Healing</div>
             </div>
-            <div class="tile-icon-bubble">🕉️</div>
+            <div class="tile-icon-svg">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#EA580C" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M6 12a6 6 0 0 1 12 0"/><path d="M3 12a9 9 0 0 1 18 0"/></svg>
+            </div>
           </div>
 
           <div class="tool-tile pastel-yellow" onclick="openToolSheet('kicks')">
@@ -1471,7 +1494,9 @@
               <div class="tile-title">Kick Counter</div>
               <div class="tile-sub" id="toolKicksSub">10 kicks recorded</div>
             </div>
-            <div class="tile-icon-bubble">👣</div>
+            <div class="tile-icon-svg">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#CA8A04" stroke-width="2" stroke-linecap="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
           </div>
 
           <div class="tool-tile pastel-lavender" onclick="openToolSheet('vitals')">
@@ -1479,7 +1504,9 @@
               <div class="tile-title">Health Hub</div>
               <div class="tile-sub">BP: 118/76 · 62 kg</div>
             </div>
-            <div class="tile-icon-bubble">🩺</div>
+            <div class="tile-icon-svg">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2" stroke-linecap="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            </div>
           </div>
 
           <div class="tool-tile pastel-blue" onclick="openToolSheet('belly')">
@@ -1487,7 +1514,9 @@
               <div class="tile-title">Belly Size</div>
               <div class="tile-sub">82 cm circumference</div>
             </div>
-            <div class="tile-icon-bubble">📏</div>
+            <div class="tile-icon-svg">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="2" stroke-linecap="round"><rect x="3" y="6" width="18" height="12" rx="2"/><line x1="8" y1="6" x2="8" y2="10"/><line x1="12" y1="6" x2="12" y2="12"/><line x1="16" y1="6" x2="16" y2="10"/></svg>
+            </div>
           </div>
 
           <div class="tool-tile pastel-pink" onclick="openToolSheet('vaccine')">
@@ -1495,14 +1524,16 @@
               <div class="tile-title">Vaccine Tracker</div>
               <div class="tile-sub">TT-1 Completed</div>
             </div>
-            <div class="tile-icon-bubble">💉</div>
+            <div class="tile-icon-svg">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#E11D48" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
           </div>
         </div>
       </div><!-- End view-tools -->
 
 
       <!-- ==============================================
-           SCREEN 4: AI ASSISTANT CHAT (REF 30)
+           SCREEN 4: AI ASSISTANT CHAT
            ============================================== -->
       <div id="view-ai" style="display: none;">
         <div class="app-header">
@@ -1510,72 +1541,75 @@
             <span class="greeting-sub">Operational AI Guidance</span>
             <h2 style="font-size: 20px; font-weight: 800; font-family: 'Outfit', sans-serif;">Swasth AI Companion</h2>
           </div>
-          <button class="icon-badge-btn" onclick="clearAiChat()">🗑️</button>
+          <button class="icon-badge-btn" onclick="clearAiChat()" title="Clear Chat">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          </button>
         </div>
 
         <div class="ai-chat-wrap">
           <div class="ai-hero-banner">
-            <div class="ai-sparkle-glyph" style="background: var(--primary-gradient); box-shadow: 0 8px 24px var(--primary-glow); display: flex; align-items: center; justify-content: center;">
-            <svg viewBox="0 0 100 100" fill="none" style="width: 32px; height: 32px;">
-              <path d="M50 82 C32 82 18 66 18 50 C18 34 28 24 38 20 C34 32 37 46 45 56 C47 58 50 64 50 82 Z" fill="#FFFFFF" fill-opacity="0.95"/>
-              <path d="M50 82 C68 82 82 66 82 50 C82 34 72 24 62 20 C66 32 63 46 55 56 C53 58 50 64 50 82 Z" fill="#FFE4E9" fill-opacity="0.95"/>
-              <path d="M50 22 C42 36 42 50 50 66 C58 50 58 36 50 22 Z" fill="#FFFFFF"/>
-              <circle cx="50" cy="44" r="5" fill="#FF3B69"/>
-              <circle cx="50" cy="44" r="2" fill="#FFFFFF"/>
-            </svg>
-          </div>
-            <div style="font-size: 16px; font-weight: 800; color: #0369A1;">Hi Ananya! 👋</div>
+            <div class="ai-logo-badge">
+              <svg viewBox="0 0 100 100" fill="none" style="width: 32px; height: 32px;">
+                <path d="M50 82 C32 82 18 66 18 50 C18 34 28 24 38 20 C34 32 37 46 45 56 C47 58 50 64 50 82 Z" fill="#FFFFFF"/>
+                <path d="M50 82 C68 82 82 66 82 50 C82 34 72 24 62 20 C66 32 63 46 55 56 C53 58 50 64 50 82 Z" fill="#FFE4E9"/>
+                <path d="M50 22 C42 36 42 50 50 66 C58 50 58 36 50 22 Z" fill="#FFFFFF"/>
+                <circle cx="50" cy="44" r="5" fill="#FF3B69"/>
+              </svg>
+            </div>
+            <div style="font-size: 16px; font-weight: 800; color: #831843;">Hi Ananya!</div>
             <div style="font-size: 12px; color: #475569; margin-top: 4px;">
               Ask anything about baby development, cultural diet, or clinic schedules.
             </div>
 
-            <!-- Chips -->
-            <div class="ai-prompt-chips">
-              <button class="prompt-chip" onclick="askAiQuestion('What is baby developing at Week 14?')">👶 Week 14 Milestones</button>
-              <button class="prompt-chip" onclick="askAiQuestion('Which foods provide natural iron and calcium?')">🥗 Iron & Calcium Foods</button>
-              <button class="prompt-chip" onclick="askAiQuestion('Is mild lower back stretching safe right now?')">🧘 Safe Stretches</button>
-              <button class="prompt-chip" onclick="askAiQuestion('I have severe abdominal pain and bleeding')">🚨 Check Emergency</button>
+            <div style="display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-top: 12px;">
+              <button class="prompt-chip" onclick="askAiQuestion('What is baby developing at Week 14?')">Week 14 Milestones</button>
+              <button class="prompt-chip" onclick="askAiQuestion('Which foods provide natural iron and calcium?')">Iron & Calcium Foods</button>
+              <button class="prompt-chip" onclick="askAiQuestion('Is mild lower back stretching safe right now?')">Safe Stretches</button>
+              <button class="prompt-chip" onclick="askAiQuestion('I have severe abdominal pain and bleeding')">Check Emergency</button>
             </div>
           </div>
 
-          <!-- Chat Messages Container -->
-          <div class="chat-messages-box" id="aiChatBox">
-            <!-- Populated from SQLite -->
-          </div>
+          <div class="chat-messages-box" id="aiChatBox"></div>
 
-          <!-- Input Bar -->
           <div class="chat-input-bar">
             <input type="text" id="aiInput" class="chat-input-field" placeholder="Ask a question..." onkeydown="if(event.key==='Enter') sendAiMessage()">
-            <button class="chat-send-btn" onclick="sendAiMessage()">➔</button>
+            <button class="chat-send-btn" onclick="sendAiMessage()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
           </div>
         </div>
       </div><!-- End view-ai -->
 
 
       <!-- ==============================================
-           SCREEN 5: PROFILE & ABHA SETTINGS (REF 20, 31)
+           SCREEN 5: PROFILE & ABHA SETTINGS
            ============================================== -->
       <div id="view-profile" style="display: none;">
         <div class="app-header">
           <div>
             <h2 style="font-size: 20px; font-weight: 800; font-family: 'Outfit', sans-serif;">Profile & Preferences</h2>
           </div>
-          <button class="icon-badge-btn" onclick="switchTab('auth')">🚪</button>
+          <button class="icon-badge-btn" onclick="switchTab('auth')" title="Sign Out">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          </button>
         </div>
 
         <div style="padding: 0 20px 20px; display: flex; flex-direction: column; gap: 14px;">
           <!-- Mother Card -->
           <div style="background: var(--card-white); border-radius: 24px; padding: 20px; box-shadow: var(--shadow-sm); border: 1px solid var(--border-soft); text-align: center;">
-            <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #FF3B69, #FFB088); padding: 3px; margin: 0 auto 12px; box-shadow: 0 6px 20px rgba(255, 59, 105, 0.25);"><img src="../assets/ananya_profile.png" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid white;" alt="Ananya Sharma"></div>
+            <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #FF3B69, #FFB088); padding: 3px; margin: 0 auto 12px; box-shadow: 0 6px 20px rgba(255, 59, 105, 0.25);">
+              <img src="../assets/ananya_profile.png" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid white;" alt="Ananya Sharma">
+            </div>
             <h3 style="font-size: 18px; font-weight: 800; color: var(--text-main);" id="profileNameDisplay">Ananya Sharma</h3>
             <p style="font-size: 12px; color: var(--text-muted);">Due Date: 18 September 2026 · Week 14</p>
             
             <div style="display: inline-flex; align-items: center; gap: 6px; background: #ECFDF5; border: 1px solid #A7F3D0; padding: 4px 12px; border-radius: 999px; margin-top: 10px; font-size: 11px; font-weight: 700; color: #065F46;">
-              <span>🆔</span> ABHA: 91-8842-1094-8831
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><circle cx="9" cy="10" r="2"/><line x1="15" y1="8" x2="17" y2="8"/></svg>
+              ABHA: 91-8842-1094-8831
             </div>
           </div>
 
-          <!-- Settings Groups (Ref 31) -->
+          <!-- Preferences -->
           <div style="background: var(--card-white); border-radius: 20px; padding: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--border-soft);">
             <div style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 12px;">App Preferences</div>
             
@@ -1595,6 +1629,7 @@
             </div>
           </div>
 
+          <!-- Governance -->
           <div style="background: var(--card-white); border-radius: 20px; padding: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--border-soft);">
             <div style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 12px;">Data Governance & Ledger</div>
             
@@ -1603,7 +1638,7 @@
                 <div style="font-size: 13px; font-weight: 600;">On-Device SQLite Engine</div>
                 <div style="font-size: 10px; color: var(--text-muted);">Instant zero-network offline storage</div>
               </div>
-              <span style="font-size: 10px; background: #DCFCE7; color: #15803D; font-weight: 800; padding: 3px 8px; border-radius: 6px;">Active 🟢</span>
+              <span style="font-size: 10px; background: #DCFCE7; color: #15803D; font-weight: 800; padding: 3px 8px; border-radius: 6px;">Active</span>
             </div>
 
             <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0;">
@@ -1624,47 +1659,76 @@
     </div><!-- End app-screen-viewport -->
 
 
-    <!-- FLOATING FROSTED DOCK (SWASTH DESIGN) -->
-    <div class="frosted-dock" id="bottomDock">
-      <button class="dock-tab active" id="tabBtn-home" onclick="switchTab('home')">
-        <span class="dock-icon">🏠</span>
-        <span class="dock-lbl">Home</span>
+    <!-- ========================================================
+         NAVIGATION DOCK (MATCHING EXACT REFERENCE media_1791232095554)
+         ======================================================== -->
+    <div class="reference-nav-dock" id="bottomDock">
+      
+      <!-- 1. Clubs (Like Ref: Shop) -->
+      <button class="ref-nav-tab" id="tabBtn-community" onclick="switchTab('community')">
+        <div class="tab-icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 10V4h16v6"/>
+            <path d="M4 10c0 1.5 1.5 2 2.5 2s2.5-.5 2.5-2c0 1.5 1.5 2 2.5 2s2.5-.5 2.5-2c0 1.5 1.5 2 2.5 2s2.5-.5 2.5-2"/>
+            <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/>
+            <path d="M10 21v-4a2 2 0 0 1 4 0v4"/>
+          </svg>
+        </div>
+        <span class="tab-label">Clubs</span>
       </button>
 
-      <button class="dock-tab" id="tabBtn-community" onclick="switchTab('community')">
-        <span class="dock-icon">👥</span>
-        <span class="dock-lbl">Clubs</span>
+      <!-- 2. Plans (Like Ref: Plans) -->
+      <button class="ref-nav-tab" id="tabBtn-plans" onclick="scrollToActivities()">
+        <div class="tab-icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="3" width="16" height="18" rx="4"/>
+            <path d="M8 3v7l4-2.5 4 2.5V3"/>
+          </svg>
+        </div>
+        <span class="tab-label">Plans</span>
       </button>
 
-      <!-- Center Floating Orb (Swasth Logo) -->
-      <button class="dock-tab-orb" onclick="switchTab('ai')" title="Swasth AI Companion">
-        <svg viewBox="0 0 100 100" fill="none" style="width: 28px; height: 28px;">
-          <path d="M50 82 C32 82 18 66 18 50 C18 34 28 24 38 20 C34 32 37 46 45 56 C47 58 50 64 50 82 Z" fill="#FFFFFF" fill-opacity="0.95"/>
-          <path d="M50 82 C68 82 82 66 82 50 C82 34 72 24 62 20 C66 32 63 46 55 56 C53 58 50 64 50 82 Z" fill="#FFE4E9" fill-opacity="0.95"/>
-          <path d="M50 22 C42 36 42 50 50 66 C58 50 58 36 50 22 Z" fill="#FFFFFF"/>
-          <circle cx="50" cy="44" r="5" fill="#FF3B69"/>
-          <circle cx="50" cy="44" r="2" fill="#FFFFFF"/>
-        </svg>
+      <!-- 3. Center Home Circular Button (Like Ref: Pink Circle Home) -->
+      <div class="ref-nav-center-wrap">
+        <button class="ref-center-circle-btn" id="tabBtn-home" onclick="switchTab('home')" title="Home Dashboard">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+            <path d="M12 3L3 10.5V20a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V10.5L12 3zm0 13a1 1 0 0 1-1-1v-2a1 1 0 0 1 2 0v2a1 1 0 0 1-1 1z"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- 4. Session / AI (Like Ref: Session Circle) -->
+      <button class="ref-nav-tab" id="tabBtn-ai" onclick="switchTab('ai')">
+        <div class="tab-icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9"/>
+            <circle cx="12" cy="12" r="2.5" fill="currentColor"/>
+          </svg>
+        </div>
+        <span class="tab-label">Session</span>
       </button>
 
-      <button class="dock-tab" id="tabBtn-tools" onclick="switchTab('tools')">
-        <span class="dock-icon">🛠️</span>
-        <span class="dock-lbl">Tools</span>
+      <!-- 5. More / Tools (Like Ref: 4-square grid with plus) -->
+      <button class="ref-nav-tab" id="tabBtn-tools" onclick="switchTab('tools')">
+        <div class="tab-icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7" rx="2.5"/>
+            <rect x="14" y="3" width="7" height="7" rx="2.5"/>
+            <rect x="3" y="14" width="7" height="7" rx="2.5"/>
+            <path d="M17.5 14v7"/>
+            <path d="M14 17.5h7"/>
+          </svg>
+        </div>
+        <span class="tab-label">More</span>
       </button>
 
-      <button class="dock-tab" id="tabBtn-profile" onclick="switchTab('profile')">
-        <span class="dock-icon">👤</span>
-        <span class="dock-lbl">Profile</span>
-      </button>
-    </div>
+    </div><!-- End reference-nav-dock -->
 
 
-    <!-- APP BOTTOM SHEET MODAL (FOR TOOLS / LOGGING) -->
+    <!-- APP BOTTOM SHEET MODAL -->
     <div class="app-bottom-sheet" id="bottomSheet">
       <div class="sheet-handle" onclick="closeToolSheet()"></div>
-      <div id="sheetContent">
-        <!-- Injected dynamically -->
-      </div>
+      <div id="sheetContent"></div>
     </div>
 
   </div><!-- End phone-container -->
@@ -1675,7 +1739,7 @@
     <div class="sql-modal-content">
       <div class="sql-header">
         <div>
-          <h3 style="font-size: 18px; font-weight: 800; color: #38BDF8;">⚡ Real SQLite WebAssembly Inspector</h3>
+          <h3 style="font-size: 18px; font-weight: 800; color: #38BDF8;">SQLite WebAssembly Inspector</h3>
           <p style="font-size: 11px; color: #94A3B8;">Direct in-browser SQLite database queries with live updates</p>
         </div>
         <button onclick="closeSqlModal()" style="background: #334155; border: none; color: white; width: 32px; height: 32px; border-radius: 50%; font-size: 16px; cursor: pointer;">✕</button>
@@ -1694,9 +1758,7 @@
           <button class="tool-btn primary" onclick="executeCustomSql()">Execute SQL</button>
         </div>
 
-        <div id="sqlQueryResult" style="overflow-x: auto;">
-          <!-- Table result output -->
-        </div>
+        <div id="sqlQueryResult" style="overflow-x: auto;"></div>
       </div>
     </div>
   </div>
@@ -1714,9 +1776,6 @@
       identifier: "+91 98765 43210"
     };
 
-    // -------------------------------------------------------------
-    // 1. SQLITE ENGINE INITIALIZATION
-    // -------------------------------------------------------------
     async function initSqliteEngine() {
       try {
         if (typeof initSqlJs === 'function') {
@@ -1724,21 +1783,17 @@
             locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${file}`
           });
           
-          // Check if saved database exists in localStorage
           const savedDb = localStorage.getItem('swasth_sqlite_db');
           if (savedDb) {
             const uInt8Array = new Uint8Array(JSON.parse(savedDb));
             db = new SQL.Database(uInt8Array);
-            console.log("Loaded existing SQLite database from localStorage");
           } else {
             db = new SQL.Database();
             setupDatabaseSchema();
             seedDefaultData();
             persistDatabase();
-            console.log("Initialized fresh SQLite database");
           }
         } else {
-          console.warn("sql.js not loaded, falling back to mock storage");
           setupFallbackDb();
         }
       } catch (err) {
@@ -1746,7 +1801,6 @@
         setupFallbackDb();
       }
 
-      // Initial renders
       renderWeekStrip();
       updateGrowthCard(14);
       loadActivities();
@@ -1798,7 +1852,6 @@
         CREATE TABLE IF NOT EXISTS baby_milestones (
           week_num INTEGER PRIMARY KEY,
           fruit_name TEXT,
-          fruit_emoji TEXT,
           length_cm REAL,
           weight_g REAL,
           milestone_title TEXT,
@@ -1815,37 +1868,33 @@
     }
 
     function seedDefaultData() {
-      // 1. User
       db.run(`INSERT INTO users VALUES (1, 'phone', '+91 98765 43210', 'Ananya Sharma', '2026-09-18', 14, '91-8842-1094-8831');`);
 
-      // 2. Daily Activities (4Q Framework)
       const acts = [
-        [1, 'SQ', '🪷', 'Morning Om Chanting & Gayatri Raga', '10 mins of calming resonance for baby', '10 min', 1],
-        [2, 'PQ', '🏃', 'Pelvic Butterfly & Gentle Prenatal Stretches', 'Improves circulation and reduces lower back stiffness', '15 min', 1],
-        [3, 'IQ', '💡', 'Prenatal Brain Puzzle & Sanskrit Subhashita', 'Cognitive stimulation and linguistic cadence', '10 min', 1],
-        [4, 'EQ', '❤️', 'Partner Belly Touch & Bonding Conversation', 'Father speaks to baby to recognize vocal pitch', '12 min', 1],
-        [5, 'PQ', '💧', 'Morning Hydration Goal (500ml warm water)', 'Aids amniotic fluid replenishment', '5 min', 1],
-        [6, 'SQ', '📖', 'Garbh Sanskar Audio Narrative: Prahlad', 'Cultural stories of courage and peace', '15 min', 1],
-        [7, 'EQ', '🎨', 'Positive Affirmation Journaling', 'Emotional equilibrium and stress reduction', '8 min', 1],
-        [8, 'PQ', '🥗', 'Sprouted Moong & Sesame Snack', 'Natural dietary folate and iron boost', '10 min', 1],
-        [9, 'IQ', '🎵', 'Kalyani Raga Listening Session', 'Acoustic tranquility for fetal auditory neurons', '20 min', 0],
-        [10, 'SQ', '🕯️', 'Evening Deep Breathing & Gratitude', 'Slow diaphragmatic relaxation', '10 min', 0],
-        [11, 'PQ', '🚶', 'Evening 1,500 Steps Walk', 'Gentle post-dinner stroll', '20 min', 0],
-        [12, 'EQ', '🌙', 'Lullaby Humming Before Sleep', 'Warm bedtime mother-infant emotional bonding', '10 min', 0]
+        [1, 'SQ', 'lotus', 'Morning Om Chanting & Gayatri Raga', '10 mins of calming harmonic resonance for baby', '10 min', 1],
+        [2, 'PQ', 'movement', 'Pelvic Butterfly & Gentle Prenatal Stretches', 'Improves circulation and reduces lower back stiffness', '15 min', 1],
+        [3, 'IQ', 'bulb', 'Prenatal Brain Puzzle & Linguistic Cadence', 'Cognitive stimulation and soothing rhythmic cadence', '10 min', 1],
+        [4, 'EQ', 'heart', 'Partner Belly Touch & Bonding Conversation', 'Father speaks to baby to recognize vocal pitch', '12 min', 1],
+        [5, 'PQ', 'drop', 'Morning Hydration Goal (500ml warm water)', 'Aids amniotic fluid replenishment', '5 min', 1],
+        [6, 'SQ', 'book', 'Garbh Sanskar Audio Narrative: Prahlad', 'Cultural stories of courage and peace', '15 min', 1],
+        [7, 'EQ', 'pen', 'Positive Affirmation Journaling', 'Emotional equilibrium and stress reduction', '8 min', 1],
+        [8, 'PQ', 'leaf', 'Sprouted Moong & Sesame Snack', 'Natural dietary folate and iron boost', '10 min', 1],
+        [9, 'IQ', 'sound', 'Kalyani Raga Listening Session', 'Acoustic tranquility for fetal auditory neurons', '20 min', 0],
+        [10, 'SQ', 'breathe', 'Evening Deep Breathing & Gratitude', 'Slow diaphragmatic relaxation', '10 min', 0],
+        [11, 'PQ', 'walk', 'Evening 1,500 Steps Walk', 'Gentle post-dinner stroll', '20 min', 0],
+        [12, 'EQ', 'sleep', 'Lullaby Humming Before Sleep', 'Warm bedtime mother-infant emotional bonding', '10 min', 0]
       ];
       for (const a of acts) {
         db.run(`INSERT INTO daily_activities VALUES (?, ?, ?, ?, ?, ?, ?);`, a);
       }
 
-      // 3. Smart Tools Initial Logs
       db.run(`INSERT INTO smart_tools_logs VALUES (1, 'water', '1750', 'ml', '2026-10-05 14:00');`);
       db.run(`INSERT INTO smart_tools_logs VALUES (2, 'steps', '3840', 'steps', '2026-10-05 18:30');`);
       db.run(`INSERT INTO smart_tools_logs VALUES (3, 'kicks', '10', 'kicks', '2026-10-05 19:15');`);
       db.run(`INSERT INTO smart_tools_logs VALUES (4, 'blood_pressure', '118/76', 'mmHg', '2026-10-05 09:00');`);
 
-      // 4. Community Birth Club Posts (Reference 06)
       const posts = [
-        [1, 'Priyanka Madina', '26 weeks pregnant', '#GeneralPregnancy', 'Is it normal to notice mild brown pigment patches on cheekbones during Month 6? My elder sister says it is melasma and fades post-delivery.', 14, 4, '2 hours ago'],
+        [1, 'Priyanka Madina', '26 weeks pregnant', '#GeneralPregnancy', 'Is it normal to notice mild pigment patches on cheekbones during Month 6? My elder sister says it is melasma and fades post-delivery.', 14, 4, '2 hours ago'],
         [2, 'Parteek Sandhu', 'Mother of 5 months', '#WeaningDiet', 'Hello mamas! For those introducing first semi-solids at 6 months, did you start with steamed ragi malt or dal water first? Looking for easy digestion ideas.', 28, 9, '5 hours ago'],
         [3, 'Kamaldeep Kaur', '30 weeks pregnant', '#Nutrition', 'Can we drink warm saffron milk at night in the 3rd trimester? Looking for doctor-approved home recipes for better sleep.', 35, 12, '1 day ago'],
         [4, 'Sunita Deshmukh', '14 weeks pregnant', '#FirstScan', 'Just completed the NT scan and double marker at the district hospital. Hearing the heartbeat for the first time made us both so emotional!', 42, 18, '2 days ago']
@@ -1854,27 +1903,25 @@
         db.run(`INSERT INTO community_posts VALUES (?, ?, ?, ?, ?, ?, ?, ?);`, p);
       }
 
-      // 5. Baby Milestones (Weeks 1 to 40)
       const milestones = [
-        [1, 'Poppy Seed', '🌱', 0.1, 0.01, 'Fertilization & Implantation', 'The blastocyst implants securely into the uterine lining.'],
-        [4, 'Sweet Pea', '🫛', 0.4, 0.1, 'Neural Tube Forming', 'The foundational cells of the brain and spine begin closing.'],
-        [8, 'Raspberry', '🍇', 1.6, 1.0, 'Tiny Fingers & Toes', 'Webbed digits separate; tiny heartbeat can be detected on ultrasound.'],
-        [12, 'Plum', '🫐', 5.4, 14.0, 'End of Trimester 1', 'Reflexes start; kidneys begin producing amniotic fluid.'],
-        [14, 'Peach', '🍑', 8.7, 43.0, 'Facial Muscles Active', 'Baby can squint, frown, and suck their thumb! Fine lanugo hair appears.'],
-        [16, 'Avocado', '🥑', 11.6, 100.0, 'Listening to Mother’s Voice', 'Fetal ear bones harden; baby can hear mother’s heartbeat and melodic voice.'],
-        [20, 'Banana', '🍌', 25.6, 300.0, 'Halfway Milestone & Flutters', 'Quickening kicks felt; taste buds are forming in mouth.'],
-        [24, 'Corn Cob', '🌽', 30.0, 600.0, 'Lung Capillaries Maturing', 'Inner ear balance is complete; baby responds to external music rhythms.'],
-        [28, 'Eggplant', '🍆', 37.6, 1000.0, 'Third Trimester Begins', 'Baby opens eyes; REM dream sleep cycles start.'],
-        [32, 'Coconut', '🥥', 42.4, 1700.0, 'Practicing Breathing', 'Lungs practice rhythmic expansion with amniotic fluid.'],
-        [36, 'Papaya', '🍈', 47.4, 2600.0, 'Full Term Preparation', 'Baby gains 200g weekly; settles into head-down pelvic position.'],
-        [40, 'Watermelon', '🍉', 51.2, 3400.0, 'Welcome to the World!', 'Fully developed lungs and immune system ready for delivery.']
+        [1, 'Poppy Seed', 0.1, 0.01, 'Fertilization & Implantation', 'The blastocyst implants securely into the uterine lining.'],
+        [4, 'Sweet Pea', 0.4, 0.1, 'Neural Tube Forming', 'The foundational cells of the brain and spine begin closing.'],
+        [8, 'Raspberry', 1.6, 1.0, 'Tiny Fingers & Toes', 'Webbed digits separate; tiny heartbeat can be detected on ultrasound.'],
+        [12, 'Plum', 5.4, 14.0, 'End of Trimester 1', 'Reflexes start; kidneys begin producing amniotic fluid.'],
+        [14, 'Peach', 8.7, 43.0, 'Facial Muscles Active', 'Baby can squint, frown, and suck thumb! Fine lanugo hair appears.'],
+        [16, 'Avocado', 11.6, 100.0, 'Listening to Mother Voice', 'Fetal ear bones harden; baby can hear mother heartbeat and melodic voice.'],
+        [20, 'Banana', 25.6, 300.0, 'Halfway Milestone & Flutters', 'Quickening kicks felt; taste buds are forming in mouth.'],
+        [24, 'Corn Cob', 30.0, 600.0, 'Lung Capillaries Maturing', 'Inner ear balance is complete; baby responds to external music rhythms.'],
+        [28, 'Eggplant', 37.6, 1000.0, 'Third Trimester Begins', 'Baby opens eyes; REM dream sleep cycles start.'],
+        [32, 'Coconut', 42.4, 1700.0, 'Practicing Breathing', 'Lungs practice rhythmic expansion with amniotic fluid.'],
+        [36, 'Papaya', 47.4, 2600.0, 'Full Term Preparation', 'Baby gains 200g weekly; settles into head-down pelvic position.'],
+        [40, 'Watermelon', 51.2, 3400.0, 'Welcome to the World!', 'Fully developed lungs and immune system ready for delivery.']
       ];
       for (const m of milestones) {
-        db.run(`INSERT INTO baby_milestones VALUES (?, ?, ?, ?, ?, ?, ?);`, m);
+        db.run(`INSERT INTO baby_milestones VALUES (?, ?, ?, ?, ?, ?);`, m);
       }
 
-      // 6. AI Chat Seed
-      db.run(`INSERT INTO ai_chat VALUES (1, 'ai', 'Namaste Ananya! I am your Swasth maternal health guide. You are at Week 14 (Trimester 2). How can I assist you today?', '09:00 AM');`);
+      db.run(`INSERT INTO ai_chat VALUES (1, 'ai', 'Namaste Ananya! I am your Swasth maternal health guide. You are at Week 14 (Trimester 2). How can I assist your health and Garbh Sanskar routine today?', '09:00 AM');`);
     }
 
     function persistDatabase() {
@@ -1883,23 +1930,20 @@
           const binary = db.export();
           localStorage.setItem('swasth_sqlite_db', JSON.stringify(Array.from(binary)));
         } catch (e) {
-          console.warn("Storage quota exceeded or error exporting db:", e);
+          console.warn("Storage export error:", e);
         }
       }
     }
 
     function setupFallbackDb() {
-      // Mock SQLite-like interface
       db = {
-        run: function(sql, params) { console.log("Mock SQL RUN:", sql, params); },
-        exec: function(sql) { return [{ columns: ['Status'], values: [['Mock Active']] }]; },
+        run: function(sql, params) {},
+        exec: function(sql) { return [{ columns: ['Status'], values: [['Active']] }]; },
         export: function() { return new Uint8Array(); }
       };
     }
 
-    // -------------------------------------------------------------
-    // 2. WEEK STRIP & BABY GROWTH LOGIC
-    // -------------------------------------------------------------
+    // WEEK STRIP & GROWTH
     function renderWeekStrip() {
       const container = document.getElementById('weekStripContainer');
       container.innerHTML = '';
@@ -1938,60 +1982,59 @@
       document.getElementById('heroTrimesterText').innerText = `${trimester} · Week ${wk}`;
       document.getElementById('heroDayText').innerText = `Day ${day} of 280`;
 
-      // Query SQLite for closest milestone
       let fruit = 'Peach';
-      let emoji = '🍑';
-      let length = (wk * 0.9 + 1.2).toFixed(1);
-      let weight = (wk * wk * 0.35 + 10).toFixed(0);
-      let desc = 'Baby is growing actively and practicing tiny movements!';
+      let length = (wk * 1.1).toFixed(1);
+      let weight = Math.round(wk * 15 * (wk / 10));
+      let desc = 'Baby is flexing tiny facial muscles and practicing thumb movements!';
 
       if (db) {
         try {
-          const res = db.exec(`SELECT fruit_name, fruit_emoji, length_cm, weight_g, milestone_desc FROM baby_milestones WHERE week_num <= ${wk} ORDER BY week_num DESC LIMIT 1;`);
+          const res = db.exec(`SELECT fruit_name, length_cm, weight_g, milestone_desc FROM baby_milestones WHERE week_num <= ${wk} ORDER BY week_num DESC LIMIT 1;`);
           if (res && res[0] && res[0].values.length > 0) {
             const row = res[0].values[0];
             fruit = row[0];
-            emoji = row[1];
-            length = (wk * 1.1).toFixed(1);
-            weight = Math.round(wk * 15 * (wk / 10));
-            desc = row[4];
+            desc = row[3];
           }
-        } catch (e) {
-          console.warn(e);
-        }
+        } catch (e) {}
       }
 
-      document.getElementById('babyFruitEmoji').innerText = emoji;
-      document.getElementById('babyFruitName').innerText = `${fruit} Size`;
+      document.getElementById('babyFruitName').innerText = `${fruit} Stage`;
       document.getElementById('babyMilestoneShort').innerText = desc;
       document.getElementById('babyLengthText').innerText = `${length} cm`;
       document.getElementById('babyWeightText').innerText = `${weight} g`;
     }
 
-    // -------------------------------------------------------------
-    // 3. DAILY ACTIVITIES (4Q HABITS)
-    // -------------------------------------------------------------
+    // DAILY ACTIVITIES
     let currentCategoryFilter = 'ALL';
+
+    function getCategorySvg(cat) {
+      if (cat === 'SQ') {
+        return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2a5 5 0 0 1 5 5c0 3-2 5-5 9-3-4-5-6-5-9a5 5 0 0 1 5-5z"/></svg>`;
+      } else if (cat === 'IQ') {
+        return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-7 7c0 3 2 5 3 6h8c1-1 3-3 3-6a7 7 0 0 0-7-7z"/></svg>`;
+      } else if (cat === 'EQ') {
+        return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`;
+      } else {
+        return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>`;
+      }
+    }
 
     function loadActivities() {
       const container = document.getElementById('activitiesListContainer');
       container.innerHTML = '';
-
       if (!db) return;
+
       let sql = `SELECT id, category, icon, title, subtitle, duration, is_completed FROM daily_activities`;
       if (currentCategoryFilter !== 'ALL') {
         sql += ` WHERE category = '${currentCategoryFilter}'`;
       }
       sql += ` ORDER BY is_completed ASC, id ASC;`;
 
-      let total = 0;
-      let completed = 0;
-
       try {
         const statsRes = db.exec(`SELECT COUNT(*), SUM(is_completed) FROM daily_activities;`);
         if (statsRes && statsRes[0]) {
-          total = statsRes[0].values[0][0];
-          completed = statsRes[0].values[0][1] || 0;
+          const total = statsRes[0].values[0][0];
+          const completed = statsRes[0].values[0][1] || 0;
           const pct = Math.round((completed / total) * 100);
           document.getElementById('activityProgressStats').innerText = `${completed} of ${total} Activities Completed (${pct}%)`;
           document.getElementById('activityProgressBar').style.width = `${pct}%`;
@@ -2005,19 +2048,21 @@
             card.className = `activity-card ${isDone ? 'completed' : ''}`;
             card.onclick = () => toggleActivity(id, isDone);
             card.innerHTML = `
-              <div class="activity-icon-sq ${cat.toLowerCase()}">${icon}</div>
+              <div class="act-icon-box ${cat.toLowerCase()}">${getCategorySvg(cat)}</div>
               <div class="activity-details">
                 <div class="act-tag">${cat} Quotients · ${dur}</div>
                 <div class="act-title">${title}</div>
                 <div class="act-sub">${sub}</div>
               </div>
-              <div class="act-check-btn">${isDone ? '✓' : ''}</div>
+              <div class="act-check-btn">
+                ${isDone ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>` : ''}
+              </div>
             `;
             container.appendChild(card);
           });
         }
       } catch (e) {
-        console.error("Error loading activities:", e);
+        console.error(e);
       }
     }
 
@@ -2027,7 +2072,7 @@
         db.run(`UPDATE daily_activities SET is_completed = ${newStatus} WHERE id = ${id};`);
         persistDatabase();
       }
-      showConfetti(newStatus === 1 ? '🎉 Activity Completed! SQLite Updated' : 'Activity marked pending');
+      showConfetti(newStatus === 1 ? 'Activity Completed! SQLite Updated' : 'Activity marked pending');
       loadActivities();
     }
 
@@ -2046,9 +2091,7 @@
       setTimeout(() => pop.classList.remove('show'), 2200);
     }
 
-    // -------------------------------------------------------------
-    // 4. COMMUNITY BIRTH CLUBS
-    // -------------------------------------------------------------
+    // COMMUNITY POSTS
     function loadCommunityPosts() {
       const container = document.getElementById('communityFeedContainer');
       container.innerHTML = '';
@@ -2064,7 +2107,9 @@
             post.innerHTML = `
               <div class="post-header">
                 <div class="post-author-box">
-                  <div class="post-avatar">👩</div>
+                  <div class="post-avatar-circle">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  </div>
                   <div>
                     <div class="post-author-name">${author}</div>
                     <div class="post-stage-pill">${week} · ${time}</div>
@@ -2074,8 +2119,11 @@
               </div>
               <div class="post-content">${text}</div>
               <div class="post-footer-actions">
-                <button class="action-like-btn" onclick="likePost(${id})">❤️ <span>${likes}</span> Helpful</button>
-                <span>💬 ${comments} Responses</span>
+                <button class="action-like-btn" onclick="likePost(${id})">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                  <span>${likes}</span> Helpful
+                </button>
+                <span>${comments} Responses</span>
                 <span style="color: var(--primary); font-weight: 700; cursor: pointer;">Reply</span>
               </div>
             `;
@@ -2092,7 +2140,7 @@
         db.run(`UPDATE community_posts SET likes_count = likes_count + 1 WHERE id = ${id};`);
         persistDatabase();
         loadCommunityPosts();
-        showConfetti('❤️ Hearted! Community ledger updated');
+        showConfetti('Upvoted! Community ledger updated');
       }
     }
 
@@ -2114,9 +2162,7 @@
       }
     }
 
-    // -------------------------------------------------------------
-    // 5. AI ASSISTANT CHAT (GUARDRAILS + PERSISTENCE)
-    // -------------------------------------------------------------
+    // AI COMPANION
     function loadAiChat() {
       const box = document.getElementById('aiChatBox');
       box.innerHTML = '';
@@ -2134,9 +2180,7 @@
           });
           box.scrollTop = box.scrollHeight;
         }
-      } catch (e) {
-        console.error(e);
-      }
+      } catch (e) {}
     }
 
     function sendAiMessage() {
@@ -2149,29 +2193,26 @@
 
     function askAiQuestion(query) {
       const now = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-      // 1. Record user message in SQLite
       if (db) {
         db.run(`INSERT INTO ai_chat (sender, text, timestamp) VALUES ('user', ?, ?);`, [query, now]);
         persistDatabase();
         loadAiChat();
       }
 
-      // 2. Intelligent Guardrails Evaluation
       setTimeout(() => {
         let reply = "";
         const lower = query.toLowerCase();
 
-        // Clinical Red Flag Interceptor
         if (lower.includes('bleeding') || lower.includes('pain') || lower.includes('fever') || lower.includes('severe')) {
-          reply = `🚨 **CLINICAL RED FLAG DETECTED:** Swasth AI provides non-diagnostic operational guidance only. If you are experiencing bleeding, severe abdominal cramps, or high fever, please seek immediate medical evaluation at your nearest Primary Health Center (PHC Rampur) or call 108 Emergency.`;
+          reply = `CLINICAL RED FLAG: Swasth AI provides non-diagnostic operational guidance only. If you are experiencing bleeding, severe abdominal pain, or high fever, please seek immediate medical evaluation at your nearest Primary Health Center (PHC Rampur) or call 108 Emergency.`;
         } else if (lower.includes('milestone') || lower.includes('week 14') || lower.includes('developing')) {
-          reply = `🍼 **Week 14 Fetal Growth:** Baby is the size of a peach (approx. 8.7 cm and 43 grams)! Tiny facial muscles are now working, meaning baby can make subtle squinting expressions and suck their thumb. Fingerprints are also permanently set!`;
+          reply = `Week 14 Fetal Growth: Baby is the size of a peach (approx. 8.7 cm and 43 grams). Tiny facial muscles are now functioning, allowing baby to make subtle expressions. Fingerprints are also permanently formed.`;
         } else if (lower.includes('iron') || lower.includes('calcium') || lower.includes('food')) {
-          reply = `🥗 **Nutrition Guide (Trimester 2):** To build red blood cells, incorporate steamed spinach, soaked dates, roasted sesame seeds, and moong sprouts. Pair with Vitamin C (amla or lemon) to maximize iron absorption.`;
+          reply = `Nutrition Guide (Trimester 2): To support hemoglobin levels, incorporate steamed spinach, soaked dates, roasted sesame seeds, and sprouted moong. Pair with Vitamin C (amla or lemon) for optimal absorption.`;
         } else if (lower.includes('stretch') || lower.includes('yoga') || lower.includes('exercise')) {
-          reply = `🧘 **Safe Prenatal Movement:** Gentle butterfly pose (Bhadrasana) and cat-cow stretches help alleviate pelvic tension. Avoid inverted postures, and maintain steady nasal breathing throughout.`;
+          reply = `Safe Prenatal Movement: Gentle butterfly pose (Bhadrasana) and cat-cow stretches help alleviate pelvic tension. Avoid deep inversions and maintain comfortable breathing throughout.`;
         } else {
-          reply = `🌸 **Swasth Fetal Wellness:** Great question regarding pregnancy care! During Week ${currentUser.week}, focus on rhythmic hydration, 15 minutes of calming Garbh Sanskar listening, and keeping your MCP vaccination card handy for your next PHC antenatal visit.`;
+          reply = `Swasth Fetal Wellness: During Week ${currentUser.week}, focus on rhythmic hydration, 15 minutes of calming Garbh Sanskar listening, and keeping your MCP vaccination card handy for your next PHC visit.`;
         }
 
         if (db) {
@@ -2190,16 +2231,14 @@
       }
     }
 
-    // -------------------------------------------------------------
-    // 6. BOTTOM SHEET LOGGERS (WATER, KICKS, VITALS, VACCINE)
-    // -------------------------------------------------------------
+    // BOTTOM SHEET TOOLS
     function openToolSheet(type) {
       const sheet = document.getElementById('bottomSheet');
       const content = document.getElementById('sheetContent');
       
       if (type === 'water') {
         content.innerHTML = `
-          <h3 style="font-size: 18px; font-weight: 800; color: #0284C7;">💧 Hydration Log (SQLite)</h3>
+          <h3 style="font-size: 18px; font-weight: 800; color: #0284C7;">Hydration Log (SQLite)</h3>
           <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Daily Target: 2,500 ml for maternal blood volume support</p>
           <div style="font-size: 38px; text-align: center; margin: 10px 0; font-weight: 800; color: #0369A1;" id="sheetWaterVal">1,750 ml</div>
           <div style="display: flex; gap: 10px; justify-content: center;">
@@ -2209,26 +2248,28 @@
         `;
       } else if (type === 'kicks') {
         content.innerHTML = `
-          <h3 style="font-size: 18px; font-weight: 800; color: #D97706;">👣 Baby Kick Counter</h3>
+          <h3 style="font-size: 18px; font-weight: 800; color: #D97706;">Baby Kick Counter</h3>
           <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Count 10 movements within a 2-hour window</p>
           <div style="font-size: 46px; text-align: center; margin: 14px 0; font-weight: 800; color: #B45309;" id="sheetKickCount">10</div>
-          <button onclick="incrementKick()" class="auth-btn-primary" style="background: #F59E0B;">Tap on Baby Kick</button>
+          <button onclick="incrementKick()" class="auth-btn-primary" style="background: #F59E0B;">Record Baby Kick</button>
         `;
       } else if (type === 'audio') {
         content.innerHTML = `
-          <h3 style="font-size: 18px; font-weight: 800; color: #8B5CF6;">🕉️ Om Chanter & Garbh Sanskar Audio</h3>
+          <h3 style="font-size: 18px; font-weight: 800; color: #8B5CF6;">Om Chanter & Sound Healing</h3>
           <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px;">432Hz harmonic acoustic resonance</p>
-          <div style="text-align: center; margin: 20px 0; font-size: 50px;">🎶</div>
-          <button onclick="toggleAudioChant(this)" class="auth-btn-primary" style="background: #8B5CF6;">▶ Play 10-Minute Calming Chants</button>
+          <div style="text-align: center; margin: 20px 0; color: #8B5CF6;">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M6 12a6 6 0 0 1 12 0"/><path d="M3 12a9 9 0 0 1 18 0"/></svg>
+          </div>
+          <button onclick="toggleAudioChant(this)" class="auth-btn-primary" style="background: #8B5CF6;">Play 10-Minute Calming Chants</button>
         `;
       } else if (type === 'vaccine') {
         content.innerHTML = `
-          <h3 style="font-size: 18px; font-weight: 800; color: #10B981;">💉 Care Continuity & Vaccines</h3>
+          <h3 style="font-size: 18px; font-weight: 800; color: #10B981;">Care Continuity & Vaccines</h3>
           <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px;">National UIP Maternal Immunization Schedule</p>
           <div style="display: flex; flex-direction: column; gap: 10px;">
             <div style="background: #ECFDF5; border: 1px solid #A7F3D0; padding: 12px; border-radius: 14px; display: flex; justify-content: space-between;">
-              <div><strong>TT-1 / Td-1 Vaccine</strong><div style="font-size: 10px; color: #047857;">Given early in pregnancy</div></div>
-              <span style="color: #059669; font-weight: 800;">Completed ✓</span>
+              <div><strong>TT-1 / Td-1 Vaccine</strong><div style="font-size: 10px; color: #047857;">Administered early in pregnancy</div></div>
+              <span style="color: #059669; font-weight: 800;">Completed</span>
             </div>
             <div style="background: #FFFBEB; border: 1px solid #FDE68A; padding: 12px; border-radius: 14px; display: flex; justify-content: space-between;">
               <div><strong>TT-2 / Td-2 Booster</strong><div style="font-size: 10px; color: #B45309;">Due at Week 18 · PHC Rampur</div></div>
@@ -2238,8 +2279,8 @@
         `;
       } else if (type === 'vitals') {
         content.innerHTML = `
-          <h3 style="font-size: 18px; font-weight: 800; color: #E11D48;">🩺 Maternal Health Hub</h3>
-          <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px;">Logged at PHC Rampur</p>
+          <h3 style="font-size: 18px; font-weight: 800; color: #E11D48;">Maternal Health Hub</h3>
+          <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px;">Recorded at Primary Health Center</p>
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px;">
             <div style="background: #FFF1F4; padding: 12px; border-radius: 14px;">
               <div style="font-size: 11px; color: #9F1239;">Blood Pressure</div>
@@ -2255,7 +2296,7 @@
       } else {
         content.innerHTML = `
           <h3 style="font-size: 18px; font-weight: 800;">${type.toUpperCase()}</h3>
-          <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">Feature configured and synced with on-device SQLite database.</p>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">Feature synced with on-device SQLite database.</p>
           <button onclick="closeToolSheet()" class="auth-btn-primary" style="margin-top: 20px;">Close</button>
         `;
       }
@@ -2278,7 +2319,7 @@
         persistDatabase();
         document.getElementById('sheetWaterVal').innerText = `${updated} ml`;
         document.getElementById('toolWaterSub').innerText = `${updated} / 2,500 ml`;
-        showConfetti(`+${amount}ml water logged to SQLite!`);
+        showConfetti(`+${amount}ml water logged to SQLite`);
       }
     }
 
@@ -2294,24 +2335,22 @@
         persistDatabase();
         document.getElementById('sheetKickCount').innerText = updated;
         document.getElementById('toolKicksSub').innerText = `${updated} kicks recorded`;
-        showConfetti(`👣 Kick #${updated} recorded!`);
+        showConfetti(`Kick #${updated} recorded`);
       }
     }
 
     function toggleAudioChant(btn) {
       if (btn.innerText.includes('Play')) {
-        btn.innerText = '⏸ Pause Om Chanting';
+        btn.innerText = 'Pause Om Chanting';
         btn.style.background = '#EF4444';
-        showConfetti('🧘 Calming Raga audio playing');
+        showConfetti('Calming Raga audio playing');
       } else {
-        btn.innerText = '▶ Play 10-Minute Calming Chants';
+        btn.innerText = 'Play 10-Minute Calming Chants';
         btn.style.background = '#8B5CF6';
       }
     }
 
-    // -------------------------------------------------------------
-    // 7. AUTHENTICATION & LOGIN FLOW
-    // -------------------------------------------------------------
+    // AUTH
     function switchAuthTab(type) {
       document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
       if (type === 'phone') {
@@ -2328,9 +2367,9 @@
     }
 
     function proceedToVerification() {
-      const otp = prompt("Swasth Verification: Enter the 6-digit OTP code sent to your device (Enter '123456'):", "123456");
+      const otp = prompt("Swasth Verification: Enter the 6-digit OTP passcode (123456):", "123456");
       if (otp) {
-        showConfetti("Login Verified! Loading mother profile...");
+        showConfetti("Login Verified! Loading profile...");
         setTimeout(() => switchTab('home'), 400);
       }
     }
@@ -2338,15 +2377,13 @@
     function oneClickDemoLogin() {
       currentUser.name = "Ananya Sharma";
       currentUser.week = 14;
-      document.getElementById('userNameHeader').innerText = "Ananya Sharma 👋";
+      document.getElementById('userNameHeader').innerText = "Ananya Sharma";
       document.getElementById('profileNameDisplay').innerText = "Ananya Sharma";
       showConfetti("Welcome Ananya! Live SQLite MVP loaded.");
       switchTab('home');
     }
 
-    // -------------------------------------------------------------
-    // 8. TAB NAVIGATION
-    // -------------------------------------------------------------
+    // TAB SWITCHING
     function switchTab(tabId) {
       const views = ['home', 'community', 'tools', 'ai', 'profile', 'auth'];
       views.forEach(v => {
@@ -2354,21 +2391,23 @@
         if (el) el.style.display = (v === tabId) ? 'block' : 'none';
       });
 
-      // Update bottom dock active states
-      document.querySelectorAll('.dock-tab').forEach(b => b.classList.remove('active'));
+      // Update ref nav tabs
+      document.querySelectorAll('.ref-nav-tab').forEach(b => b.classList.remove('active'));
       const activeBtn = document.getElementById(`tabBtn-${tabId}`);
       if (activeBtn) activeBtn.classList.add('active');
 
-      // Hide dock on auth screen
       document.getElementById('bottomDock').style.display = (tabId === 'auth') ? 'none' : 'flex';
-
-      // Scroll viewport back to top
       document.getElementById('appViewport').scrollTop = 0;
     }
 
-    // -------------------------------------------------------------
-    // 9. SQLITE LIVE INSPECTOR MODAL
-    // -------------------------------------------------------------
+    function scrollToActivities() {
+      switchTab('home');
+      setTimeout(() => {
+        document.querySelector('.section-heading').scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
+
+    // SQL MODAL
     function openSqlModal() {
       document.getElementById('sqlModal').style.display = 'flex';
       runSqlPreset('SELECT * FROM daily_activities LIMIT 6;');
@@ -2426,17 +2465,16 @@
         loadActivities();
         loadCommunityPosts();
         loadAiChat();
-        showConfetti("SQLite database reset to factory state!");
+        showConfetti("SQLite database reset to factory state");
       }
     }
 
     function togglePhoneFrame() {
       document.body.classList.toggle('is-fullscreen');
       const isFull = document.body.classList.contains('is-fullscreen');
-      document.getElementById('btnToggleFrame').innerText = isFull ? '📱 Exit Fullscreen' : '📱 Toggle Fullscreen';
+      document.getElementById('btnToggleFrame').innerText = isFull ? 'Exit Fullscreen' : 'Toggle Fullscreen';
     }
 
-    // Initialize on load
     window.addEventListener('DOMContentLoaded', () => {
       initSqliteEngine();
     });
