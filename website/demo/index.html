@@ -62,50 +62,6 @@
       overflow-x: hidden;
     }
 
-    /* DESKTOP TOOLBAR */
-    .desktop-toolbar {
-      position: fixed;
-      top: 16px;
-      z-index: 1000;
-      display: flex;
-      gap: 12px;
-      background: rgba(19, 26, 43, 0.9);
-      backdrop-filter: blur(16px);
-      padding: 8px 16px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    }
-    .tool-btn {
-      background: transparent;
-      border: none;
-      color: #94A3B8;
-      font-size: 13px;
-      font-weight: 600;
-      padding: 6px 14px;
-      border-radius: 999px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.2s;
-      text-decoration: none;
-    }
-    .tool-btn:hover, .tool-btn.active {
-      color: white;
-      background: rgba(255, 255, 255, 0.1);
-    }
-    .tool-btn.primary {
-      background: var(--primary-gradient);
-      color: white;
-      box-shadow: 0 4px 14px var(--primary-glow);
-    }
-    .tool-btn.sql-btn {
-      background: rgba(99, 102, 241, 0.25);
-      color: #C7D2FE;
-      border: 1px solid rgba(99, 102, 241, 0.4);
-    }
-
     /* PHONE CONTAINER */
     .phone-container {
       width: 100%;
@@ -119,7 +75,7 @@
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      margin: 40px auto 20px;
+      margin: 20px auto;
       transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
@@ -1029,64 +985,6 @@
       margin-top: 3px;
     }
 
-    /* SQL MODAL */
-    .sql-modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(8px);
-      z-index: 2000;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-    .sql-modal-content {
-      background: #0F172A;
-      color: #F8FAFC;
-      border-radius: 24px;
-      width: 100%;
-      max-width: 800px;
-      max-height: 85vh;
-      display: flex;
-      flex-direction: column;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      box-shadow: 0 25px 60px rgba(0,0,0,0.8);
-      overflow: hidden;
-    }
-    .sql-header {
-      padding: 16px 24px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .sql-body { padding: 20px 24px; overflow-y: auto; flex: 1; }
-    .sql-query-row { display: flex; gap: 10px; margin-bottom: 16px; }
-    .sql-input {
-      flex: 1;
-      background: #1E293B;
-      border: 1px solid #334155;
-      border-radius: 12px;
-      padding: 10px 14px;
-      color: #38BDF8;
-      font-family: monospace;
-      font-size: 13px;
-      outline: none;
-    }
-    .sql-table-viewer {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 12px;
-      margin-top: 10px;
-    }
-    .sql-table-viewer th, .sql-table-viewer td {
-      border: 1px solid #334155;
-      padding: 8px 12px;
-      text-align: left;
-    }
-    .sql-table-viewer th { background: #1E293B; color: #A5B4FC; }
-
     /* BOTTOM SHEET */
     .app-bottom-sheet {
       position: absolute;
@@ -1136,26 +1034,6 @@
 </head>
 <body>
 
-  <!-- DESKTOP TOP TOOLBAR -->
-  <div class="desktop-toolbar">
-    <a href="../index.html" class="tool-btn">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-      Back to Showcase
-    </a>
-    <button class="tool-btn sql-btn" onclick="openSqlModal()">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
-      SQLite Live Inspector
-    </button>
-    <button class="tool-btn" id="btnToggleFrame" onclick="togglePhoneFrame()">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="3"/><line x1="12" y1="18" x2="12" y2="18"/></svg>
-      Toggle Fullscreen
-    </button>
-    <button class="tool-btn primary" onclick="seedSampleData()">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
-      Reset Demo Data
-    </button>
-  </div>
-
   <!-- PHONE CONTAINER -->
   <div class="phone-container" id="phoneContainer">
     <div class="dynamic-island">
@@ -1169,7 +1047,7 @@
       <span>100%</span>
     </div>
 
-    <div class="confetti-pop" id="confettiPop">Activity Completed! SQLite Updated</div>
+    <div class="confetti-pop" id="confettiPop">Activity Completed!</div>
 
     <!-- MAIN APP SCROLLABLE VIEWPORT -->
     <div class="app-screen-viewport" id="appViewport">
@@ -1219,7 +1097,7 @@
         </button>
 
         <p style="font-size: 10px; color: var(--text-subtle); text-align: center; margin-top: 18px;">
-          ABDM & ABHA Compliant. Data stored locally on encrypted SQLite.
+          ABDM & ABHA Compliant. 100% Private On-Device Encrypted Storage.
         </p>
       </div>
 
@@ -1635,7 +1513,7 @@
             
             <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #F1F5F9;">
               <div>
-                <div style="font-size: 13px; font-weight: 600;">On-Device SQLite Engine</div>
+                <div style="font-size: 13px; font-weight: 600;">On-Device Secure Storage</div>
                 <div style="font-size: 10px; color: var(--text-muted);">Instant zero-network offline storage</div>
               </div>
               <span style="font-size: 10px; background: #DCFCE7; color: #15803D; font-weight: 800; padding: 3px 8px; border-radius: 6px;">Active</span>
@@ -1646,7 +1524,7 @@
                 <div style="font-size: 13px; font-weight: 600;">ABHA Consent Ledger</div>
                 <div style="font-size: 10px; color: var(--text-muted);">Encrypted health records</div>
               </div>
-              <button onclick="openSqlModal()" style="font-size: 11px; background: #EEF2FF; color: #4338CA; border: none; font-weight: 700; padding: 4px 10px; border-radius: 6px; cursor: pointer;">View Tables</button>
+              <span style="font-size: 10px; background: #EEF2FF; color: #4338CA; font-weight: 800; padding: 3px 8px; border-radius: 6px;">Consent Verified</span>
             </div>
           </div>
 
@@ -1732,36 +1610,6 @@
     </div>
 
   </div><!-- End phone-container -->
-
-
-  <!-- SQL LIVE INSPECTOR MODAL -->
-  <div class="sql-modal-overlay" id="sqlModal">
-    <div class="sql-modal-content">
-      <div class="sql-header">
-        <div>
-          <h3 style="font-size: 18px; font-weight: 800; color: #38BDF8;">SQLite WebAssembly Inspector</h3>
-          <p style="font-size: 11px; color: #94A3B8;">Direct in-browser SQLite database queries with live updates</p>
-        </div>
-        <button onclick="closeSqlModal()" style="background: #334155; border: none; color: white; width: 32px; height: 32px; border-radius: 50%; font-size: 16px; cursor: pointer;">✕</button>
-      </div>
-      <div class="sql-body">
-        <div style="display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;">
-          <button class="tool-btn sql-btn" onclick="runSqlPreset('SELECT * FROM users;')">Table: users</button>
-          <button class="tool-btn sql-btn" onclick="runSqlPreset('SELECT * FROM daily_activities;')">Table: daily_activities</button>
-          <button class="tool-btn sql-btn" onclick="runSqlPreset('SELECT * FROM community_posts;')">Table: community_posts</button>
-          <button class="tool-btn sql-btn" onclick="runSqlPreset('SELECT * FROM smart_tools_logs;')">Table: smart_tools_logs</button>
-          <button class="tool-btn sql-btn" onclick="runSqlPreset('SELECT * FROM baby_milestones WHERE week_num BETWEEN 12 AND 16;')">Table: baby_milestones</button>
-        </div>
-
-        <div class="sql-query-row">
-          <input type="text" id="customSqlInput" class="sql-input" value="SELECT * FROM daily_activities;" onkeydown="if(event.key==='Enter') executeCustomSql()">
-          <button class="tool-btn primary" onclick="executeCustomSql()">Execute SQL</button>
-        </div>
-
-        <div id="sqlQueryResult" style="overflow-x: auto;"></div>
-      </div>
-    </div>
-  </div>
 
 
   <!-- ==============================================
@@ -2072,7 +1920,7 @@
         db.run(`UPDATE daily_activities SET is_completed = ${newStatus} WHERE id = ${id};`);
         persistDatabase();
       }
-      showConfetti(newStatus === 1 ? 'Activity Completed! SQLite Updated' : 'Activity marked pending');
+      showConfetti(newStatus === 1 ? 'Activity Completed!' : 'Activity marked pending');
       loadActivities();
     }
 
@@ -2319,7 +2167,7 @@
         persistDatabase();
         document.getElementById('sheetWaterVal').innerText = `${updated} ml`;
         document.getElementById('toolWaterSub').innerText = `${updated} / 2,500 ml`;
-        showConfetti(`+${amount}ml water logged to SQLite`);
+        showConfetti(`+${amount}ml water logged! Stay hydrated`);
       }
     }
 
@@ -2379,7 +2227,7 @@
       currentUser.week = 14;
       document.getElementById('userNameHeader').innerText = "Ananya Sharma";
       document.getElementById('profileNameDisplay').innerText = "Ananya Sharma";
-      showConfetti("Welcome Ananya! Live SQLite MVP loaded.");
+      showConfetti("Welcome Ananya! Your daily companion is ready.");
       switchTab('home');
     }
 
@@ -2407,53 +2255,6 @@
       }, 100);
     }
 
-    // SQL MODAL
-    function openSqlModal() {
-      document.getElementById('sqlModal').style.display = 'flex';
-      runSqlPreset('SELECT * FROM daily_activities LIMIT 6;');
-    }
-
-    function closeSqlModal() {
-      document.getElementById('sqlModal').style.display = 'none';
-    }
-
-    function runSqlPreset(query) {
-      document.getElementById('customSqlInput').value = query;
-      executeCustomSql();
-    }
-
-    function executeCustomSql() {
-      const query = document.getElementById('customSqlInput').value.trim();
-      const resultBox = document.getElementById('sqlQueryResult');
-      if (!db || !query) return;
-
-      try {
-        const res = db.exec(query);
-        if (!res || res.length === 0) {
-          resultBox.innerHTML = `<div style="color: #94A3B8; padding: 10px;">Query executed successfully. 0 rows returned.</div>`;
-          return;
-        }
-
-        const columns = res[0].columns;
-        const values = res[0].values;
-
-        let tableHtml = `<table class="sql-table-viewer"><thead><tr>`;
-        columns.forEach(c => tableHtml += `<th>${c}</th>`);
-        tableHtml += `</tr></thead><tbody>`;
-
-        values.forEach(row => {
-          tableHtml += `<tr>`;
-          row.forEach(cell => tableHtml += `<td>${cell !== null ? cell : 'NULL'}</td>`);
-          tableHtml += `</tr>`;
-        });
-        tableHtml += `</tbody></table>`;
-
-        resultBox.innerHTML = tableHtml;
-      } catch (err) {
-        resultBox.innerHTML = `<div style="color: #EF4444; padding: 10px;">SQL Error: ${err.message}</div>`;
-      }
-    }
-
     function seedSampleData() {
       if (confirm("Reset SQLite database to original sample records?")) {
         localStorage.removeItem('swasth_sqlite_db');
@@ -2465,16 +2266,13 @@
         loadActivities();
         loadCommunityPosts();
         loadAiChat();
-        showConfetti("SQLite database reset to factory state");
+        showConfetti("Sample data reset to initial state");
       }
     }
 
-    function togglePhoneFrame() {
-      document.body.classList.toggle('is-fullscreen');
-      const isFull = document.body.classList.contains('is-fullscreen');
-      document.getElementById('btnToggleFrame').innerText = isFull ? 'Exit Fullscreen' : 'Toggle Fullscreen';
-    }
+    
 
+    if (window.self !== window.top) { document.body.classList.add('in-iframe'); }
     window.addEventListener('DOMContentLoaded', () => {
       initSqliteEngine();
     });
