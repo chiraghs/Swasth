@@ -59,7 +59,7 @@ def create_presentation():
     tf1.word_wrap = True
     
     p = tf1.paragraphs[0]
-    p.text = "SWASTH (मातृ-स्वास्थ्य)"
+    p.text = "SWASTH (Maternal Health)"
     p.font.size = Pt(44)
     p.font.bold = True
     p.font.color.rgb = C_PRIMARY

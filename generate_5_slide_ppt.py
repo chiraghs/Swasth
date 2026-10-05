@@ -57,7 +57,7 @@ def create_5_slide_presentation():
     tf1.word_wrap = True
     
     p = tf1.paragraphs[0]
-    p.text = "SWASTH (मातृ-स्वास्थ्य)"
+    p.text = "SWASTH (Maternal Health)"
     p.font.size = Pt(40)
     p.font.bold = True
     p.font.color.rgb = C_PRIMARY
@@ -81,7 +81,7 @@ def create_5_slide_presentation():
     p.font.color.rgb = RGBColor(226, 232, 240)
     p.space_before = Pt(20)
 
-    hero_img = "/Volumes/DiskD/HACKATHONS/Swasth/assets/reference/15_momly_hero_mockup.png"
+    hero_img = "/Volumes/DiskD/HACKATHONS/Swasth/assets/reference/15_swasth_hero_mockup.png"
     if os.path.exists(hero_img):
         slide1.shapes.add_picture(hero_img, Inches(7.5), Inches(1.2), Inches(5.2), Inches(5.5))
 
