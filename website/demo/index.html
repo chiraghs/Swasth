@@ -1242,7 +1242,7 @@
         <div class="app-header">
           <div class="header-user">
             <div class="user-avatar-wrap" onclick="switchTab('profile')">
-              <div class="user-avatar-img">👩</div>
+              <img src="../assets/ananya_profile.png" class="user-avatar-img" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;" alt="Ananya">
               <div class="user-status-dot"></div>
             </div>
             <div class="header-greeting">
@@ -1255,8 +1255,13 @@
               <span>💉</span>
               <span class="badge-num">1</span>
             </div>
-            <div class="icon-badge-btn" onclick="switchTab('ai')">
-              <span>✨</span>
+            <div class="icon-badge-btn" onclick="switchTab('ai')" title="Swasth AI">
+              <svg viewBox="0 0 100 100" fill="none" style="width: 20px; height: 20px;">
+              <path d="M50 82 C32 82 18 66 18 50 C18 34 28 24 38 20 C34 32 37 46 45 56 C47 58 50 64 50 82 Z" fill="#FF3B69"/>
+              <path d="M50 82 C68 82 82 66 82 50 C82 34 72 24 62 20 C66 32 63 46 55 56 C53 58 50 64 50 82 Z" fill="#FF7597"/>
+              <path d="M50 22 C42 36 42 50 50 66 C58 50 58 36 50 22 Z" fill="#FF3B69"/>
+              <circle cx="50" cy="44" r="4.5" fill="#FFB088"/>
+            </svg>
             </div>
           </div>
         </div>
@@ -1301,8 +1306,13 @@
         <!-- STORY ACTION CIRCLES -->
         <div class="story-section">
           <div class="story-circle-item" onclick="switchTab('ai')">
-            <div class="story-ring"><div class="story-inner">🤖</div></div>
-            <span class="story-lbl">AI Ask</span>
+            <div class="story-ring"><div class="story-inner"><svg viewBox="0 0 100 100" fill="none" style="width: 26px; height: 26px;">
+            <path d="M50 82 C32 82 18 66 18 50 C18 34 28 24 38 20 C34 32 37 46 45 56 C47 58 50 64 50 82 Z" fill="#FF3B69"/>
+            <path d="M50 82 C68 82 82 66 82 50 C82 34 72 24 62 20 C66 32 63 46 55 56 C53 58 50 64 50 82 Z" fill="#FF7597"/>
+            <path d="M50 22 C42 36 42 50 50 66 C58 50 58 36 50 22 Z" fill="#FF3B69"/>
+            <circle cx="50" cy="44" r="4.5" fill="#FFB088"/>
+          </svg></div></div>
+            <span class="story-lbl">Swasth AI</span>
           </div>
           <div class="story-circle-item" onclick="switchTab('tools')">
             <div class="story-ring"><div class="story-inner">💧</div></div>
@@ -1505,7 +1515,15 @@
 
         <div class="ai-chat-wrap">
           <div class="ai-hero-banner">
-            <div class="ai-sparkle-glyph">✨</div>
+            <div class="ai-sparkle-glyph" style="background: var(--primary-gradient); box-shadow: 0 8px 24px var(--primary-glow); display: flex; align-items: center; justify-content: center;">
+            <svg viewBox="0 0 100 100" fill="none" style="width: 32px; height: 32px;">
+              <path d="M50 82 C32 82 18 66 18 50 C18 34 28 24 38 20 C34 32 37 46 45 56 C47 58 50 64 50 82 Z" fill="#FFFFFF" fill-opacity="0.95"/>
+              <path d="M50 82 C68 82 82 66 82 50 C82 34 72 24 62 20 C66 32 63 46 55 56 C53 58 50 64 50 82 Z" fill="#FFE4E9" fill-opacity="0.95"/>
+              <path d="M50 22 C42 36 42 50 50 66 C58 50 58 36 50 22 Z" fill="#FFFFFF"/>
+              <circle cx="50" cy="44" r="5" fill="#FF3B69"/>
+              <circle cx="50" cy="44" r="2" fill="#FFFFFF"/>
+            </svg>
+          </div>
             <div style="font-size: 16px; font-weight: 800; color: #0369A1;">Hi Ananya! 👋</div>
             <div style="font-size: 12px; color: #475569; margin-top: 4px;">
               Ask anything about baby development, cultural diet, or clinic schedules.
@@ -1548,9 +1566,7 @@
         <div style="padding: 0 20px 20px; display: flex; flex-direction: column; gap: 14px;">
           <!-- Mother Card -->
           <div style="background: var(--card-white); border-radius: 24px; padding: 20px; box-shadow: var(--shadow-sm); border: 1px solid var(--border-soft); text-align: center;">
-            <div style="width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, #FFB088, #FF3B69); margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 36px;">
-              👩
-            </div>
+            <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #FF3B69, #FFB088); padding: 3px; margin: 0 auto 12px; box-shadow: 0 6px 20px rgba(255, 59, 105, 0.25);"><img src="../assets/ananya_profile.png" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid white;" alt="Ananya Sharma"></div>
             <h3 style="font-size: 18px; font-weight: 800; color: var(--text-main);" id="profileNameDisplay">Ananya Sharma</h3>
             <p style="font-size: 12px; color: var(--text-muted);">Due Date: 18 September 2026 · Week 14</p>
             
@@ -1620,9 +1636,15 @@
         <span class="dock-lbl">Clubs</span>
       </button>
 
-      <!-- Center Floating Orb -->
-      <button class="dock-tab-orb" onclick="switchTab('ai')">
-        ✨
+      <!-- Center Floating Orb (Swasth Logo) -->
+      <button class="dock-tab-orb" onclick="switchTab('ai')" title="Swasth AI Companion">
+        <svg viewBox="0 0 100 100" fill="none" style="width: 28px; height: 28px;">
+          <path d="M50 82 C32 82 18 66 18 50 C18 34 28 24 38 20 C34 32 37 46 45 56 C47 58 50 64 50 82 Z" fill="#FFFFFF" fill-opacity="0.95"/>
+          <path d="M50 82 C68 82 82 66 82 50 C82 34 72 24 62 20 C66 32 63 46 55 56 C53 58 50 64 50 82 Z" fill="#FFE4E9" fill-opacity="0.95"/>
+          <path d="M50 22 C42 36 42 50 50 66 C58 50 58 36 50 22 Z" fill="#FFFFFF"/>
+          <circle cx="50" cy="44" r="5" fill="#FF3B69"/>
+          <circle cx="50" cy="44" r="2" fill="#FFFFFF"/>
+        </svg>
       </button>
 
       <button class="dock-tab" id="tabBtn-tools" onclick="switchTab('tools')">
