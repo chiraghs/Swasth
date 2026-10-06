@@ -1188,8 +1188,31 @@
       z-index: 600;
       transform: translateY(100%);
       transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+      visibility: hidden;
     }
-    .app-bottom-sheet.open { transform: translateY(0); }
+    .app-bottom-sheet.open {
+      transform: translateY(0);
+      pointer-events: auto;
+      visibility: visible;
+    }
+    .sheet-action-btn {
+      width: 100%;
+      background: var(--primary-gradient);
+      color: white;
+      border: none;
+      padding: 13px;
+      border-radius: 16px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 15px var(--primary-glow);
+      transition: all 0.2s;
+    }
+    .sheet-action-btn:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+    }
     .sheet-handle {
       width: 40px;
       height: 4px;
@@ -2746,9 +2769,6 @@
       if (container && homeList) {
         container.innerHTML = homeList.innerHTML;
       }
-    }
-);
-      }, 100);
     }
 
     function seedSampleData() {
