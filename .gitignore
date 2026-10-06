@@ -20,3 +20,9 @@ __pycache__/
 !website/**/*.svg
 !website/**/*.webp
 !website/**/*.ico
+
+# Video and Node dependencies
+*.mp4
+!website/**/*.mp4
+node_modules/
+scratch/

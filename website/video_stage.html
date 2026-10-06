@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Swasth Feature Walkthrough · 2.2 Minute Presentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #FFF5F7 0%, #FFF0F4 50%, #FFE6ED 100%);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: #1E121E;
+      position: relative;
+    }
+
+    /* BACKGROUND ACCENTS */
+    .bg-blob-1 {
+      position: absolute;
+      top: -120px;
+      left: -100px;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 59, 105, 0.12) 0%, rgba(255, 176, 136, 0.05) 70%, transparent 100%);
+      filter: blur(60px);
+      pointer-events: none;
+    }
+    .bg-blob-2 {
+      position: absolute;
+      bottom: -150px;
+      right: 100px;
+      width: 700px;
+      height: 700px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 59, 105, 0.10) 0%, rgba(139, 92, 246, 0.05) 70%, transparent 100%);
+      filter: blur(80px);
+      pointer-events: none;
+    }
+    .bg-pattern {
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(255, 59, 105, 0.08) 1.5px, transparent 1.5px);
+      background-size: 36px 36px;
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    /* TOP HEADER */
+    .stage-header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 90px;
+      padding: 0 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 59, 105, 0.12);
+      background: rgba(255, 255, 255, 0.65);
+      backdrop-filter: blur(20px);
+      z-index: 100;
+    }
+    .brand-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .brand-logo-svg {
+      width: 46px;
+      height: 46px;
+      filter: drop-shadow(0 4px 10px rgba(255, 59, 105, 0.25));
+    }
+    .brand-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #FF3B69 0%, #FF6584 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .brand-tagline {
+      font-size: 13px;
+      font-weight: 600;
+      color: #8C6A7B;
+      letter-spacing: 0.2px;
+    }
+
+    .header-badges {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 16px;
+      background: white;
+      border: 1px solid rgba(255, 59, 105, 0.18);
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #4A3342;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }
+    .badge-live-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10B981;
+      box-shadow: 0 0 10px #10B981;
+      animation: pulse-live 1.8s infinite;
+    }
+    @keyframes pulse-live {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.85); }
+    }
+    .badge-timer {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 700;
+      color: #FF3B69;
+      background: #FFF0F4;
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 59, 105, 0.2);
+    }
+
+    /* MAIN STAGE LAYOUT */
+    .stage-main {
+      position: absolute;
+      top: 90px;
+      bottom: 70px;
+      left: 0;
+      right: 0;
+      padding: 24px 60px;
+      display: flex;
+      gap: 50px;
+      align-items: center;
+    }
+
+    /* LEFT: PHONE FRAME */
+    .phone-container {
+      width: 440px;
+      height: 850px;
+      position: relative;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .phone-mock-frame {
+      width: 420px;
+      height: 840px;
+      background: #0E0811;
+      border-radius: 52px;
+      padding: 12px;
+      box-shadow: 
+        0 30px 70px -10px rgba(255, 59, 105, 0.28),
+        0 15px 35px -5px rgba(30, 18, 30, 0.35),
+        inset 0 0 0 2px #422E3A,
+        inset 0 0 0 4px #231620;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .phone-dynamic-island {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 110px;
+      height: 28px;
+      background: #000;
+      border-radius: 20px;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+    }
+    .island-camera {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #111;
+      border: 1.5px solid #222;
+    }
+    .island-sensor {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #0a1128;
+    }
+    .phone-screen-iframe {
+      width: 100%;
+      height: 100%;
+      border-radius: 42px;
+      border: none;
+      background: white;
+      overflow: hidden;
+    }
+
+    /* RIGHT: PRESENTATION SHOWCASE */
+    .showcase-container {
+      flex: 1;
+      height: 840px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 10px 0;
+    }
+
+    /* CHAPTER BADGE & TITLE */
+    .chapter-tag-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .chapter-pill {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #FF3B69;
+      background: #FFE8EE;
+      padding: 6px 14px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 59, 105, 0.25);
+    }
+    .chapter-counter-badge {
+      font-size: 13px;
+      font-weight: 700;
+      color: #8C6A7B;
+    }
+
+    .chapter-headline {
+      font-family: 'Outfit', sans-serif;
+      font-size: 38px;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.8px;
+      color: #1E121E;
+      margin-bottom: 12px;
+    }
+    .chapter-subheadline {
+      font-size: 16px;
+      line-height: 1.5;
+      color: #5C4854;
+      font-weight: 500;
+      margin-bottom: 24px;
+      max-width: 900px;
+    }
+
+    /* FEATURE SPOTLIGHT HIGHLIGHT CARDS (3 CARDS) */
+    .feature-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+    .spotlight-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(16px);
+      border: 1.5px solid rgba(255, 59, 105, 0.16);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 10px 25px rgba(255, 59, 105, 0.05);
+      transition: all 0.35s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .spotlight-card.active-card {
+      border-color: #FF3B69;
+      background: white;
+      box-shadow: 0 14px 35px rgba(255, 59, 105, 0.15);
+      transform: translateY(-2px);
+    }
+    .card-top-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #FFE8EE, #FFF0F4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FF3B69;
+      margin-bottom: 14px;
+    }
+    .card-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: #1E121E;
+      margin-bottom: 6px;
+    }
+    .card-metric {
+      font-size: 12px;
+      font-weight: 700;
+      color: #FF3B69;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+    .card-desc {
+      font-size: 13px;
+      line-height: 1.45;
+      color: #6C5564;
+    }
+
+    /* LIVE SUBTITLES & TELEPROMPTER */
+    .teleprompter-box {
+      background: linear-gradient(135deg, #201320 0%, #150A15 100%);
+      border-radius: 22px;
+      padding: 22px 28px;
+      color: white;
+      box-shadow: 0 16px 40px rgba(32, 19, 32, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      position: relative;
+    }
+    .teleprompter-label {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: #FF7597;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .teleprompter-text {
+      font-size: 18px;
+      line-height: 1.55;
+      font-weight: 500;
+      color: #F8EDF3;
+      min-height: 60px;
+    }
+    .teleprompter-highlight {
+      color: #FFAEC3;
+      font-weight: 700;
+    }
+
+    /* BOTTOM TIMELINE & PROGRESS BAR */
+    .stage-footer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 70px;
+      padding: 0 60px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(255, 59, 105, 0.12);
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      z-index: 100;
+    }
+    .footer-time {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      font-weight: 700;
+      color: #1E121E;
+      width: 105px;
+      flex-shrink: 0;
+    }
+    .progress-track {
+      flex: 1;
+      height: 12px;
+      background: #FFE8EE;
+      border-radius: 999px;
+      position: relative;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #FF3B69 0%, #FF7597 100%);
+      border-radius: 999px;
+      transition: width 0.1s linear;
+    }
+    .chapter-markers-strip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .chapter-step-chip {
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      background: #F4EAEF;
+      color: #8C6A7B;
+      transition: all 0.25s ease;
+    }
+    .chapter-step-chip.active-step {
+      background: #FF3B69;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-blob-1"></div>
+  <div class="bg-blob-2"></div>
+  <div class="bg-pattern"></div>
+
+  <!-- HEADER -->
+  <header class="stage-header">
+    <div class="brand-left">
+      <!-- SWASTH MATRU-KAMAL EMBLEM -->
+      <svg class="brand-logo-svg" viewBox="0 0 100 100" fill="none">
+        <defs>
+          <linearGradient id="brandPetalGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#FF3B69"/>
+            <stop offset="100%" stop-color="#FF7597"/>
+          </linearGradient>
+          <linearGradient id="brandHaloGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#FF9E80"/>
+            <stop offset="100%" stop-color="#FF3B69"/>
+          </linearGradient>
+        </defs>
+        <path d="M50 84 C30 84 15 67 15 50 C15 33 26 22 37 18 C33 31 36 46 45 57 C47 59 50 65 50 84 Z" fill="url(#brandPetalGrad)"/>
+        <path d="M50 84 C70 84 85 67 85 50 C85 33 74 22 63 18 C67 31 64 46 55 57 C53 59 50 65 50 84 Z" fill="url(#brandHaloGrad)"/>
+        <path d="M50 20 C41 35 41 51 50 68 C59 51 59 35 50 20 Z" fill="#FF3B69"/>
+        <circle cx="50" cy="43" r="5" fill="#FFE8EE"/>
+      </svg>
+      <div>
+        <div class="brand-title">SWASTH</div>
+        <div class="brand-tagline">Maternal & Infant Health Platform · Conception to First 1,000 Days</div>
+      </div>
+    </div>
+
+    <div class="header-badges">
+      <div class="badge-pill">
+        <span class="badge-live-dot"></span>
+        <span>Running Locally: Port 8088</span>
+      </div>
+      <div class="badge-pill">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FF3B69" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span>ABHA & FHIR Verified</span>
+      </div>
+      <div class="badge-timer" id="topTimer">00:00 / 02:12</div>
+    </div>
+  </header>
+
+  <!-- MAIN STAGE -->
+  <main class="stage-main">
+    
+    <!-- LEFT: REALISTIC IPHONE PRO FRAME -->
+    <div class="phone-container">
+      <div class="phone-mock-frame">
+        <div class="phone-dynamic-island">
+          <div class="island-camera"></div>
+          <div class="island-sensor"></div>
+        </div>
+        <iframe src="/app/index.html" class="phone-screen-iframe" id="appIframe"></iframe>
+      </div>
+    </div>
+
+    <!-- RIGHT: SHOWCASE INFO PANEL -->
+    <div class="showcase-container">
+      
+      <div>
+        <!-- CHAPTER TAG -->
+        <div class="chapter-tag-row">
+          <span class="chapter-pill" id="chapterPill">CHAPTER 1 · DASHBOARD</span>
+          <span class="chapter-counter-badge" id="chapterCounter">1 of 6 Features</span>
+        </div>
+
+        <!-- HEADLINE & SUBHEADLINE -->
+        <h1 class="chapter-headline" id="chapterTitle">Daily Maternal Habit Engine & 40-Week Timeline</h1>
+        <p class="chapter-subheadline" id="chapterSub">
+          Empowering expectant mothers with trimester-tailored tracking, daily hydration & micronutrient routines, and calming Garbh Sanskar positive bonding rituals.
+        </p>
+
+        <!-- 3 SPOTLIGHT CARDS -->
+        <div class="feature-cards-grid" id="spotlightCards">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- TELEPROMPTER / NARRATION SUBTITLES -->
+      <div class="teleprompter-box">
+        <div class="teleprompter-label">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+          Narration Voiceover
+        </div>
+        <div class="teleprompter-text" id="teleprompterText">
+          Welcome to Swasth, India's clinically validated, culturally rooted maternal and infant health platform.
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- BOTTOM PROGRESS FOOTER -->
+  <footer class="stage-footer">
+    <div class="footer-time" id="bottomTime">00:00 / 02:12</div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <div class="chapter-markers-strip">
+      <span class="chapter-step-chip active-step" id="stepChip-1">1. Home</span>
+      <span class="chapter-step-chip" id="stepChip-2">2. Timeline</span>
+      <span class="chapter-step-chip" id="stepChip-3">3. Plans</span>
+      <span class="chapter-step-chip" id="stepChip-4">4. Sessions</span>
+      <span class="chapter-step-chip" id="stepChip-5">5. AI Companion</span>
+      <span class="chapter-step-chip" id="stepChip-6">6. ABHA & Security</span>
+    </div>
+  </footer>
+
+  <script>
+    const CHAPTERS_DATA = [
+      {
+        id: 1,
+        timeStart: 0,
+        timeEnd: 20,
+        pill: 'CHAPTER 1 · DASHBOARD & ROUTINE',
+        title: 'Maternal Home Dashboard & Garbh Sanskar Habit Engine',
+        subtitle: 'Empowers expectant mothers with trimester-tailored tracking, daily hydration & micronutrient routines, and calming Garbh Sanskar positive bonding rituals.',
+        narration: "Welcome to Swasth, India's clinically validated, culturally rooted maternal and infant health platform. Swasth empowers mothers and families through the entire journey, from pregnancy to the first one thousand days. Here on the home dashboard, expectant mother Ananya can view her current stage at Week twenty-four, track remaining days to delivery, check off daily iron and hydration routines, and tune into Garbh Sanskar positive bonding affirmations.",
+        cards: [
+          {
+            icon: '<path d="M12 2a5 5 0 0 1 5 5c0 3-2 5-5 9-3-4-5-6-5-9a5 5 0 0 1 5-5z"/>',
+            metric: 'Trimester 2 · Week 24',
+            title: 'Fetal Stage Growth',
+            desc: 'Baby is ~30cm and 600g. Hearing is developed; responds to mother\'s voice and soothing classical ragas.'
+          },
+          {
+            icon: '<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
+            metric: '4-Pillar Daily Protocol',
+            title: 'Habit & Nutrition Routine',
+            desc: 'Daily checklist tracking iron-folic acid, 2.5L hydration, gentle pelvic stretches, and kick counting.'
+          },
+          {
+            icon: '<path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>',
+            metric: 'Ancient & Modern Science',
+            title: 'Garbh Sanskar Rituals',
+            desc: 'Harmonic 432Hz Om resonance, Raga Yaman calming audio, and mindfulness affirmations for prenatal mental wellness.'
+          }
+        ]
+      },
+      {
+        id: 2,
+        timeStart: 20,
+        timeEnd: 42,
+        pill: 'CHAPTER 2 · 40-WEEK TIMELINE & DUE DATE',
+        title: 'Interactive 40-Week Timeline & Clinical Due Date Engine',
+        subtitle: 'Week-by-week organ development insights combined with multi-method clinical due date calculation (LMP, ultrasound biometric scan, and conception date).',
+        narration: "The interactive 40-Week Timeline breaks down fetal development week by week, showing organ growth, size comparisons, and clinical milestones. Swasth includes a smart Due Date Calculator that supports multiple clinical calculation methods, including last menstrual period, ultrasound scans, and conception date, giving parents precise medical clarity at every stage.",
+        cards: [
+          {
+            icon: '<rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>',
+            metric: 'Multi-Method Calculation',
+            title: 'Smart Due Date Engine',
+            desc: 'Supports Naegele\'s rule (LMP), early ultrasound crown-rump length (CRL), and exact conception date.'
+          },
+          {
+            icon: '<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>',
+            metric: 'Fetal Milestones',
+            title: 'Organ & Sensory Map',
+            desc: 'Visual progression of lung surfactant development, eye movements, and brain neural synapses week by week.'
+          },
+          {
+            icon: '<circle cx="12" cy="12" r="10"/><path d="M8 12h8"/>',
+            metric: 'Clinical Screening Alerts',
+            title: 'Investigation Scheduler',
+            desc: 'Automated reminders for anomaly scans, glucose tolerance tests (OGTT), and tetanus toxoid boosters.'
+          }
+        ]
+      },
+      {
+        id: 3,
+        timeStart: 42,
+        timeEnd: 64,
+        pill: 'CHAPTER 3 · PLANS & CLINICAL TOOLS',
+        title: 'Clinical Health Toolkit & 8 Smart Calculators',
+        subtitle: 'Essential on-device tools including Fetal Kick Counter, Contraction Timer with 5-1-1 rule alert, GDM glucose tracking, and national immunization schedule.',
+        narration: "Under Plans, mothers gain access to our eight essential clinical tools and four-pillar habit engine. This includes the Fetal Kick Counter with live movement logging, a Contraction Timer with the clinical 5-1-1 labor rule alert, weight and blood pressure tracking, gestational diabetes blood sugar monitoring, and an automated pediatric immunization calendar.",
+        cards: [
+          {
+            icon: '<path d="M12 2a5 5 0 0 1 5 5c0 3-2 5-5 9-3-4-5-6-5-9a5 5 0 0 1 5-5z"/>',
+            metric: '10-Movement Timer',
+            title: 'Fetal Kick Counter',
+            desc: 'Tracks baby\'s movement rhythm with SQLite logging, detecting decreased fetal movement early.'
+          },
+          {
+            icon: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/>',
+            metric: 'Clinical 5-1-1 Threshold',
+            title: 'Contraction Timer',
+            desc: 'Measures frequency and duration, notifying the family and hospital triage when true active labor begins.'
+          },
+          {
+            icon: '<path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>',
+            metric: 'National UIP Schedule',
+            title: 'Immunization Calendar',
+            desc: 'Tracks maternal TT/Td shots and seamlessly transitions to WHO/UIP infant vaccine tracking post-delivery.'
+          }
+        ]
+      },
+      {
+        id: 4,
+        timeStart: 64,
+        timeEnd: 88,
+        pill: 'CHAPTER 4 · SESSIONS & RECOVERY',
+        title: 'Long-Term Care Engagement: Timed Circuit & 150+ Recipes',
+        subtitle: 'Guided maternal fitness with an active interval workout player, certified pelvic floor specialists, and trimester-specific Ayurvedic nutrition programs.',
+        narration: "In Sessions, Swasth introduces comprehensive Long-Term Care Engagement. Mothers can enroll in trimester-tailored programs like prenatal pilates and pelvic floor recovery. The active Timed Interval Circuit Player guides workouts with real-time countdown intervals, set indicators, and movement cues. Users also explore mobility specialists and over one hundred and fifty Ayurvedic nutrition recipes with clinical ingredient breakdowns.",
+        cards: [
+          {
+            icon: '<polygon points="5 3 19 12 5 21 5 3"/>',
+            metric: 'Active 45s Countdown',
+            title: 'Timed Circuit Player',
+            desc: 'Interactive guided interval training with round counters, active exercise cues, and posture instructions.'
+          },
+          {
+            icon: '<circle cx="12" cy="7" r="4"/><path d="M5.5 21a6.5 6.5 0 0 1 13 0"/>',
+            metric: 'Certified Specialists',
+            title: 'Pelvic & Mobility Recovery',
+            desc: 'Programs designed by physical therapists for diastasis recti prevention, back pain relief, and labor prep.'
+          },
+          {
+            icon: '<path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 19 2c0 3 0 5-1.5 8.5A7 7 0 0 1 11 20z"/>',
+            metric: '150+ Traditional Recipes',
+            title: 'Ayurvedic Nutrition',
+            desc: 'Curated dishes like Postpartum Gond Laddoo and Moringa Rasam with iron, calcium, and lactogenic benefits.'
+          }
+        ]
+      },
+      {
+        id: 5,
+        timeStart: 88,
+        timeEnd: 112,
+        pill: 'CHAPTER 5 · SWASTH AI COMPANION',
+        title: '24/7 Clinical AI Maternal Companion',
+        subtitle: 'Evidence-based conversational AI grounded in maternal care protocols, NeMo safety guardrails, and automated red-flag triage detection.',
+        narration: "The Swasth AI Companion delivers twenty-four-seven evidence-based maternal guidance. Grounded in clinical protocols and safety guardrails, mothers can ask about second-trimester symptoms, safe traditional remedies, or nutrition. The AI instantly analyzes trimester context, providing reassuring, validated advice alongside emergency red-flag triage detection.",
+        cards: [
+          {
+            icon: '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/>',
+            metric: 'Trimester Context Aware',
+            title: 'Personalized Clinical AI',
+            desc: 'Understands gestational age, dietary restrictions, and symptom history for highly specific, reassuring advice.'
+          },
+          {
+            icon: '<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
+            metric: 'Zero-Hallucination Guard',
+            title: 'Red-Flag Symptom Triage',
+            desc: 'Detects preeclampsia warnings, severe bleeding, or reduced fetal movement, immediately directing to emergency care.'
+          },
+          {
+            icon: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+            metric: 'Multilingual Voice & Text',
+            title: 'Dignified Maternal Guidance',
+            desc: 'Provides warm, culturally respectful explanations of normal bodily changes and safe home wellness practices.'
+          }
+        ]
+      },
+      {
+        id: 6,
+        timeStart: 112,
+        timeEnd: 132,
+        pill: 'CHAPTER 6 · COMMUNITY & ABHA SECURITY',
+        title: 'Hyperlocal Birth Clubs & ABHA Digital Health Stack',
+        subtitle: 'Connecting mothers with local peer circles, family caregiver synchronization, and India’s Ayushman Bharat Digital Mission (ABHA) consent architecture.',
+        narration: "Swasth connects mothers through safe Hyperlocal Birth Clubs and integrates seamlessly with India's Ayushman Bharat Digital Mission, or ABHA, enabling encrypted health record sharing. With our Caregiver Circle, spouses and family stay synced via WhatsApp and voice updates. Swasth delivers dignified, culturally resonant, and life-saving care for every mother.",
+        cards: [
+          {
+            icon: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+            metric: 'Peer Circles & Mentors',
+            title: 'Hyperlocal Birth Clubs',
+            desc: 'Connect with mothers in the exact same trimester in your city, moderated by verified healthcare professionals.'
+          },
+          {
+            icon: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+            metric: 'ABHA PHR Linked',
+            title: 'Consent-Driven Privacy',
+            desc: 'Encrypted storage with seamless sharing to hospitals and PHCs via Ayushman Bharat Digital Mission protocols.'
+          },
+          {
+            icon: '<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>',
+            metric: 'Partner & Family Sync',
+            title: 'Caregiver Circle',
+            desc: 'Automated WhatsApp & voice updates for partners and elders with milestone tips and appointment reminders.'
+          }
+        ]
+      }
+    ];
+
+    let currentChapterId = 1;
+
+    function renderChapter(ch) {
+      document.getElementById('chapterPill').innerText = ch.pill;
+      document.getElementById('chapterCounter').innerText = `${ch.id} of 6 Features`;
+      document.getElementById('chapterTitle').innerText = ch.title;
+      document.getElementById('chapterSub').innerText = ch.subtitle;
+      document.getElementById('teleprompterText').innerText = ch.narration;
+
+      // Update Cards
+      const container = document.getElementById('spotlightCards');
+      container.innerHTML = ch.cards.map((c, i) => `
+        <div class="spotlight-card ${i === 0 ? 'active-card' : ''}" id="card-${i}">
+          <div class="card-top-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              ${c.icon}
+            </svg>
+          </div>
+          <div class="card-metric">${c.metric}</div>
+          <div class="card-title">${c.title}</div>
+          <div class="card-desc">${c.desc}</div>
+        </div>
+      `).join('');
+
+      // Update Bottom Step Chips
+      for (let i = 1; i <= 6; i++) {
+        const el = document.getElementById(`stepChip-${i}`);
+        if (el) {
+          if (i === ch.id) el.classList.add('active-step');
+          else el.classList.remove('active-step');
+        }
+      }
+    }
+
+    // Master Timeline Seek / Tick Function (0 to 132s)
+    window.seekToTime = function(sec) {
+      sec = Math.max(0, Math.min(132, sec));
+      
+      // Update Timer display
+      const mins = Math.floor(sec / 60);
+      const secs = Math.floor(sec % 60);
+      const timeStr = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')} / 02:12`;
+      document.getElementById('topTimer').innerText = timeStr;
+      document.getElementById('bottomTime').innerText = timeStr;
+
+      // Update Progress Bar
+      const pct = (sec / 132) * 100;
+      document.getElementById('progressFill').style.width = `${pct}%`;
+
+      // Determine active chapter
+      let activeChapter = CHAPTERS_DATA.find(c => sec >= c.timeStart && sec < c.timeEnd);
+      if (!activeChapter) activeChapter = CHAPTERS_DATA[CHAPTERS_DATA.length - 1];
+
+      if (activeChapter.id !== currentChapterId) {
+        currentChapterId = activeChapter.id;
+        renderChapter(activeChapter);
+      }
+
+      // Highlight cards based on progress within chapter
+      const chProgress = (sec - activeChapter.timeStart) / (activeChapter.timeEnd - activeChapter.timeStart);
+      const activeCardIdx = Math.min(2, Math.floor(chProgress * 3));
+      for (let i = 0; i < 3; i++) {
+        const cardEl = document.getElementById(`card-${i}`);
+        if (cardEl) {
+          if (i === activeCardIdx) cardEl.classList.add('active-card');
+          else cardEl.classList.remove('active-card');
+        }
+      }
+
+      // Control inner iframe app!
+      const iframe = document.getElementById('appIframe');
+      if (iframe && iframe.contentWindow) {
+        try {
+          const app = iframe.contentWindow;
+          const viewport = app.document ? app.document.getElementById('appViewport') : null;
+
+          if (currentChapterId === 1) {
+            // Home Dashboard
+            if (app.switchTab) app.switchTab('home');
+            if (viewport) {
+              const scrollPos = Math.min(300, (sec / 20) * 300);
+              viewport.scrollTop = scrollPos;
+            }
+          } else if (currentChapterId === 2) {
+            // 40-Week Timeline & Due Date
+            if (app.switchTab) app.switchTab('home');
+            if (viewport) {
+              const relSec = sec - 20;
+              if (relSec < 8) {
+                viewport.scrollTop = 320;
+              } else if (relSec < 18) {
+                viewport.scrollTop = 580;
+                // Open Due date or vitals sheet
+                if (app.openToolSheet && !app.document.getElementById('bottomSheet').classList.contains('open')) {
+                  app.openToolSheet('vitals');
+                }
+              } else {
+                if (app.closeToolSheet) app.closeToolSheet();
+              }
+            }
+          } else if (currentChapterId === 3) {
+            // Plans & Tools
+            if (app.switchTab) app.switchTab('plans');
+            const relSec = sec - 42;
+            if (viewport) {
+              if (relSec < 6) {
+                viewport.scrollTop = 50;
+              } else if (relSec < 15) {
+                // Open Kicks Counter sheet
+                if (app.openToolSheet && !app.document.getElementById('bottomSheet').classList.contains('open')) {
+                  app.openToolSheet('kicks');
+                }
+                if (relSec > 9 && app.incrementKick) {
+                  app.incrementKick();
+                }
+              } else {
+                if (app.closeToolSheet) app.closeToolSheet();
+                viewport.scrollTop = 220;
+              }
+            }
+          } else if (currentChapterId === 4) {
+            // Sessions & Long-Term Care Engagement
+            if (app.switchTab) app.switchTab('ai');
+            const relSec = sec - 64;
+            if (relSec < 7) {
+              if (app.switchSessionSubTab) app.switchSessionSubTab('programs');
+            } else if (relSec < 14) {
+              if (app.switchSessionSubTab) app.switchSessionSubTab('circuit');
+              // Let timer tick
+              const timerValEl = app.document.getElementById('circuitTimerVal');
+              if (timerValEl) {
+                const remainSec = Math.max(10, 45 - Math.floor(relSec - 7));
+                timerValEl.innerText = `00:${String(remainSec).padStart(2, '0')}`;
+              }
+            } else if (relSec < 19) {
+              if (app.switchSessionSubTab) app.switchSessionSubTab('mobility');
+            } else {
+              if (app.switchSessionSubTab) app.switchSessionSubTab('nutrition');
+              if (app.openRecipeModal && !app.document.getElementById('bottomSheet').classList.contains('open')) {
+                app.openRecipeModal('gond');
+              }
+            }
+          } else if (currentChapterId === 5) {
+            // Swasth AI Companion
+            if (app.closeToolSheet) app.closeToolSheet();
+            if (app.switchTab) app.switchTab('ai');
+            if (app.switchSessionSubTab) app.switchSessionSubTab('ai');
+            const relSec = sec - 88;
+            if (viewport) viewport.scrollTop = 200;
+          } else if (currentChapterId === 6) {
+            // Community & ABHA Security
+            const relSec = sec - 112;
+            if (relSec < 7) {
+              if (app.switchTab) app.switchTab('community');
+              if (viewport) viewport.scrollTop = 100;
+            } else {
+              if (app.switchTab) app.switchTab('more');
+              if (viewport) viewport.scrollTop = 150;
+            }
+          }
+        } catch(e) {
+          // Cross-frame or loading state guard
+        }
+      }
+    };
+
+    // Initialize first chapter
+    renderChapter(CHAPTERS_DATA[0]);
+  </script>
+</body>
+</html>
