@@ -922,13 +922,14 @@
       align-items: center;
       justify-content: center;
       gap: 4px;
-      width: 54px;
+      width: 58px;
       height: 60px;
       border: none;
       background: transparent;
       cursor: pointer;
       color: var(--nav-stroke-idle);
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
     }
     .ref-nav-tab .tab-icon-wrap {
       width: 24px;
@@ -951,6 +952,15 @@
     .ref-nav-tab.active .tab-label {
       color: var(--nav-active);
       font-weight: 800;
+    }
+    .ref-nav-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: 5px;
+      width: 16px;
+      height: 3px;
+      border-radius: 999px;
+      background: var(--nav-active);
     }
     
     /* Center Elevated Circular Button (Like Reference) */
@@ -2793,21 +2803,19 @@
 
 
     <!-- ========================================================
-         NAVIGATION DOCK (MATCHING EXACT REFERENCE media_1791232095554)
+         NAVIGATION DOCK: 1. Home | 2. Plans | 3. Clubs | 4. Session | 5. More
          ======================================================== -->
     <div class="reference-nav-dock" id="bottomDock">
       
-      <!-- 1. Clubs -->
-      <button class="ref-nav-tab" id="tabBtn-community" onclick="switchTab('community')">
+      <!-- 1. Home (DEFAULT ACTIVE TAB) -->
+      <button class="ref-nav-tab active" id="tabBtn-home" onclick="switchTab('home')">
         <div class="tab-icon-wrap">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4 10V4h16v6"/>
-            <path d="M4 10c0 1.5 1.5 2 2.5 2s2.5-.5 2.5-2c0 1.5 1.5 2 2.5 2s2.5-.5 2.5-2c0 1.5 1.5 2 2.5 2s2.5-.5 2.5-2"/>
-            <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/>
-            <path d="M10 21v-4a2 2 0 0 1 4 0v4"/>
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
           </svg>
         </div>
-        <span class="tab-label">Clubs</span>
+        <span class="tab-label">Home</span>
       </button>
 
       <!-- 2. Plans (Toolkit & Daily Schedules) -->
@@ -2821,14 +2829,18 @@
         <span class="tab-label">Plans</span>
       </button>
 
-      <!-- 3. Center Home Circular Button -->
-      <div class="ref-nav-center-wrap">
-        <button class="ref-center-circle-btn" id="tabBtn-home" onclick="switchTab('home')" title="Home Dashboard">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
-            <path d="M12 3L3 10.5V20a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V10.5L12 3zm0 13a1 1 0 0 1-1-1v-2a1 1 0 0 1 2 0v2a1 1 0 0 1-1 1z"/>
+      <!-- 3. Clubs (Hyperlocal Birth Clubs) -->
+      <button class="ref-nav-tab" id="tabBtn-community" onclick="switchTab('community')">
+        <div class="tab-icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
           </svg>
-        </button>
-      </div>
+        </div>
+        <span class="tab-label">Clubs</span>
+      </button>
 
       <!-- 4. Session / AI -->
       <button class="ref-nav-tab" id="tabBtn-ai" onclick="switchTab('ai')">
@@ -2841,7 +2853,7 @@
         <span class="tab-label">Session</span>
       </button>
 
-      <!-- 5. More (Settings matching exact ref media_1791234426439) -->
+      <!-- 5. More (Settings & ABHA Privacy) -->
       <button class="ref-nav-tab" id="tabBtn-more" onclick="switchTab('more')">
         <div class="tab-icon-wrap">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -3803,7 +3815,10 @@
     if (window.self !== window.top) { document.body.classList.add('in-iframe'); }
     window.addEventListener('DOMContentLoaded', () => {
       initSqliteEngine();
+      switchTab('home');
     });
+    // Ensure Home is default view immediately on script evaluation
+    try { switchTab('home'); } catch(e){}
   </script>
 </body>
 </html>

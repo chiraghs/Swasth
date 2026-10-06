@@ -879,7 +879,7 @@
       </div>
 
       <div class="phone-mockup-frame">
-        <iframe src="./app/index.html" id="heroPhoneIframe" title="Swasth Live App Simulator"></iframe>
+        <iframe src="./app/index.html" id="heroPhoneIframe" title="Swasth Live App Simulator" onload="try { if (this.contentWindow && typeof this.contentWindow.switchTab === 'function') this.contentWindow.switchTab('home'); } catch(e){}"></iframe>
       </div>
 
       <!-- Quick Switcher Controls for Simulator -->
