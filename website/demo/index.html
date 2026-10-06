@@ -985,6 +985,153 @@
       margin-top: 3px;
     }
 
+    
+    /* SETTINGS / MORE VIEW (EXACT REFERENCE REPLICA) */
+    .settings-view-wrap {
+      padding: 0 16px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background: linear-gradient(180deg, #FFEBF0 0%, #FFF5F7 140px, #FAF8F9 100%);
+      min-height: 100%;
+    }
+    .settings-header-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 4px 10px;
+    }
+    .settings-back-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #FF3B69 0%, #FF5E8A 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(255, 59, 105, 0.35);
+      border: none;
+      flex-shrink: 0;
+      transition: transform 0.15s;
+    }
+    .settings-back-btn:active {
+      transform: scale(0.92);
+    }
+    .settings-title {
+      font-size: 24px;
+      font-weight: 800;
+      font-family: 'Outfit', sans-serif;
+      color: #1E293B;
+      letter-spacing: -0.3px;
+    }
+    .settings-group-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #64748B;
+      margin: 10px 4px 6px;
+    }
+    .settings-card {
+      background: #FFFFFF;
+      border-radius: 24px;
+      padding: 4px 18px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+      border: 1px solid rgba(0, 0, 0, 0.04);
+    }
+    .settings-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 13px 0;
+      border-bottom: 1px solid #F8FAFC;
+      cursor: pointer;
+    }
+    .settings-row:last-child {
+      border-bottom: none;
+    }
+    .settings-row-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex: 1;
+    }
+    .settings-icon-badge {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .settings-label-box {
+      display: flex;
+      flex-direction: column;
+    }
+    .settings-row-label {
+      font-size: 15px;
+      font-weight: 600;
+      color: #1E293B;
+    }
+    .settings-row-sub {
+      font-size: 11px;
+      font-weight: 500;
+      color: #94A3B8;
+      margin-top: 2px;
+    }
+    .settings-row-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #64748B;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .settings-chevron {
+      color: #94A3B8;
+      stroke-width: 2.4;
+    }
+
+    /* iOS SWITCH (PURPLE/MAGENTA GRADIENT MATCHING REF) */
+    .ios-switch {
+      position: relative;
+      display: inline-block;
+      width: 48px;
+      height: 28px;
+      flex-shrink: 0;
+    }
+    .ios-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .ios-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #CBD5E1;
+      transition: .25s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 34px;
+    }
+    .ios-slider:before {
+      position: absolute;
+      content: "";
+      height: 22px;
+      width: 22px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .25s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 50%;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    }
+    .ios-switch input:checked + .ios-slider {
+      background: linear-gradient(135deg, #E040FB 0%, #A855F7 50%, #FF3B69 100%);
+    }
+    .ios-switch input:checked + .ios-slider:before {
+      transform: translateX(20px);
+    }
+
     /* BOTTOM SHEET */
     .app-bottom-sheet {
       position: absolute;
@@ -1109,7 +1256,7 @@
         <!-- TOP APP BAR -->
         <div class="app-header">
           <div class="header-user">
-            <div class="user-avatar-wrap" onclick="switchTab('profile')">
+            <div class="user-avatar-wrap" onclick="switchTab('more')">
               <img src="../assets/ananya_profile.png" class="user-avatar-img" alt="Ananya">
               <div class="user-status-dot"></div>
             </div>
@@ -1306,31 +1453,35 @@
       </div><!-- End view-community -->
 
 
-      <!-- ==============================================
-           SCREEN 3: SMART TOOLS (OUTLINE VECTOR GRID)
+            <!-- ==============================================
+           SCREEN 3: PLANS & TOOLKIT (DAILY SCHEDULES & HEALTH TOOLS)
            ============================================== -->
-      <div id="view-tools" style="display: none;">
+      <div id="view-plans" style="display: none;">
         <div class="app-header">
           <div>
-            <span class="greeting-sub">Interactive Utilities</span>
-            <h2 style="font-size: 20px; font-weight: 800; font-family: 'Outfit', sans-serif;">Smart Tools & Vitals</h2>
+            <span class="greeting-sub">Interactive Utilities & Plans</span>
+            <h2 style="font-size: 20px; font-weight: 800; font-family: 'Outfit', sans-serif;">Toolkit & Daily Plans</h2>
           </div>
+          <button class="icon-badge-btn" onclick="openToolSheet('vaccine')" title="Immunization Schedule">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </button>
         </div>
 
-        <div style="margin: 0 20px 16px; background: linear-gradient(135deg, #10B981 0%, #059669 100%); border-radius: 22px; padding: 18px 20px; color: white; display: flex; justify-content: space-between; align-items: center;">
+        <!-- Toolkit Banner -->
+        <div style="margin: 0 20px 16px; background: linear-gradient(135deg, #10B981 0%, #059669 100%); border-radius: 22px; padding: 18px 20px; color: white; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 8px 24px rgba(16, 185, 129, 0.25);">
           <div>
             <div style="font-size: 18px; font-weight: 800; font-family: 'Outfit', sans-serif;">Daily Health Toolkit</div>
             <div style="font-size: 11px; opacity: 0.9; margin-top: 2px;">Track hydration, vitals, kicks & sound therapy</div>
           </div>
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
         </div>
 
-        <!-- 2-Column Vector Grid -->
+        <!-- 2-Column Vector Tools Grid -->
         <div class="smart-tools-grid">
           <div class="tool-tile pastel-cyan" onclick="openToolSheet('water')">
             <div>
               <div class="tile-title">Water Hydration</div>
-              <div class="tile-sub" id="toolWaterSub">1,750 / 2,500 ml</div>
+              <div class="tile-sub" id="toolWaterSubPlans">1,750 / 2,500 ml</div>
             </div>
             <div class="tile-icon-svg">
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="2" stroke-linecap="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
@@ -1350,7 +1501,7 @@
           <div class="tool-tile pastel-mint" onclick="openToolSheet('steps')">
             <div>
               <div class="tile-title">Daily Steps</div>
-              <div class="tile-sub" id="toolStepsSub">3,840 / 5,000 steps</div>
+              <div class="tile-sub" id="toolStepsSubPlans">3,840 / 5,000 steps</div>
             </div>
             <div class="tile-icon-svg">
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2" stroke-linecap="round"><path d="M4 16v-2a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v2"/><circle cx="12" cy="7" r="3"/></svg>
@@ -1370,7 +1521,7 @@
           <div class="tool-tile pastel-yellow" onclick="openToolSheet('kicks')">
             <div>
               <div class="tile-title">Kick Counter</div>
-              <div class="tile-sub" id="toolKicksSub">10 kicks recorded</div>
+              <div class="tile-sub" id="toolKicksSubPlans">10 kicks recorded</div>
             </div>
             <div class="tile-icon-svg">
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#CA8A04" stroke-width="2" stroke-linecap="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
@@ -1407,7 +1558,38 @@
             </div>
           </div>
         </div>
-      </div><!-- End view-tools -->
+
+        <!-- DAILY HABIT ROUTINE IN PLANS -->
+        <div class="section-heading" style="margin-top: 14px;">
+          <span class="heading-title">Daily Garbh Sanskar Plans</span>
+          <span class="heading-link" onclick="filterActivities('ALL')">All Plans</span>
+        </div>
+
+        <div class="daily-activities-wrap">
+          <div class="activity-progress-card">
+            <div>
+              <div style="font-size: 13px; font-weight: 800; color: #1E293B;">Daily Garbh Sanskar Routine</div>
+              <div style="font-size: 11px; color: var(--text-muted);" id="plansProgressStats">8 of 12 Activities Completed (67%)</div>
+              <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="plansProgressBar" style="width: 67%;"></div>
+              </div>
+            </div>
+            <div style="color: var(--primary);">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.5h-2v-2h2zm0-4h-2V7h2z"/></svg>
+            </div>
+          </div>
+
+          <div class="category-filter-strip">
+            <button class="cat-btn active" onclick="filterActivities('ALL')">All (12)</button>
+            <button class="cat-btn" onclick="filterActivities('SQ')">SQ Spiritual</button>
+            <button class="cat-btn" onclick="filterActivities('IQ')">IQ Intellectual</button>
+            <button class="cat-btn" onclick="filterActivities('EQ')">EQ Emotional</button>
+            <button class="cat-btn" onclick="filterActivities('PQ')">PQ Physical</button>
+          </div>
+
+          <div id="plansActivitiesContainer" style="display: flex; flex-direction: column; gap: 8px;"></div>
+        </div>
+      </div><!-- End view-plans -->
 
 
       <!-- ==============================================
@@ -1459,80 +1641,224 @@
       </div><!-- End view-ai -->
 
 
-      <!-- ==============================================
-           SCREEN 5: PROFILE & ABHA SETTINGS
+            <!-- ==============================================
+           SCREEN 5: MORE / SETTINGS (MATCHING REF media_1791234426439)
            ============================================== -->
-      <div id="view-profile" style="display: none;">
-        <div class="app-header">
-          <div>
-            <h2 style="font-size: 20px; font-weight: 800; font-family: 'Outfit', sans-serif;">Profile & Preferences</h2>
-          </div>
-          <button class="icon-badge-btn" onclick="switchTab('auth')" title="Sign Out">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-          </button>
-        </div>
-
-        <div style="padding: 0 20px 20px; display: flex; flex-direction: column; gap: 14px;">
-          <!-- Mother Card -->
-          <div style="background: var(--card-white); border-radius: 24px; padding: 20px; box-shadow: var(--shadow-sm); border: 1px solid var(--border-soft); text-align: center;">
-            <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #FF3B69, #FFB088); padding: 3px; margin: 0 auto 12px; box-shadow: 0 6px 20px rgba(255, 59, 105, 0.25);">
-              <img src="../assets/ananya_profile.png" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid white;" alt="Ananya Sharma">
-            </div>
-            <h3 style="font-size: 18px; font-weight: 800; color: var(--text-main);" id="profileNameDisplay">Ananya Sharma</h3>
-            <p style="font-size: 12px; color: var(--text-muted);">Due Date: 18 September 2026 · Week 14</p>
-            
-            <div style="display: inline-flex; align-items: center; gap: 6px; background: #ECFDF5; border: 1px solid #A7F3D0; padding: 4px 12px; border-radius: 999px; margin-top: 10px; font-size: 11px; font-weight: 700; color: #065F46;">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><circle cx="9" cy="10" r="2"/><line x1="15" y1="8" x2="17" y2="8"/></svg>
-              ABHA: 91-8842-1094-8831
-            </div>
+      <div id="view-more" style="display: none;">
+        <div class="settings-view-wrap">
+          
+          <!-- TOP HEADER WITH PINK CIRCULAR BACK BUTTON & TITLE -->
+          <div class="settings-header-row">
+            <button class="settings-back-btn" onclick="switchTab('home')" title="Back to Home">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+            </button>
+            <h2 class="settings-title">Settings</h2>
           </div>
 
-          <!-- Preferences -->
-          <div style="background: var(--card-white); border-radius: 20px; padding: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--border-soft);">
-            <div style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 12px;">App Preferences</div>
-            
-            <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #F1F5F9;">
-              <span style="font-size: 13px; font-weight: 600;">Units</span>
-              <span style="font-size: 12px; font-weight: 700; color: var(--primary);">Metric (Kg / Cm)</span>
-            </div>
-
-            <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #F1F5F9;">
-              <span style="font-size: 13px; font-weight: 600;">Daily Habit Reminders</span>
-              <input type="checkbox" checked style="accent-color: var(--primary); transform: scale(1.2);">
-            </div>
-
-            <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0;">
-              <span style="font-size: 13px; font-weight: 600;">Haptic Vibrations</span>
-              <input type="checkbox" checked style="accent-color: var(--primary); transform: scale(1.2);">
-            </div>
-          </div>
-
-          <!-- Governance -->
-          <div style="background: var(--card-white); border-radius: 20px; padding: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--border-soft);">
-            <div style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 12px;">Data Governance & Ledger</div>
-            
-            <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #F1F5F9;">
-              <div>
-                <div style="font-size: 13px; font-weight: 600;">On-Device Secure Storage</div>
-                <div style="font-size: 10px; color: var(--text-muted);">Instant zero-network offline storage</div>
+          <!-- GROUP 1: GENERAL -->
+          <div class="settings-group-label">General</div>
+          <div class="settings-card">
+            <div class="settings-row" onclick="toggleUnits()">
+              <div class="settings-row-left">
+                <!-- Scale / Balance icon badge -->
+                <div class="settings-icon-badge" style="background: #EEF2FF; color: #6366F1;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="3" x2="12" y2="21"></line>
+                    <polyline points="4 7 12 5 20 7"></polyline>
+                    <polyline points="1 13 4 7 7 13"></polyline>
+                    <polyline points="17 13 20 7 23 13"></polyline>
+                    <circle cx="4" cy="13" r="3"></circle>
+                    <circle cx="20" cy="13" r="3"></circle>
+                  </svg>
+                </div>
+                <div class="settings-label-box">
+                  <span class="settings-row-label">Units</span>
+                </div>
               </div>
-              <span style="font-size: 10px; background: #DCFCE7; color: #15803D; font-weight: 800; padding: 3px 8px; border-radius: 6px;">Active</span>
-            </div>
-
-            <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0;">
-              <div>
-                <div style="font-size: 13px; font-weight: 600;">ABHA Consent Ledger</div>
-                <div style="font-size: 10px; color: var(--text-muted);">Encrypted health records</div>
+              <div class="settings-row-right">
+                <span id="currentUnitsLabel" style="color: #64748B;">Kg/Cm</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" class="settings-chevron"><polyline points="9 18 15 12 9 6"/></svg>
               </div>
-              <span style="font-size: 10px; background: #EEF2FF; color: #4338CA; font-weight: 800; padding: 3px 8px; border-radius: 6px;">Consent Verified</span>
             </div>
           </div>
 
-          <button onclick="switchTab('auth')" style="background: #FEE2E2; color: #B91C1C; border: none; padding: 12px; border-radius: 14px; font-size: 13px; font-weight: 700; cursor: pointer;">
+          <!-- GROUP 2: REMINDERS -->
+          <div class="settings-group-label">Reminders</div>
+          <div class="settings-card">
+            <!-- Notifications Toggle -->
+            <div class="settings-row">
+              <div class="settings-row-left">
+                <!-- Bell icon badge -->
+                <div class="settings-icon-badge" style="background: #E0F2FE; color: #0284C7;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                  </svg>
+                </div>
+                <div class="settings-label-box">
+                  <span class="settings-row-label">Notifications</span>
+                </div>
+              </div>
+              <div class="settings-row-right">
+                <label class="ios-switch">
+                  <input type="checkbox" id="toggleNotifications" checked onchange="onNotificationToggle(this.checked)">
+                  <span class="ios-slider"></span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Vibrations Toggle -->
+            <div class="settings-row">
+              <div class="settings-row-left">
+                <!-- Speaker / Vibration badge -->
+                <div class="settings-icon-badge" style="background: #FFEDD5; color: #EA580C;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                  </svg>
+                </div>
+                <div class="settings-label-box">
+                  <span class="settings-row-label">Vibrations</span>
+                </div>
+              </div>
+              <div class="settings-row-right">
+                <label class="ios-switch">
+                  <input type="checkbox" id="toggleVibrations" checked onchange="onVibrationToggle(this.checked)">
+                  <span class="ios-slider"></span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Manage Notifications -->
+            <div class="settings-row" onclick="openNotificationSettingsModal()">
+              <div class="settings-row-left">
+                <!-- Alarm / Bell badge -->
+                <div class="settings-icon-badge" style="background: #FEF3C7; color: #D97706;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="13" r="8"></circle>
+                    <path d="M12 9v4l2 2"></path>
+                    <path d="m5 3 2 2"></path>
+                    <path d="m19 3-2 2"></path>
+                  </svg>
+                </div>
+                <div class="settings-label-box">
+                  <span class="settings-row-label">Manage Notifications</span>
+                  <span class="settings-row-sub">Advanced Notification Settings</span>
+                </div>
+              </div>
+              <div class="settings-row-right">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" class="settings-chevron"><polyline points="9 18 15 12 9 6"/></svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- GROUP 3: APP -->
+          <div class="settings-group-label">App</div>
+          <div class="settings-card">
+            <!-- Help And Feedback -->
+            <div class="settings-row" onclick="openHelpFeedbackModal()">
+              <div class="settings-row-left">
+                <!-- Feedback document / bubble badge -->
+                <div class="settings-icon-badge" style="background: #FCE7F3; color: #DB2777;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                  </svg>
+                </div>
+                <div class="settings-label-box">
+                  <span class="settings-row-label">Help And Feedback</span>
+                </div>
+              </div>
+              <div class="settings-row-right">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" class="settings-chevron"><polyline points="9 18 15 12 9 6"/></svg>
+              </div>
+            </div>
+
+            <!-- Open Source Licenses -->
+            <div class="settings-row" onclick="openLicensesModal()">
+              <div class="settings-row-left">
+                <!-- Code bracket badge -->
+                <div class="settings-icon-badge" style="background: #E0F2FE; color: #0284C7;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="16 18 22 12 16 6"></polyline>
+                    <polyline points="8 6 2 12 8 18"></polyline>
+                  </svg>
+                </div>
+                <div class="settings-label-box">
+                  <span class="settings-row-label">Open Source Licenses</span>
+                </div>
+              </div>
+              <div class="settings-row-right">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" class="settings-chevron"><polyline points="9 18 15 12 9 6"/></svg>
+              </div>
+            </div>
+
+            <!-- Help Us Translate -->
+            <div class="settings-row" onclick="openTranslateModal()">
+              <div class="settings-row-left">
+                <!-- Translation A/文 badge -->
+                <div class="settings-icon-badge" style="background: #EDE9FE; color: #7C3AED;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m5 8 6 6"></path>
+                    <path d="m4 14 6-6 2-3"></path>
+                    <path d="M2 5h12"></path>
+                    <path d="M7 2h1"></path>
+                    <path d="m22 22-5-10-5 10"></path>
+                    <path d="M14 18h6"></path>
+                  </svg>
+                </div>
+                <div class="settings-label-box">
+                  <span class="settings-row-label">Help Us Translate</span>
+                </div>
+              </div>
+              <div class="settings-row-right">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" class="settings-chevron"><polyline points="9 18 15 12 9 6"/></svg>
+              </div>
+            </div>
+
+            <!-- Data Protection -->
+            <div class="settings-row" onclick="openDataProtectionModal()">
+              <div class="settings-row-left">
+                <!-- Shield badge -->
+                <div class="settings-icon-badge" style="background: #D1FAE5; color: #059669;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                  </svg>
+                </div>
+                <div class="settings-label-box">
+                  <span class="settings-row-label">Data Protection</span>
+                </div>
+              </div>
+              <div class="settings-row-right">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" class="settings-chevron"><polyline points="9 18 15 12 9 6"/></svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- USER PROFILE CARD IN SETTINGS -->
+          <div class="settings-group-label">Account</div>
+          <div class="settings-card" style="padding: 16px;">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <img src="../assets/ananya_profile.png" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" alt="Ananya">
+                <div>
+                  <div style="font-size: 15px; font-weight: 800; color: #1E293B;">Ananya Sharma</div>
+                  <div style="font-size: 11px; color: #64748B;">Week 14 · ABHA: 91-8842-1094-8831</div>
+                </div>
+              </div>
+              <span style="font-size: 10px; background: #EEF2FF; color: #4338CA; font-weight: 800; padding: 4px 10px; border-radius: 999px;">Consent Verified</span>
+            </div>
+          </div>
+
+          <button onclick="switchTab('auth')" style="background: #FEE2E2; color: #B91C1C; border: none; padding: 13px; border-radius: 18px; font-size: 13px; font-weight: 700; cursor: pointer; margin-top: 4px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
             Sign Out / Switch Account
           </button>
+
         </div>
-      </div><!-- End view-profile -->
+      </div><!-- End view-more -->
 
     </div><!-- End app-screen-viewport -->
 
@@ -1542,7 +1868,7 @@
          ======================================================== -->
     <div class="reference-nav-dock" id="bottomDock">
       
-      <!-- 1. Clubs (Like Ref: Shop) -->
+      <!-- 1. Clubs -->
       <button class="ref-nav-tab" id="tabBtn-community" onclick="switchTab('community')">
         <div class="tab-icon-wrap">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1555,8 +1881,8 @@
         <span class="tab-label">Clubs</span>
       </button>
 
-      <!-- 2. Plans (Like Ref: Plans) -->
-      <button class="ref-nav-tab" id="tabBtn-plans" onclick="scrollToActivities()">
+      <!-- 2. Plans (Toolkit & Daily Schedules) -->
+      <button class="ref-nav-tab" id="tabBtn-plans" onclick="switchTab('plans')">
         <div class="tab-icon-wrap">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="4" y="3" width="16" height="18" rx="4"/>
@@ -1566,7 +1892,7 @@
         <span class="tab-label">Plans</span>
       </button>
 
-      <!-- 3. Center Home Circular Button (Like Ref: Pink Circle Home) -->
+      <!-- 3. Center Home Circular Button -->
       <div class="ref-nav-center-wrap">
         <button class="ref-center-circle-btn" id="tabBtn-home" onclick="switchTab('home')" title="Home Dashboard">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
@@ -1575,7 +1901,7 @@
         </button>
       </div>
 
-      <!-- 4. Session / AI (Like Ref: Session Circle) -->
+      <!-- 4. Session / AI -->
       <button class="ref-nav-tab" id="tabBtn-ai" onclick="switchTab('ai')">
         <div class="tab-icon-wrap">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1586,8 +1912,8 @@
         <span class="tab-label">Session</span>
       </button>
 
-      <!-- 5. More / Tools (Like Ref: 4-square grid with plus) -->
-      <button class="ref-nav-tab" id="tabBtn-tools" onclick="switchTab('tools')">
+      <!-- 5. More (Settings matching exact ref media_1791234426439) -->
+      <button class="ref-nav-tab" id="tabBtn-more" onclick="switchTab('more')">
         <div class="tab-icon-wrap">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="3" width="7" height="7" rx="2.5"/>
@@ -1878,35 +2204,45 @@
       }
       sql += ` ORDER BY is_completed ASC, id ASC;`;
 
+      const plansContainer = document.getElementById('plansActivitiesContainer');
+      if (plansContainer) plansContainer.innerHTML = '';
+
       try {
         const statsRes = db.exec(`SELECT COUNT(*), SUM(is_completed) FROM daily_activities;`);
         if (statsRes && statsRes[0]) {
           const total = statsRes[0].values[0][0];
           const completed = statsRes[0].values[0][1] || 0;
           const pct = Math.round((completed / total) * 100);
-          document.getElementById('activityProgressStats').innerText = `${completed} of ${total} Activities Completed (${pct}%)`;
-          document.getElementById('activityProgressBar').style.width = `${pct}%`;
+          const txt = `${completed} of ${total} Activities Completed (${pct}%)`;
+          if (document.getElementById('activityProgressStats')) document.getElementById('activityProgressStats').innerText = txt;
+          if (document.getElementById('activityProgressBar')) document.getElementById('activityProgressBar').style.width = `${pct}%`;
+          if (document.getElementById('plansProgressStats')) document.getElementById('plansProgressStats').innerText = txt;
+          if (document.getElementById('plansProgressBar')) document.getElementById('plansProgressBar').style.width = `${pct}%`;
         }
 
         const res = db.exec(sql);
         if (res && res[0]) {
           res[0].values.forEach(row => {
             const [id, cat, icon, title, sub, dur, isDone] = row;
-            const card = document.createElement('div');
-            card.className = `activity-card ${isDone ? 'completed' : ''}`;
-            card.onclick = () => toggleActivity(id, isDone);
-            card.innerHTML = `
-              <div class="act-icon-box ${cat.toLowerCase()}">${getCategorySvg(cat)}</div>
-              <div class="activity-details">
-                <div class="act-tag">${cat} Quotients · ${dur}</div>
-                <div class="act-title">${title}</div>
-                <div class="act-sub">${sub}</div>
-              </div>
-              <div class="act-check-btn">
-                ${isDone ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>` : ''}
-              </div>
-            `;
-            container.appendChild(card);
+            function createCard() {
+              const card = document.createElement('div');
+              card.className = `activity-card ${isDone ? 'completed' : ''}`;
+              card.onclick = () => toggleActivity(id, isDone);
+              card.innerHTML = `
+                <div class="act-icon-box ${cat.toLowerCase()}">${getCategorySvg(cat)}</div>
+                <div class="activity-details">
+                  <div class="act-tag">${cat} Quotients · ${dur}</div>
+                  <div class="act-title">${title}</div>
+                  <div class="act-sub">${sub}</div>
+                </div>
+                <div class="act-check-btn">
+                  ${isDone ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>` : ''}
+                </div>
+              `;
+              return card;
+            }
+            container.appendChild(createCard());
+            if (plansContainer) plansContainer.appendChild(createCard());
           });
         }
       } catch (e) {
@@ -2231,27 +2567,135 @@
       switchTab('home');
     }
 
-    // TAB SWITCHING
+    
+    // SWITCH TAB (CLUBS, PLANS, HOME, SESSION, MORE)
     function switchTab(tabId) {
-      const views = ['home', 'community', 'tools', 'ai', 'profile', 'auth'];
+      const views = ['home', 'community', 'plans', 'ai', 'more', 'auth'];
       views.forEach(v => {
         const el = document.getElementById(`view-${v}`);
         if (el) el.style.display = (v === tabId) ? 'block' : 'none';
       });
 
-      // Update ref nav tabs
+      // Update active state in bottom dock
       document.querySelectorAll('.ref-nav-tab').forEach(b => b.classList.remove('active'));
       const activeBtn = document.getElementById(`tabBtn-${tabId}`);
       if (activeBtn) activeBtn.classList.add('active');
 
       document.getElementById('bottomDock').style.display = (tabId === 'auth') ? 'none' : 'flex';
       document.getElementById('appViewport').scrollTop = 0;
+
+      if (tabId === 'plans') {
+        renderPlansActivities();
+      }
     }
 
-    function scrollToActivities() {
-      switchTab('home');
-      setTimeout(() => {
-        document.querySelector('.section-heading').scrollIntoView({ behavior: 'smooth' });
+    // SETTINGS ACTIONS (MATCHING REF media_1791234426439)
+    let currentUnits = 'Kg/Cm';
+    function toggleUnits() {
+      currentUnits = (currentUnits === 'Kg/Cm') ? 'Lbs/In' : 'Kg/Cm';
+      document.getElementById('currentUnitsLabel').innerText = currentUnits;
+      showConfetti(`Units updated to ${currentUnits}`);
+    }
+
+    function onNotificationToggle(enabled) {
+      showConfetti(enabled ? "Daily reminders enabled" : "Reminders muted");
+    }
+
+    function onVibrationToggle(enabled) {
+      showConfetti(enabled ? "Haptic feedback enabled" : "Haptic feedback muted");
+    }
+
+    function openNotificationSettingsModal() {
+      openModalSheet(`
+        <h3 style="font-size: 18px; font-weight: 800; color: #1E293B; margin-bottom: 8px;">Advanced Reminders</h3>
+        <p style="font-size: 12px; color: #64748B; margin-bottom: 16px;">Customize reminder cadence for daily Garbh Sanskar habits and clinic appointments.</p>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <label style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: #F8FAFC; border-radius: 12px; font-size: 13px; font-weight: 600;">
+            Morning Raga & Meditation (07:00 AM)
+            <input type="checkbox" checked style="accent-color: var(--primary);">
+          </label>
+          <label style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: #F8FAFC; border-radius: 12px; font-size: 13px; font-weight: 600;">
+            Hourly Hydration Prompt (250ml)
+            <input type="checkbox" checked style="accent-color: var(--primary);">
+          </label>
+          <label style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: #F8FAFC; border-radius: 12px; font-size: 13px; font-weight: 600;">
+            PHC Checkup Alerts (3 days before)
+            <input type="checkbox" checked style="accent-color: var(--primary);">
+          </label>
+        </div>
+        <button class="sheet-action-btn" onclick="closeToolSheet(); showConfetti('Reminder schedule saved!');" style="margin-top: 18px;">Save Preferences</button>
+      `);
+    }
+
+    function openHelpFeedbackModal() {
+      openModalSheet(`
+        <h3 style="font-size: 18px; font-weight: 800; color: #1E293B; margin-bottom: 8px;">Help & Feedback</h3>
+        <p style="font-size: 12px; color: #64748B; margin-bottom: 14px;">How can we improve Swasth for you and your baby?</p>
+        <textarea style="width: 100%; height: 90px; border-radius: 12px; border: 1px solid #CBD5E1; padding: 10px; font-size: 13px; font-family: inherit; resize: none;" placeholder="Share your experience or report an issue..."></textarea>
+        <button class="sheet-action-btn" onclick="closeToolSheet(); showConfetti('Thank you! Feedback received.');" style="margin-top: 14px;">Submit Feedback</button>
+      `);
+    }
+
+    function openLicensesModal() {
+      openModalSheet(`
+        <h3 style="font-size: 18px; font-weight: 800; color: #1E293B; margin-bottom: 8px;">Open Source Licenses</h3>
+        <p style="font-size: 12px; color: #64748B; margin-bottom: 12px;">Swasth is built on open technologies:</p>
+        <div style="background: #F8FAFC; border-radius: 12px; padding: 12px; font-size: 11px; color: #475569; max-height: 180px; overflow-y: auto; line-height: 1.6;">
+          <strong>• SQLite (Public Domain):</strong> On-device database engine<br>
+          <strong>• sql.js (MIT License):</strong> WebAssembly SQLite port<br>
+          <strong>• Flutter SDK (BSD 3-Clause):</strong> Cross-platform UI toolkit<br>
+          <strong>• IndicTrans2 (MIT License):</strong> Multilingual translation<br>
+          <strong>• NeMo Guardrails (Apache 2.0):</strong> Safe dialogue management
+        </div>
+        <button class="sheet-action-btn" onclick="closeToolSheet();" style="margin-top: 14px;">Close</button>
+      `);
+    }
+
+    function openTranslateModal() {
+      openModalSheet(`
+        <h3 style="font-size: 18px; font-weight: 800; color: #1E293B; margin-bottom: 8px;">Help Us Translate</h3>
+        <p style="font-size: 12px; color: #64748B; margin-bottom: 14px;">Select language preference for voice prompts and health records:</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px;">
+          <button style="padding: 10px; border-radius: 12px; border: 1.5px solid var(--primary); background: #FFF1F4; font-size: 12px; font-weight: 700; color: var(--primary);">English</button>
+          <button style="padding: 10px; border-radius: 12px; border: 1px solid #E2E8F0; background: white; font-size: 12px; font-weight: 600; color: #334155;" onclick="closeToolSheet(); showConfetti('Hindi locale selected');">Hindi</button>
+          <button style="padding: 10px; border-radius: 12px; border: 1px solid #E2E8F0; background: white; font-size: 12px; font-weight: 600; color: #334155;" onclick="closeToolSheet(); showConfetti('Marathi locale selected');">Marathi</button>
+          <button style="padding: 10px; border-radius: 12px; border: 1px solid #E2E8F0; background: white; font-size: 12px; font-weight: 600; color: #334155;" onclick="closeToolSheet(); showConfetti('Bengali locale selected');">Bengali</button>
+          <button style="padding: 10px; border-radius: 12px; border: 1px solid #E2E8F0; background: white; font-size: 12px; font-weight: 600; color: #334155;" onclick="closeToolSheet(); showConfetti('Tamil locale selected');">Tamil</button>
+          <button style="padding: 10px; border-radius: 12px; border: 1px solid #E2E8F0; background: white; font-size: 12px; font-weight: 600; color: #334155;" onclick="closeToolSheet(); showConfetti('Telugu locale selected');">Telugu</button>
+        </div>
+        <button class="sheet-action-btn" onclick="closeToolSheet();">Done</button>
+      `);
+    }
+
+    function openDataProtectionModal() {
+      openModalSheet(`
+        <h3 style="font-size: 18px; font-weight: 800; color: #1E293B; margin-bottom: 8px;">ABHA Data Protection</h3>
+        <p style="font-size: 12px; color: #64748B; margin-bottom: 12px;">Your maternal health records are governed by ABDM standards:</p>
+        <div style="background: #ECFDF5; border: 1px solid #A7F3D0; border-radius: 12px; padding: 12px; font-size: 12px; color: #065F46; line-height: 1.5; margin-bottom: 14px;">
+          ✓ 100% on-device encrypted local storage<br>
+          ✓ Zero clinical tracking without explicit maternal consent<br>
+          ✓ ABHA ID linked only for official PHC vaccine cards<br>
+          ✓ Emergency red-flag safety guidance without data brokering
+        </div>
+        <button class="sheet-action-btn" onclick="closeToolSheet();">Understood</button>
+      `);
+    }
+
+    function openModalSheet(htmlContent) {
+      const sheet = document.getElementById('bottomSheet');
+      const content = document.getElementById('sheetContent');
+      content.innerHTML = htmlContent;
+      sheet.classList.add('open');
+    }
+
+    function renderPlansActivities() {
+      const container = document.getElementById('plansActivitiesContainer');
+      const homeList = document.getElementById('activitiesListContainer');
+      if (container && homeList) {
+        container.innerHTML = homeList.innerHTML;
+      }
+    }
+);
       }, 100);
     }
 
