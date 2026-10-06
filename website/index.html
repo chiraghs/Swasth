@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="./assets/swasth_logo.svg">
 
   <style>
     :root {
@@ -473,19 +474,129 @@
     }
     .page-visual-wrap {
       background: linear-gradient(135deg, #FFF0F3 0%, #FFE4E9 100%);
-      border-radius: 24px;
-      padding: 24px;
+      border-radius: 28px;
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255, 59, 105, 0.18);
+      position: relative;
+    }
+    .app-carousel-container {
+      position: relative;
+      width: 100%;
+      max-width: 440px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .carousel-slide-view {
+      position: relative;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 440px;
+    }
+    .carousel-main-img {
+      max-height: 450px;
+      max-width: 100%;
+      border-radius: 26px;
+      box-shadow: 0 20px 45px rgba(255, 59, 105, 0.18), 0 8px 20px rgba(0, 0, 0, 0.1);
+      border: 3px solid #FFFFFF;
+      object-fit: contain;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+    .carousel-arrow {
+      position: absolute;
+      top: 42%;
+      transform: translateY(-50%);
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+      border: 1.5px solid rgba(255, 59, 105, 0.25);
+      color: #1E293B;
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 1px solid rgba(255, 59, 105, 0.15);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      z-index: 10;
     }
-    .page-visual-img {
-      max-width: 100%;
-      max-height: 440px;
-      border-radius: 18px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-      object-fit: contain;
+    .carousel-arrow:hover {
+      background: var(--primary-gradient);
+      color: white;
+      border-color: transparent;
+      transform: translateY(-50%) scale(1.1);
+      box-shadow: 0 8px 24px rgba(255, 59, 105, 0.35);
+    }
+    .carousel-arrow.prev { left: -12px; }
+    .carousel-arrow.next { right: -12px; }
+
+    .carousel-meta-box {
+      margin-top: 16px;
+      width: 100%;
+      background: #FFFFFF;
+      border-radius: 20px;
+      padding: 14px 18px;
+      border: 1px solid rgba(255, 59, 105, 0.15);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 6px;
+    }
+    .carousel-badge-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .carousel-counter-pill {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--primary);
+      background: #FFF1F4;
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 59, 105, 0.2);
+    }
+    .carousel-screen-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: #1E293B;
+      font-family: 'Outfit', sans-serif;
+    }
+    .carousel-screen-sub {
+      font-size: 12px;
+      color: #64748B;
+      line-height: 1.4;
+      max-width: 380px;
+    }
+    .carousel-dots-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 4px;
+      align-items: center;
+      justify-content: center;
+    }
+    .carousel-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #E2E8F0;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    .carousel-dot.active {
+      width: 24px;
+      background: var(--primary-gradient);
     }
 
     /* 4Q GARBH SANSKAR QUADRANTS */
@@ -819,27 +930,48 @@
       <div class="page-card-display">
         <div class="page-card-info">
           <div class="sec-tag" id="pageTagDisplay">PILLAR 1 · HOME DASHBOARD</div>
-          <h3 id="pageTitleDisplay">40-Week Interactive Growth & Daily Milestones</h3>
+          <h3 id="pageTitleDisplay">Home & 40-Week Interactive Growth</h3>
           <p id="pageDescDisplay">
-            Mothers track baby growth through culturally relatable tactile fruit analogies (Peach at Week 14, 8.7cm, 43g) paired with an interactive 40-week timeline scrubber and countdown clock (Day 98 of 280).
+            Mothers track baby growth through culturally relatable tactile fruit analogies paired with an interactive 40-week timeline scrubber, countdown clock, and daily Garbh Sanskar habit protocols.
           </p>
           <ul class="page-feature-list" id="pageFeaturesDisplay">
             <li>
               <div class="feature-check-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
-              <span>Interactive week-by-week growth slider from Conception to Full Term</span>
+              <span>Interactive week-by-week growth slider from Conception to Full Term (Week 1 to 40)</span>
             </li>
             <li>
               <div class="feature-check-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
-              <span>Daily maternal greeting with customized due date calendar tracking</span>
+              <span>Daily maternal greeting with customized due date calendar tracking and 112-day countdown</span>
             </li>
             <li>
               <div class="feature-check-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
-              <span>Quick-action story rings for hydration, raga chanting, and birth clubs</span>
+              <span>Today's Routine checklist: Iron & Folic Acid, 2.5L Hydration, pelvic stretches, and kick counting</span>
             </li>
           </ul>
         </div>
         <div class="page-visual-wrap">
-          <img src="./assets/reference/25_feature_baby_growth_tracking.png" id="pageImageDisplay" class="page-visual-img" alt="Baby Growth Tracking">
+          <div class="app-carousel-container" id="appCarousel">
+            <button class="carousel-arrow prev" onclick="prevCarouselSlide()" aria-label="Previous App Screen">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+            <div class="carousel-slide-view">
+              <img src="./assets/app_screens/pillar1_1_home_overview.png" id="carouselMainImg" class="carousel-main-img" alt="Swasth App Screen">
+            </div>
+            <button class="carousel-arrow next" onclick="nextCarouselSlide()" aria-label="Next App Screen">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+            
+            <div class="carousel-meta-box">
+              <div class="carousel-badge-row">
+                <span class="carousel-counter-pill" id="carouselCounterPill">Screen 1 of 4</span>
+                <span class="carousel-screen-title" id="carouselScreenTitle">Home Dashboard & Baby Growth Card</span>
+              </div>
+              <div class="carousel-screen-sub" id="carouselScreenSub">Week 24 stage overview with 112-day countdown and fetal size comparisons</div>
+              <div class="carousel-dots-row" id="carouselDotsRow">
+                <!-- Dots generated dynamically by JS -->
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1053,75 +1185,237 @@
       }
     }
 
-    // 5 App Pages Showcase Carousel Data
+    // 5 App Pages Showcase Carousel Data (Using 100% Real Screenshots from Our App)
     const pagesData = [
       {
         tag: "PILLAR 1 · HOME DASHBOARD",
-        title: "40-Week Interactive Growth & Daily Milestones",
-        desc: "Mothers track baby growth through culturally relatable tactile fruit analogies (Peach at Week 14, 8.7cm, 43g) paired with an interactive 40-week timeline scrubber and countdown clock (Day 98 of 280).",
+        title: "Home & 40-Week Interactive Growth",
+        desc: "Mothers track baby growth through culturally relatable tactile fruit analogies paired with an interactive 40-week timeline scrubber, countdown clock, and daily Garbh Sanskar habit protocols.",
         features: [
-          "Interactive week-by-week growth slider from Conception to Full Term",
-          "Daily maternal greeting with customized due date calendar tracking",
-          "Quick-action story rings for hydration, raga chanting, and birth clubs"
+          "Interactive week-by-week growth slider from Conception to Full Term (Week 1 to 40)",
+          "Daily maternal greeting with customized due date calendar tracking and 112-day countdown",
+          "Today's Routine checklist: Iron & Folic Acid, 2.5L Hydration, pelvic stretches, and kick counting",
+          "Maternal Health Hub sheet tracking blood pressure (118/76 mmHg) and weight progression"
         ],
-        image: "./assets/reference/25_feature_baby_growth_tracking.png"
+        screens: [
+          {
+            src: "./assets/app_screens/pillar1_1_home_overview.png",
+            title: "Home Dashboard & Baby Growth Card",
+            desc: "Week 24 stage overview with 112-day countdown and fetal size comparisons"
+          },
+          {
+            src: "./assets/app_screens/pillar1_2_home_routine.png",
+            title: "Today's Routine & Garbh Sanskar Focus",
+            desc: "Interactive daily habit checklist and Raga Yaman calming affirmations"
+          },
+          {
+            src: "./assets/app_screens/pillar1_3_home_milestones.png",
+            title: "40-Week Timeline & Organ Milestones",
+            desc: "Tactile week slider showing sensory and anatomical milestones"
+          },
+          {
+            src: "./assets/app_screens/pillar1_4_home_vitals.png",
+            title: "Maternal Health Hub & Vitals Log",
+            desc: "Blood pressure, maternal weight gain tracking, and upcoming TT booster alerts"
+          }
+        ]
       },
       {
         tag: "PILLAR 2 · PLANS & TOOLKIT",
-        title: "Interactive Health Toolkit & 4Q Garbh Sanskar Schedule",
-        desc: "An integrated 8-tool interactive utility suite (Hydration 2,500ml target, Pedometer, 432Hz Om sound chanter, Baby kick counter, Health Hub BP/weight vitals, Belly circumference, TT vaccine tracker) combined with a daily 12-habit Garbh Sanskar routine.",
+        title: "Plans & Smart Health Toolkit",
+        desc: "An integrated clinical toolkit featuring 8 interactive tools combined with a 4-pillar daily Garbh Sanskar schedule, powered by an on-device encrypted SQLite database.",
         features: [
-          "8-Tool Daily Maternal Toolkit with instant logging & feedback",
-          "Category filters for SQ Spiritual, PQ Physical, IQ Intellectual, and EQ Emotional",
-          "Interactive check-offs with on-device SQLite state synchronization"
+          "8 Essential Smart Tools: 2.5L Hydration tracker, Pedometer, 432Hz Om chanter, Kick counter, Health hub vitals, Belly tape, and UIP vaccine tracker",
+          "Interactive Baby Kick Counter with 10-kick countdown window and persistent SQLite audit trail",
+          "Structured 4Q Garbh Sanskar daily routines (Morning, Afternoon, Evening, Night)",
+          "National UIP Immunization schedule tracking maternal TT/Td shots and pediatric infant vaccines"
         ],
-        image: "./assets/reference/01_smart_tools.png"
+        screens: [
+          {
+            src: "./assets/app_screens/pillar2_1_plans_toolkit.png",
+            title: "Smart Health Tools Catalog",
+            desc: "Quick access to all 8 clinical calculators and on-device logging tools"
+          },
+          {
+            src: "./assets/app_screens/pillar2_2_kick_counter.png",
+            title: "Interactive Baby Kick Counter",
+            desc: "Real-time 10-movement counter with SQLite logging and audit timestamps"
+          },
+          {
+            src: "./assets/app_screens/pillar2_3_habits_schedule.png",
+            title: "4Q Garbh Sanskar Daily Schedule",
+            desc: "Morning to night holistic habits spanning spiritual, physical, intellectual, and emotional quotients"
+          },
+          {
+            src: "./assets/app_screens/pillar2_4_vaccine_schedule.png",
+            title: "Care Continuity & Vaccine Tracker",
+            desc: "National UIP maternal TT-1/TT-2 tracking and pediatric vaccine roadmap"
+          }
+        ]
       },
       {
         tag: "PILLAR 3 · HYPERLOCAL BIRTH CLUBS",
-        title: "Peer Circles & Shared Experiences in Same PHC Radii",
-        desc: "Connects 9,388+ online mothers within the same pregnancy trimester and local health district for mutual reassurance, weaning diet advice, and logistical clinic guidance.",
+        title: "Hyperlocal Birth Clubs & Community Support",
+        desc: "Connects mothers in the exact same trimester and city cohort for peer solidarity, supported by verified obstetricians, doulas, and NeMo safety moderation.",
         features: [
-          "Cohorts organized by due date (e.g. September 2026 Moms Club)",
-          "Safe peer question sharing with active NeMo Guardrails moderation",
-          "Community upvoting, encouragement reactions, and doctor-referral reminders"
+          "Hyperlocal Trimester Cohorts (e.g., Trimester 2 · Rampur & Lucknow Mother Circle)",
+          "Curated peer discussion feeds for symptom sharing, baby prep, and hospital bag planning",
+          "Verified Gynecologist & Pediatrician mentor answers with zero misinformation",
+          "Culturally empathetic voice query submission for mothers across linguistic backgrounds"
         ],
-        image: "./assets/reference/06_community_birth_clubs.png"
+        screens: [
+          {
+            src: "./assets/app_screens/pillar3_1_birth_clubs.png",
+            title: "Birth Clubs Cohort Overview",
+            desc: "Peer circle categorized by gestational trimester and geographic district"
+          },
+          {
+            src: "./assets/app_screens/pillar3_2_discussion_threads.png",
+            title: "Peer Discussions & Doctor Answers",
+            desc: "Real conversations moderated with NeMo Guardrails safety protocols"
+          },
+          {
+            src: "./assets/app_screens/pillar3_3_doula_mentors.png",
+            title: "Ask Mentor & Voice Query Portal",
+            desc: "Direct access to certified doulas, lactation consultants, and healthcare workers"
+          }
+        ]
       },
       {
-        tag: "PILLAR 4 · SESSIONS & LONG-TERM CARE ENGAGEMENT",
-        title: "Maternal Recovery Programs, Timed Circuits & 150+ Recipes",
-        desc: "Comprehensive 1,000-day care engagement featuring guided prenatal and postpartum recovery tracks (Core Basics, Pelvic Floor Release, Diastasis Recti safe flows), interactive timed circuit intervals, certified specialist guides, and 150+ cultural recipes paired with Swasth AI.",
+        tag: "PILLAR 4 · SESSIONS & CARE",
+        title: "Sessions & Long-Term Care Engagement",
+        desc: "Comprehensive continuity extending through the critical first 1,000 days: maternal fitness programs, live interval workout player, specialist instructors, and 150+ Ayurvedic nutrition recipes.",
         features: [
-          "Programs for every stage of motherhood (Beginner, Intermediate, Advanced, Pregnancy, Barre, Core)",
-          "Interactive timed intervals circuit player (20:14 Min, 3 rounds of 9 guided movement steps)",
-          "Weekly nutrition challenges and 150+ evidence-backed maternal recipes with Swasth AI guidance"
+          "Trimester-specific maternal programs: Prenatal Pilates, Core Basics, Pelvic Floor Rehab, and Diastasis Recti recovery",
+          "Active Interactive Timed Circuit Player: live 45s countdown intervals, circuit rounds progress (1/3, 2/3, 3/3), and real-time exercise cues",
+          "Specialist directory featuring pelvic floor PTs, prenatal chiropractors, and maternal fitness coaches",
+          "150+ Cultural & Ayurvedic Nutrition recipes (Gond Laddoo, Drumstick Leaf Rasam) with clinical macronutrient and lactogenic breakdowns"
         ],
-        image: "./assets/reference/32_feature_maternal_programs_dashboard.png"
+        screens: [
+          {
+            src: "./assets/app_screens/pillar4_1_programs_catalog.png",
+            title: "Maternal Programs Dashboard",
+            desc: "Featured courses for prenatal strength, pelvic core foundation, and postpartum recovery"
+          },
+          {
+            src: "./assets/app_screens/pillar4_2_timed_circuit.png",
+            title: "Active Timed Circuit Workout Player",
+            desc: "Live 45s interval timer, circuit progression bar, and exercise transition cues"
+          },
+          {
+            src: "./assets/app_screens/pillar4_3_mobility_recovery.png",
+            title: "Mobility & Specialist Directory",
+            desc: "Guided sessions with pelvic PTs, prenatal chiropractors, and postpartum experts"
+          },
+          {
+            src: "./assets/app_screens/pillar4_4_nutrition_recipes.png",
+            title: "150+ Cultural Nutrition Program",
+            desc: "7-day healthy eating challenge and traditional Indian recipes tailored for pregnancy & postpartum"
+          },
+          {
+            src: "./assets/app_screens/pillar4_5_recipe_modal.png",
+            title: "Recipe Nutritional Breakdown Sheet",
+            desc: "Interactive sheet for Postpartum Gond Laddoo detailing lactogenic herbs, iron, and calcium benefits"
+          }
+        ]
       },
       {
-        tag: "PILLAR 5 · SETTINGS & DATA PROTECTION",
-        title: "ABHA Privacy Controls, Units & Indic Localization",
-        desc: "Replicating modern iOS settings with metric/imperial toggles (Kg/Cm), customizable habit reminder cadences, 10 Indic languages via IndicTrans2, and ABDM-compliant encrypted local storage.",
+        tag: "PILLAR 5 · SETTINGS & ABHA PRIVACY",
+        title: "Settings, ABHA Privacy & Caregiver Circle",
+        desc: "Patient sovereignty through Ayushman Bharat Digital Mission (ABHA) PHR compliance, family caregiver synchronization via WhatsApp/Voice, and 100% on-device encrypted storage.",
         features: [
-          "Customizable habit reminder notifications and haptic vibration switches",
-          "Multi-lingual translation support across Hindi, Marathi, Bengali, Tamil & Telugu",
-          "100% on-device encrypted SQLite storage with verified ABHA consent ledger"
+          "Ayushman Bharat Digital Mission (ABHA) Health ID integration with consent-driven record sharing",
+          "Caregiver Circle: Automated WhatsApp and voice updates for spouses and family members",
+          "Unit preferences toggle (Kg/Cm vs. Lbs/In), granular haptic feedback, and notification controls",
+          "Zero-cloud dependency: Encrypted on-device SQLite database ensuring absolute patient confidentiality"
         ],
-        image: "./assets/reference/31_feature_settings_preferences_data_protection.png"
+        screens: [
+          {
+            src: "./assets/app_screens/pillar5_1_profile_settings.png",
+            title: "Profile & Personalization Settings",
+            desc: "Ananya Sharma's profile, Due date calculator settings, and clinical unit toggles"
+          },
+          {
+            src: "./assets/app_screens/pillar5_2_abha_privacy.png",
+            title: "ABHA Health Card & Consent Manager",
+            desc: "FHIR-compliant digital health record link with ABDM data governance"
+          },
+          {
+            src: "./assets/app_screens/pillar5_3_caregiver_circle.png",
+            title: "Caregiver Circle & Family Sync",
+            desc: "Automated partner synchronization via WhatsApp alerts and emergency clinic routing"
+          }
+        ]
       }
     ];
 
+    let currentPillarIdx = 0;
+    let currentSlideIdx = 0;
+
+    function updateCarouselView() {
+      const pillar = pagesData[currentPillarIdx];
+      const screen = pillar.screens[currentSlideIdx];
+      const totalScreens = pillar.screens.length;
+
+      const img = document.getElementById('carouselMainImg');
+      if (img) {
+        img.style.opacity = '0';
+        img.style.transform = 'scale(0.98)';
+        setTimeout(() => {
+          img.src = screen.src;
+          img.alt = screen.title;
+          img.style.opacity = '1';
+          img.style.transform = 'scale(1)';
+        }, 120);
+      }
+
+      document.getElementById('carouselCounterPill').innerText = `Screen ${currentSlideIdx + 1} of ${totalScreens}`;
+      document.getElementById('carouselScreenTitle').innerText = screen.title;
+      document.getElementById('carouselScreenSub').innerText = screen.desc;
+
+      // Update dots
+      const dotsRow = document.getElementById('carouselDotsRow');
+      if (dotsRow) {
+        dotsRow.innerHTML = '';
+        pillar.screens.forEach((_, i) => {
+          const dot = document.createElement('div');
+          dot.className = `carousel-dot ${i === currentSlideIdx ? 'active' : ''}`;
+          dot.title = `Jump to Screen ${i + 1}`;
+          dot.onclick = () => goToCarouselSlide(i);
+          dotsRow.appendChild(dot);
+        });
+      }
+    }
+
+    function nextCarouselSlide() {
+      const total = pagesData[currentPillarIdx].screens.length;
+      currentSlideIdx = (currentSlideIdx + 1) % total;
+      updateCarouselView();
+    }
+
+    function prevCarouselSlide() {
+      const total = pagesData[currentPillarIdx].screens.length;
+      currentSlideIdx = (currentSlideIdx - 1 + total) % total;
+      updateCarouselView();
+    }
+
+    function goToCarouselSlide(idx) {
+      currentSlideIdx = idx;
+      updateCarouselView();
+    }
+
     function showPageDetails(idx) {
+      currentPillarIdx = idx - 1;
+      currentSlideIdx = 0;
+
       document.querySelectorAll('.page-tab-btn').forEach((btn, i) => {
-        btn.classList.toggle('active', i === (idx - 1));
+        btn.classList.toggle('active', i === currentPillarIdx);
       });
 
-      const data = pagesData[idx - 1];
+      const data = pagesData[currentPillarIdx];
       document.getElementById('pageTagDisplay').innerText = data.tag;
       document.getElementById('pageTitleDisplay').innerText = data.title;
       document.getElementById('pageDescDisplay').innerText = data.desc;
-      document.getElementById('pageImageDisplay').src = data.image;
 
       const featList = document.getElementById('pageFeaturesDisplay');
       featList.innerHTML = '';
@@ -1136,13 +1430,22 @@
         featList.appendChild(li);
       });
 
+      updateCarouselView();
+
       // Also sync iframe tab if possible
       const tabNames = ['home', 'plans', 'community', 'ai', 'more'];
       const iframe = document.getElementById('heroPhoneIframe');
       if (iframe && iframe.contentWindow && typeof iframe.contentWindow.switchTab === 'function') {
-        iframe.contentWindow.switchTab(tabNames[idx - 1]);
+        iframe.contentWindow.switchTab(tabNames[currentPillarIdx]);
       }
     }
+
+    // Initialize first pillar on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      showPageDetails(1);
+    });
+    // Fallback invocation in case DOM already loaded
+    showPageDetails(1);
   </script>
 </body>
 </html>
