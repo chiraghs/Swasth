@@ -1175,6 +1175,449 @@
       }
     }
 
+    
+    /* SESSION & LONG-TERM CARE ENGAGEMENT STYLES */
+    .session-container {
+      padding: 0 18px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .session-tabs-strip {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding-bottom: 2px;
+      margin-bottom: 4px;
+    }
+    .session-tabs-strip::-webkit-scrollbar { display: none; }
+    .session-tab-btn {
+      background: var(--card-white);
+      border: 1px solid var(--border-soft);
+      padding: 7px 16px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .session-tab-btn.active {
+      background: var(--primary-gradient);
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 4px 14px var(--primary-glow);
+    }
+
+    /* FEATURED PROGRAM CARD (MATCHING REF 32) */
+    .featured-program-card {
+      background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
+      border-radius: 26px;
+      padding: 22px;
+      color: white;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .featured-program-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+    .program-stage-pill {
+      background: rgba(255, 59, 105, 0.25);
+      border: 1px solid rgba(255, 59, 105, 0.4);
+      color: #FF7597;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .program-card-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--primary-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      box-shadow: 0 4px 12px var(--primary-glow);
+    }
+    .program-title {
+      font-size: 22px;
+      font-weight: 800;
+      font-family: 'Outfit', sans-serif;
+      letter-spacing: -0.3px;
+    }
+    .program-sub {
+      font-size: 12px;
+      color: #94A3B8;
+      margin-top: 4px;
+      line-height: 1.45;
+    }
+    .program-card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .btn-start-session {
+      background: var(--primary-gradient);
+      color: white;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 14px var(--primary-glow);
+      transition: all 0.2s;
+    }
+    .btn-start-session:hover {
+      transform: translateY(-1px);
+    }
+
+    /* ADD TO YOUR ROUTINE CARDS (MATCHING REF 32) */
+    .routine-tiles-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .routine-tile-item {
+      background: var(--card-white);
+      border-radius: 20px;
+      padding: 14px 10px;
+      border: 1px solid var(--border-soft);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .routine-tile-item:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .routine-tile-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 8px;
+    }
+    .routine-tile-title {
+      font-size: 11px;
+      font-weight: 800;
+      color: #1E293B;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .routine-tile-sub {
+      font-size: 9px;
+      color: #64748B;
+      margin-top: 2px;
+    }
+
+    /* 6 STAGES GRID (MATCHING REF 35) */
+    .stages-grid-6 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .stage-card-box {
+      background: var(--card-white);
+      border-radius: 20px;
+      padding: 14px;
+      border: 1px solid var(--border-soft);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .stage-card-box:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+    .stage-icon-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .stage-name-title {
+      font-size: 12px;
+      font-weight: 800;
+      color: #1E293B;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .stage-sub-info {
+      font-size: 10px;
+      color: #64748B;
+      margin-top: 1px;
+    }
+
+    /* TIMED INTERVALS CIRCUIT (MATCHING REF 33) */
+    .circuit-player-card {
+      background: var(--card-white);
+      border-radius: 26px;
+      padding: 18px;
+      border: 1.5px solid var(--border-soft);
+      box-shadow: var(--shadow-md);
+    }
+    .circuit-top-progress {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .circuit-progress-track {
+      width: 100%;
+      height: 6px;
+      background: #F1F5F9;
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 8px 0 14px;
+    }
+    .circuit-progress-fill {
+      height: 100%;
+      background: var(--primary-gradient);
+      width: 66%;
+      transition: width 0.3s;
+    }
+    .circuit-rounds-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .round-step-pill {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+      border: 1.5px solid #CBD5E1;
+      color: #64748B;
+    }
+    .round-step-pill.completed {
+      background: #10B981;
+      border-color: #10B981;
+      color: white;
+    }
+    .round-step-pill.active {
+      background: var(--primary-gradient);
+      border-color: transparent;
+      color: white;
+      box-shadow: 0 2px 8px var(--primary-glow);
+    }
+    .circuit-move-box {
+      background: #FFF1F4;
+      border: 1.5px solid rgba(255, 59, 105, 0.2);
+      border-radius: 18px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .circuit-move-box.active {
+      border-color: var(--primary);
+      background: #FFEBF0;
+    }
+    .move-name-txt {
+      font-size: 13px;
+      font-weight: 800;
+      color: #1E293B;
+    }
+    .move-sub-txt {
+      font-size: 10px;
+      color: #64748B;
+      margin-top: 2px;
+    }
+    .move-reps-badge {
+      background: white;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--primary);
+      border: 1px solid rgba(255, 59, 105, 0.15);
+    }
+
+    /* INSTRUCTORS ROW (MATCHING REF 34) */
+    .instructors-strip-scroll {
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding: 4px 2px 8px;
+    }
+    .instructors-strip-scroll::-webkit-scrollbar { display: none; }
+    .instructor-item-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      min-width: 66px;
+      cursor: pointer;
+    }
+    .instructor-avatar-circle {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #FF3B69 0%, #FFB088 100%);
+      padding: 2.5px;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 6px;
+    }
+    .instructor-avatar-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+    }
+    .instructor-name {
+      font-size: 11px;
+      font-weight: 700;
+      color: #1E293B;
+    }
+    .instructor-tag {
+      font-size: 9px;
+      color: #64748B;
+    }
+
+    /* NUTRITION & RECIPES (MATCHING REF 36) */
+    .nutrition-stats-header {
+      background: #18181B;
+      border-radius: 20px;
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      color: white;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+    .nutri-stat-num {
+      font-size: 18px;
+      font-weight: 800;
+      font-family: 'Outfit', sans-serif;
+      color: var(--primary);
+    }
+    .nutri-stat-lbl {
+      font-size: 10px;
+      font-weight: 700;
+      color: #94A3B8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 2px;
+    }
+    .weekly-lesson-box {
+      background: var(--card-white);
+      border-radius: 22px;
+      padding: 16px;
+      border: 1px solid var(--border-soft);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 14px;
+    }
+    .lesson-days-row {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid #F1F5F9;
+    }
+    .lesson-day-check {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid #CBD5E1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 800;
+      color: #64748B;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .lesson-day-check.done {
+      background: var(--primary-gradient);
+      border-color: transparent;
+      color: white;
+      box-shadow: 0 2px 8px var(--primary-glow);
+    }
+    .recipe-cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .recipe-card-item {
+      background: var(--card-white);
+      border-radius: 18px;
+      padding: 14px;
+      border: 1px solid var(--border-soft);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 120px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .recipe-card-item:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--primary);
+    }
+    .recipe-title {
+      font-size: 12px;
+      font-weight: 800;
+      color: #1E293B;
+      line-height: 1.35;
+    }
+    .recipe-benefit-tag {
+      font-size: 9px;
+      font-weight: 700;
+      color: #059669;
+      background: #ECFDF5;
+      padding: 3px 8px;
+      border-radius: 999px;
+      display: inline-block;
+      margin-top: 4px;
+    }
+
     /* BOTTOM SHEET */
     .app-bottom-sheet {
       position: absolute;
@@ -1667,53 +2110,464 @@
       </div><!-- End view-plans -->
 
 
-      <!-- ==============================================
-           SCREEN 4: AI ASSISTANT CHAT
+            <!-- ==============================================
+           SCREEN 4: SESSION & LONG-TERM CARE ENGAGEMENT
+           (BASED ON REFERENCE IMAGES 32, 33, 34, 35, 36)
            ============================================== -->
       <div id="view-ai" style="display: none;">
         <div class="app-header">
           <div>
-            <span class="greeting-sub">Operational AI Guidance</span>
-            <h2 style="font-size: 20px; font-weight: 800; font-family: 'Outfit', sans-serif;">Swasth AI Companion</h2>
+            <div style="font-size: 11px; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 0.8px;">
+              Long-Term Care Continuity · 1,000 Days
+            </div>
+            <h2 style="font-size: 20px; font-weight: 800; font-family: 'Outfit', sans-serif;">Maternal Recovery & Sessions</h2>
           </div>
-          <button class="icon-badge-btn" onclick="clearAiChat()" title="Clear Chat">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          <button class="icon-badge-btn" onclick="openToolSheet('audio')" title="Om Chanter">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M6 12a6 6 0 0 1 12 0"/><path d="M3 12a9 9 0 0 1 18 0"/></svg>
           </button>
         </div>
 
-        <div class="ai-chat-wrap">
-          <div class="ai-hero-banner">
-            <div class="ai-logo-badge">
-              <svg viewBox="0 0 100 100" fill="none" style="width: 32px; height: 32px;">
-                <path d="M50 82 C32 82 18 66 18 50 C18 34 28 24 38 20 C34 32 37 46 45 56 C47 58 50 64 50 82 Z" fill="#FFFFFF"/>
-                <path d="M50 82 C68 82 82 66 82 50 C82 34 72 24 62 20 C66 32 63 46 55 56 C53 58 50 64 50 82 Z" fill="#FFE4E9"/>
-                <path d="M50 22 C42 36 42 50 50 66 C58 50 58 36 50 22 Z" fill="#FFFFFF"/>
-                <circle cx="50" cy="44" r="5" fill="#FF3B69"/>
+        <div class="session-container">
+          
+          <!-- SUB-TABS STRIP (PROGRAMS, CIRCUIT, MOBILITY, NUTRITION, AI) -->
+          <div class="session-tabs-strip">
+            <button class="session-tab-btn active" id="subtabBtn-programs" onclick="switchSessionSubTab('programs')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></svg>
+              My Programs
+            </button>
+            <button class="session-tab-btn" id="subtabBtn-circuit" onclick="switchSessionSubTab('circuit')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Timed Circuit
+            </button>
+            <button class="session-tab-btn" id="subtabBtn-mobility" onclick="switchSessionSubTab('mobility')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a5 5 0 0 1 5 5c0 3-2 5-5 9-3-4-5-6-5-9a5 5 0 0 1 5-5z"/></svg>
+              Mobility & Recovery
+            </button>
+            <button class="session-tab-btn" id="subtabBtn-nutrition" onclick="switchSessionSubTab('nutrition')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 19 2c0 3 0 5-1.5 8.5A7 7 0 0 1 11 20z"/></svg>
+              150+ Recipes
+            </button>
+            <button class="session-tab-btn" id="subtabBtn-ai" onclick="switchSessionSubTab('ai')">
+              <svg viewBox="0 0 100 100" fill="none" style="width: 14px; height: 14px;">
+                <circle cx="50" cy="50" r="40" fill="#FF3B69"/>
+                <circle cx="50" cy="50" r="20" fill="white"/>
               </svg>
-            </div>
-            <div style="font-size: 16px; font-weight: 800; color: #831843;">Hi Ananya!</div>
-            <div style="font-size: 12px; color: #475569; margin-top: 4px;">
-              Ask anything about baby development, cultural diet, or clinic schedules.
-            </div>
-
-            <div style="display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-top: 12px;">
-              <button class="prompt-chip" onclick="askAiQuestion('What is baby developing at Week 14?')">Week 14 Milestones</button>
-              <button class="prompt-chip" onclick="askAiQuestion('Which foods provide natural iron and calcium?')">Iron & Calcium Foods</button>
-              <button class="prompt-chip" onclick="askAiQuestion('Is mild lower back stretching safe right now?')">Safe Stretches</button>
-              <button class="prompt-chip" onclick="askAiQuestion('I have severe abdominal pain and bleeding')">Check Emergency</button>
-            </div>
-          </div>
-
-          <div class="chat-messages-box" id="aiChatBox"></div>
-
-          <div class="chat-input-bar">
-            <input type="text" id="aiInput" class="chat-input-field" placeholder="Ask a question..." onkeydown="if(event.key==='Enter') sendAiMessage()">
-            <button class="chat-send-btn" onclick="sendAiMessage()">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              Swasth AI
             </button>
           </div>
+
+          <!-- ==============================================
+               SUB-VIEW 1: PROGRAMS (MATCHING REF 32 & 35)
+               ============================================== -->
+          <div id="sessionView-programs">
+            
+            <!-- FEATURED HERO PROGRAM CARD -->
+            <div class="featured-program-card">
+              <div class="featured-program-top">
+                <span class="program-stage-pill">Trimester 2 · Week 14</span>
+                <div class="program-card-badge">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 2a5 5 0 0 1 5 5c0 3-2 5-5 9-3-4-5-6-5-9a5 5 0 0 1 5-5z"/></svg>
+                </div>
+              </div>
+              <div class="program-title">Core Basics & Pelvic Floor</div>
+              <div class="program-sub">Lay a solid foundation with 6 self-paced levels designed for prenatal posture and diastasis prevention.</div>
+              <div class="program-card-footer">
+                <span style="font-size: 11px; color: #94A3B8; font-weight: 600;">20 Mins · Self-Paced</span>
+                <button class="btn-start-session" onclick="startGuidedCircuit()">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                  Start Guided Session
+                </button>
+              </div>
+            </div>
+
+            <!-- ADD TO YOUR ROUTINE -->
+            <div style="font-size: 13px; font-weight: 800; color: #1E293B; margin: 16px 2px 8px;">Add To Your Routine</div>
+            <div class="routine-tiles-strip">
+              <div class="routine-tile-item" onclick="openExerciseDetail('pelvic')">
+                <div class="routine-tile-icon" style="background: #FFE4E9; color: #FF3B69;">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2a5 5 0 0 1 5 5c0 3-2 5-5 9-3-4-5-6-5-9a5 5 0 0 1 5-5z"/></svg>
+                </div>
+                <div class="routine-tile-title">Pelvic Core</div>
+                <div class="routine-tile-sub">Custom Workouts</div>
+              </div>
+
+              <div class="routine-tile-item" onclick="openExerciseDetail('stretch')">
+                <div class="routine-tile-icon" style="background: #FEF3C7; color: #D97706;">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="3"/><path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.93 4.93l2.83 2.83"/><path d="M16.24 16.24l2.83 2.83"/></svg>
+                </div>
+                <div class="routine-tile-title">Slam Stretch</div>
+                <div class="routine-tile-sub">Recover & Release</div>
+              </div>
+
+              <div class="routine-tile-item" onclick="openExerciseDetail('walk')">
+                <div class="routine-tile-icon" style="background: #E0F2FE; color: #0284C7;">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>
+                </div>
+                <div class="routine-tile-title">Brisk Walk</div>
+                <div class="routine-tile-sub">Gentle Cardio</div>
+              </div>
+            </div>
+
+            <!-- PROGRAMS FOR EVERY STAGE (MATCHING REF 35) -->
+            <div style="font-size: 13px; font-weight: 800; color: #1E293B; margin: 18px 2px 8px;">Programs For Every Stage</div>
+            <div class="stages-grid-6">
+              <div class="stage-card-box" onclick="startStageProgram('Beginner')">
+                <div class="stage-icon-circle" style="background: #FFF1F4; color: #FF3B69;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg>
+                </div>
+                <div>
+                  <div class="stage-name-title">Beginner</div>
+                  <div class="stage-sub-info">Foundation Core</div>
+                </div>
+              </div>
+
+              <div class="stage-card-box" onclick="startStageProgram('Intermediate')">
+                <div class="stage-icon-circle" style="background: #EDE9FE; color: #7C3AED;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                </div>
+                <div>
+                  <div class="stage-name-title">Intermediate</div>
+                  <div class="stage-sub-info">Banded Flows</div>
+                </div>
+              </div>
+
+              <div class="stage-card-box" onclick="startStageProgram('Advanced')">
+                <div class="stage-icon-circle" style="background: #FEF3C7; color: #D97706;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                </div>
+                <div>
+                  <div class="stage-name-title">Advanced</div>
+                  <div class="stage-sub-info">Endurance Build</div>
+                </div>
+              </div>
+
+              <div class="stage-card-box" onclick="startStageProgram('Pregnancy')">
+                <div class="stage-icon-circle" style="background: #E0F2FE; color: #0284C7;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                </div>
+                <div>
+                  <div class="stage-name-title">Pregnancy</div>
+                  <div class="stage-sub-info">Trimester Safe</div>
+                </div>
+              </div>
+
+              <div class="stage-card-box" onclick="startStageProgram('Barre')">
+                <div class="stage-icon-circle" style="background: #FCE7F3; color: #DB2777;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+                </div>
+                <div>
+                  <div class="stage-name-title">Barre</div>
+                  <div class="stage-sub-info">Balance & Posture</div>
+                </div>
+              </div>
+
+              <div class="stage-card-box" onclick="startStageProgram('Core')">
+                <div class="stage-icon-circle" style="background: #DCFCE7; color: #16A34A;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+                </div>
+                <div>
+                  <div class="stage-name-title">Core Rebuild</div>
+                  <div class="stage-sub-info">Diastasis Safe</div>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- End sessionView-programs -->
+
+
+          <!-- ==============================================
+               SUB-VIEW 2: TIMED INTERVALS CIRCUIT (REF 33)
+               ============================================== -->
+          <div id="sessionView-circuit" style="display: none;">
+            <div class="circuit-player-card">
+              <div class="circuit-top-progress">
+                <div>
+                  <span style="font-size: 11px; font-weight: 800; color: var(--primary); text-transform: uppercase;">Circuit 2 of 3</span>
+                  <div style="font-size: 16px; font-weight: 800; color: #1E293B;">Timed Intervals · 20:14 Min</div>
+                </div>
+                <button onclick="skipCircuit()" style="background: none; border: none; font-size: 11px; font-weight: 700; color: #64748B; cursor: pointer;">Skip Circuit ›</button>
+              </div>
+
+              <div class="circuit-progress-track">
+                <div class="circuit-progress-fill" id="circuitProgressFill"></div>
+              </div>
+
+              <div class="circuit-rounds-row">
+                <div class="round-step-pill completed">✓</div>
+                <div class="round-step-pill active">2</div>
+                <div class="round-step-pill">3</div>
+                <span style="font-size: 11px; font-weight: 700; color: #64748B; margin-left: auto;">3 Rounds of 9 Moves</span>
+              </div>
+
+              <!-- Exercise Demonstration Box -->
+              <div style="background: linear-gradient(135deg, #FFF1F4 0%, #FFE4E9 100%); border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 14px; border: 1.5px solid rgba(255, 59, 105, 0.2);">
+                <div style="font-size: 12px; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px;">Active Exercise</div>
+                <div style="font-size: 20px; font-weight: 800; color: #831843; font-family: 'Outfit', sans-serif; margin-top: 4px;" id="activeMoveTitle">Resistance Band Step Back</div>
+                <div style="font-size: 12px; color: #475569; margin: 4px 0 14px;">10 Reps each leg · Keep pelvis neutral and exhale on extension</div>
+                
+                <div style="font-size: 36px; font-weight: 800; color: var(--primary); font-family: monospace;" id="circuitTimerDisplay">00:45</div>
+                
+                <div style="display: flex; gap: 10px; justify-content: center; margin-top: 14px;">
+                  <button class="btn-start-session" id="btnCircuitTimer" onclick="toggleCircuitTimer()" style="padding: 10px 24px;">
+                    Pause Interval
+                  </button>
+                  <button onclick="nextCircuitMove()" style="background: white; border: 1.5px solid var(--border-soft); color: #1E293B; font-weight: 800; font-size: 12px; padding: 10px 18px; border-radius: 999px; cursor: pointer;">
+                    Next Move ›
+                  </button>
+                </div>
+              </div>
+
+              <!-- Move List -->
+              <div class="circuit-move-box active">
+                <div>
+                  <div class="move-name-txt">MOVE 01: Band Step Back</div>
+                  <div class="move-sub-txt">Focus on glute engagement & breath</div>
+                </div>
+                <span class="move-reps-badge">10 REPS</span>
+              </div>
+
+              <div class="circuit-move-box">
+                <div>
+                  <div class="move-name-txt">MOVE 02: Prenatal Squat with Band</div>
+                  <div class="move-sub-txt">Keep knees tracked over toes</div>
+                </div>
+                <span class="move-reps-badge">10 REPS</span>
+              </div>
+
+              <div class="circuit-move-box">
+                <div>
+                  <div class="move-name-txt">MOVE 03: Glute Bridge & Release</div>
+                  <div class="move-sub-txt">Inhale to relax, exhale to lift</div>
+                </div>
+                <span class="move-reps-badge">10 REPS</span>
+              </div>
+            </div>
+          </div><!-- End sessionView-circuit -->
+
+
+          <!-- ==============================================
+               SUB-VIEW 3: MOBILITY & RECOVERY (REF 34)
+               ============================================== -->
+          <div id="sessionView-mobility" style="display: none;">
+            
+            <div style="font-size: 13px; font-weight: 800; color: #1E293B; margin-bottom: 8px;">By Specialist & Instructor</div>
+            <div class="instructors-strip-scroll">
+              <div class="instructor-item-box" onclick="filterByInstructor('Dr. Sneha')">
+                <div class="instructor-avatar-circle">
+                  <div class="instructor-avatar-inner">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  </div>
+                </div>
+                <div class="instructor-name">Dr. Sneha</div>
+                <div class="instructor-tag">Physio</div>
+              </div>
+
+              <div class="instructor-item-box" onclick="filterByInstructor('Kavita')">
+                <div class="instructor-avatar-circle">
+                  <div class="instructor-avatar-inner">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v4"/><path d="M12 18v4"/></svg>
+                  </div>
+                </div>
+                <div class="instructor-name">Kavita</div>
+                <div class="instructor-tag">Yoga</div>
+              </div>
+
+              <div class="instructor-item-box" onclick="filterByInstructor('Dr. Aditi')">
+                <div class="instructor-avatar-circle">
+                  <div class="instructor-avatar-inner">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a5 5 0 0 1 5 5c0 3-2 5-5 9-3-4-5-6-5-9a5 5 0 0 1 5-5z"/></svg>
+                  </div>
+                </div>
+                <div class="instructor-name">Dr. Aditi</div>
+                <div class="instructor-tag">Pelvic</div>
+              </div>
+
+              <div class="instructor-item-box" onclick="filterByInstructor('Pooja')">
+                <div class="instructor-avatar-circle">
+                  <div class="instructor-avatar-inner">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>
+                  </div>
+                </div>
+                <div class="instructor-name">Pooja</div>
+                <div class="instructor-tag">Breath</div>
+              </div>
+
+              <div class="instructor-item-box" onclick="filterByInstructor('Meera')">
+                <div class="instructor-avatar-circle">
+                  <div class="instructor-avatar-inner">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15 8 21 9 17 14 18 20 12 17 6 20 7 14 3 9 9 8 12 2"/></svg>
+                  </div>
+                </div>
+                <div class="instructor-name">Meera</div>
+                <div class="instructor-tag">Mobility</div>
+              </div>
+            </div>
+
+            <div style="font-size: 13px; font-weight: 800; color: #1E293B; margin: 16px 2px 8px;">Recovery By Category</div>
+            <div class="stages-grid-6">
+              <div class="stage-card-box" onclick="openExerciseDetail('pelvic')">
+                <div class="stage-icon-circle" style="background: #FEF3C7; color: #D97706;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a5 5 0 0 1 5 5c0 3-2 5-5 9-3-4-5-6-5-9a5 5 0 0 1 5-5z"/></svg>
+                </div>
+                <div>
+                  <div class="stage-name-title">Pelvic Release</div>
+                  <div class="stage-sub-info">Floor Relaxation</div>
+                </div>
+              </div>
+
+              <div class="stage-card-box" onclick="openExerciseDetail('mobility')">
+                <div class="stage-icon-circle" style="background: #E0F2FE; color: #0284C7;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/></svg>
+                </div>
+                <div>
+                  <div class="stage-name-title">Mobility</div>
+                  <div class="stage-sub-info">Hip Range of Motion</div>
+                </div>
+              </div>
+
+              <div class="stage-card-box" onclick="openExerciseDetail('yoga')">
+                <div class="stage-icon-circle" style="background: #FCE7F3; color: #DB2777;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg>
+                </div>
+                <div>
+                  <div class="stage-name-title">Garbh Yoga</div>
+                  <div class="stage-sub-info">Grounding Flows</div>
+                </div>
+              </div>
+
+              <div class="stage-card-box" onclick="openExerciseDetail('myofascial')">
+                <div class="stage-icon-circle" style="background: #EDE9FE; color: #7C3AED;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg>
+                </div>
+                <div>
+                  <div class="stage-name-title">Myofascial</div>
+                  <div class="stage-sub-info">Lower Back Relief</div>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- End sessionView-mobility -->
+
+
+          <!-- ==============================================
+               SUB-VIEW 4: NUTRITION & 150+ RECIPES (REF 36)
+               ============================================== -->
+          <div id="sessionView-nutrition" style="display: none;">
+            
+            <div class="nutrition-stats-header">
+              <div>
+                <div class="nutri-stat-num">2 / 30</div>
+                <div class="nutri-stat-lbl">Lessons</div>
+              </div>
+              <div style="border-left: 1px solid #334155;"></div>
+              <div>
+                <div class="nutri-stat-num">2 / 30</div>
+                <div class="nutri-stat-lbl">Challenges</div>
+              </div>
+              <div style="border-left: 1px solid #334155;"></div>
+              <div>
+                <div class="nutri-stat-num">150+</div>
+                <div class="nutri-stat-lbl">Recipes</div>
+              </div>
+            </div>
+
+            <!-- THIS WEEK'S LESSON -->
+            <div class="weekly-lesson-box">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 10px; font-weight: 800; color: var(--primary); text-transform: uppercase;">This Week's Challenge</span>
+                <span style="font-size: 11px; font-weight: 700; color: #059669;">Day 2 of 7</span>
+              </div>
+              <div style="font-size: 15px; font-weight: 800; color: #1E293B; margin-top: 4px;">Hydration & Natural Electrolyte Balance</div>
+              <p style="font-size: 11px; color: #64748B; margin-top: 2px;">Drink 2,500ml water + 1 tender coconut or lemon-mint water daily.</p>
+              
+              <div class="lesson-days-row">
+                <div class="lesson-day-check done">✓</div>
+                <div class="lesson-day-check done">✓</div>
+                <div class="lesson-day-check" onclick="toggleLessonDay(this)">3</div>
+                <div class="lesson-day-check" onclick="toggleLessonDay(this)">4</div>
+                <div class="lesson-day-check" onclick="toggleLessonDay(this)">5</div>
+                <div class="lesson-day-check" onclick="toggleLessonDay(this)">6</div>
+                <div class="lesson-day-check" onclick="toggleLessonDay(this)">7</div>
+              </div>
+            </div>
+
+            <!-- RECIPES GRID -->
+            <div style="font-size: 13px; font-weight: 800; color: #1E293B; margin-bottom: 8px;">150+ Cultural Maternal Recipes</div>
+            <div class="recipe-cards-grid">
+              <div class="recipe-card-item" onclick="openRecipeModal('moong')">
+                <div>
+                  <div class="recipe-title">Sprouted Moong & Pomegranate Salad</div>
+                  <span class="recipe-benefit-tag">Folate & Iron Boost</span>
+                </div>
+                <span style="font-size: 10px; color: var(--primary); font-weight: 700;">View Recipe ›</span>
+              </div>
+
+              <div class="recipe-card-item" onclick="openRecipeModal('kheer')">
+                <div>
+                  <div class="recipe-title">Saffron Almond Golden Milk</div>
+                  <span class="recipe-benefit-tag">Calcium & Sleep</span>
+                </div>
+                <span style="font-size: 10px; color: var(--primary); font-weight: 700;">View Recipe ›</span>
+              </div>
+
+              <div class="recipe-card-item" onclick="openRecipeModal('ragi')">
+                <div>
+                  <div class="recipe-title">Steamed Ragi & Apple Mash</div>
+                  <span class="recipe-benefit-tag">Weaning Phase 1</span>
+                </div>
+                <span style="font-size: 10px; color: var(--primary); font-weight: 700;">View Recipe ›</span>
+              </div>
+
+              <div class="recipe-card-item" onclick="openRecipeModal('methi')">
+                <div>
+                  <div class="recipe-title">Methi & Flaxseed Thepla</div>
+                  <span class="recipe-benefit-tag">Digestion & Fiber</span>
+                </div>
+                <span style="font-size: 10px; color: var(--primary); font-weight: 700;">View Recipe ›</span>
+              </div>
+            </div>
+
+          </div><!-- End sessionView-nutrition -->
+
+
+          <!-- ==============================================
+               SUB-VIEW 5: SWASTH AI ASSISTANT CHAT
+               ============================================== -->
+          <div id="sessionView-ai" style="display: none;">
+            <div class="ai-hero-banner">
+              <div class="ai-logo-badge">
+                <svg viewBox="0 0 100 100" fill="none" style="width: 32px; height: 32px;">
+                  <path d="M50 82 C32 82 18 66 18 50 C18 34 28 24 38 20 C34 32 37 46 45 56 C47 58 50 64 50 82 Z" fill="#FFFFFF"/>
+                  <path d="M50 82 C68 82 82 66 82 50 C82 34 72 24 62 20 C66 32 63 46 55 56 C53 58 50 64 50 82 Z" fill="#FFE4E9"/>
+                  <path d="M50 22 C42 36 42 50 50 66 C58 50 58 36 50 22 Z" fill="#FFFFFF"/>
+                  <circle cx="50" cy="44" r="5" fill="#FF3B69"/>
+                </svg>
+              </div>
+              <div style="font-size: 16px; font-weight: 800; color: #831843;">Swasth AI Companion</div>
+              <div style="font-size: 12px; color: #475569; margin-top: 4px;">
+                Ask about workout modifications, pelvic floor comfort, or cultural recipes.
+              </div>
+
+              <div style="display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-top: 12px;">
+                <button class="prompt-chip" onclick="askAiQuestion('Which pelvic stretches are safest for Week 14?')">Week 14 Stretches</button>
+                <button class="prompt-chip" onclick="askAiQuestion('Can I modify band step-backs if I have hip stiffness?')">Modify Band Moves</button>
+                <button class="prompt-chip" onclick="askAiQuestion('Which foods provide natural iron and calcium?')">Iron & Calcium Foods</button>
+                <button class="prompt-chip" onclick="askAiQuestion('I have severe abdominal pain and bleeding')">Check Emergency</button>
+              </div>
+            </div>
+
+            <div class="chat-messages-box" id="aiChatBox"></div>
+
+            <div class="chat-input-bar">
+              <input type="text" id="aiInput" class="chat-input-field" placeholder="Ask a question..." onkeydown="if(event.key==='Enter') sendAiMessage()">
+              <button class="chat-send-btn" onclick="sendAiMessage()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              </button>
+            </div>
+          </div><!-- End sessionView-ai -->
+
         </div>
-      </div><!-- End view-ai -->
+      </div><!-- End view-ai (Session) -->
 
 
             <!-- ==============================================
@@ -2643,6 +3497,164 @@
     }
 
     
+    
+    // SESSION SUB-TAB NAVIGATION
+    function switchSessionSubTab(subTab) {
+      const tabs = ['programs', 'circuit', 'mobility', 'nutrition', 'ai'];
+      tabs.forEach(t => {
+        const el = document.getElementById(`sessionView-${t}`);
+        const btn = document.getElementById(`subtabBtn-${t}`);
+        if (el) el.style.display = (t === subTab) ? 'block' : 'none';
+        if (btn) btn.classList.toggle('active', t === subTab);
+      });
+    }
+
+    // TIMED CIRCUIT PLAYER LOGIC (REF 33)
+    let circuitTimerRunning = true;
+    let circuitSeconds = 45;
+    let circuitInterval = null;
+    let currentMoveIndex = 0;
+    const circuitMoves = [
+      "Resistance Band Step Back",
+      "Gentle Prenatal Squat with Band",
+      "Glute Bridge & Diaphragmatic Breath",
+      "Pelvic Tilt with Support",
+      "Cat-Cow Spinal Mobility",
+      "Butterfly Release Stretch"
+    ];
+
+    function startGuidedCircuit() {
+      switchSessionSubTab('circuit');
+      currentMoveIndex = 0;
+      updateCircuitDisplay();
+      startTimerCountdown();
+      showConfetti("Starting Guided Circuit 2 of 3!");
+    }
+
+    function toggleCircuitTimer() {
+      circuitTimerRunning = !circuitTimerRunning;
+      const btn = document.getElementById('btnCircuitTimer');
+      if (circuitTimerRunning) {
+        btn.innerText = "Pause Interval";
+        startTimerCountdown();
+      } else {
+        btn.innerText = "Resume Interval";
+        clearInterval(circuitInterval);
+      }
+    }
+
+    function startTimerCountdown() {
+      clearInterval(circuitInterval);
+      circuitInterval = setInterval(() => {
+        if (circuitSeconds > 0) {
+          circuitSeconds--;
+          const mins = Math.floor(circuitSeconds / 60);
+          const secs = circuitSeconds % 60;
+          const display = `0${mins}:${secs < 10 ? '0' : ''}${secs}`;
+          document.getElementById('circuitTimerDisplay').innerText = display;
+        } else {
+          nextCircuitMove();
+        }
+      }, 1000);
+    }
+
+    function nextCircuitMove() {
+      currentMoveIndex = (currentMoveIndex + 1) % circuitMoves.length;
+      circuitSeconds = 45;
+      updateCircuitDisplay();
+      showConfetti(`Next: ${circuitMoves[currentMoveIndex]}`);
+    }
+
+    function updateCircuitDisplay() {
+      const title = document.getElementById('activeMoveTitle');
+      if (title) title.innerText = circuitMoves[currentMoveIndex];
+      const fill = document.getElementById('circuitProgressFill');
+      if (fill) {
+        const pct = Math.round(((currentMoveIndex + 1) / circuitMoves.length) * 100);
+        fill.style.width = `${pct}%`;
+      }
+    }
+
+    function skipCircuit() {
+      showConfetti("Circuit skipped to cool-down stretch");
+      switchSessionSubTab('mobility');
+    }
+
+    function startStageProgram(stageName) {
+      openModalSheet(`
+        <h3 style="font-size: 18px; font-weight: 800; color: #1E293B;">${stageName} Maternal Program</h3>
+        <p style="font-size: 12px; color: #64748B; margin: 4px 0 14px;">Personalized for Week 14 Trimester 2</p>
+        <div style="background: #F8FAFC; border-radius: 14px; padding: 14px; font-size: 12px; color: #334155; line-height: 1.6; margin-bottom: 16px;">
+          ✓ 6 Progression Levels · Certified Obstetric Physio Designed<br>
+          ✓ Low-impact transverse abdominal engagement<br>
+          ✓ Pelvic girdle alignment and sciatica relief<br>
+          ✓ Safe breathing rhythms with no intra-abdominal pressure
+        </div>
+        <button class="sheet-action-btn" onclick="closeToolSheet(); startGuidedCircuit();">Begin ${stageName} Workout</button>
+      `);
+    }
+
+    function openExerciseDetail(type) {
+      let title = "Pelvic Floor Release";
+      let desc = "Gentle breathing release with neutral pelvis alignment.";
+      if (type === 'stretch') { title = "Slam Stretch & Release"; desc = "432Hz harmonic sound stretch for lower back and glutes."; }
+      if (type === 'walk') { title = "Brisk Prenatal Walk"; desc = "Target: 1,500 continuous steps post-meal."; }
+      if (type === 'mobility') { title = "Hip Mobility & Posture"; desc = "Cat-cow spinal mobility and butterfly releases."; }
+      if (type === 'yoga') { title = "Garbh Sanskar Yoga"; desc = "Gentle prenatal surya namaskar modifications."; }
+      if (type === 'myofascial') { title = "Myofascial Tension Release"; desc = "Tennis ball glute & sacrum acupressure release."; }
+
+      openModalSheet(`
+        <h3 style="font-size: 18px; font-weight: 800; color: #1E293B;">${title}</h3>
+        <p style="font-size: 12px; color: #64748B; margin: 4px 0 14px;">${desc}</p>
+        <div style="background: #ECFDF5; border: 1px solid #A7F3D0; border-radius: 12px; padding: 12px; font-size: 12px; color: #065F46; margin-bottom: 14px;">
+          Certified safe for Trimester 2. Stop immediately if any dizziness occurs.
+        </div>
+        <button class="sheet-action-btn" onclick="closeToolSheet(); startGuidedCircuit();">Start Session Now</button>
+      `);
+    }
+
+    function filterByInstructor(name) {
+      showConfetti(`Viewing routines by ${name}`);
+      switchSessionSubTab('mobility');
+    }
+
+    function toggleLessonDay(el) {
+      el.classList.toggle('done');
+      el.innerText = el.classList.contains('done') ? '✓' : el.innerText;
+      showConfetti("Daily nutrition goal recorded!");
+    }
+
+    function openRecipeModal(dish) {
+      let title = "Sprouted Moong & Pomegranate Salad";
+      let benefits = "High natural Folate (Vitamin B9), Iron, Vitamin C for baby neural tube & blood volume.";
+      let recipe = "1 cup sprouted green moong, 1/2 cup pomegranate pearls, lemon juice, roasted cumin powder, rock salt. Toss fresh and consume with breakfast.";
+
+      if (dish === 'kheer') {
+        title = "Saffron Almond Golden Milk (Kheer)";
+        benefits = "Rich in Calcium, Magnesium, and tryptophan for deep restful sleep & fetal bone density.";
+        recipe = "Warm cow milk or oat milk with 4 soaked peeled almonds, 2 strands pure Kashmiri saffron, pinch of cardamom. Sip warm 30 mins before bedtime.";
+      } else if (dish === 'ragi') {
+        title = "Steamed Ragi & Apple Mash (Weaning Phase 1)";
+        benefits = "High bioavailability Calcium & Iron for infant bone hardening and smooth digestion.";
+        recipe = "2 tbsp organic ragi flour roasted gently in cow ghee, mixed with warm water and sweet apple puree. Cook until velvety smooth.";
+      } else if (dish === 'methi') {
+        title = "Methi & Flaxseed Thepla";
+        benefits = "Soluble dietary fiber, Omega-3 ALA, and natural relief for maternal constipation.";
+        recipe = "Whole wheat flour kneaded with fresh fenugreek leaves, roasted flaxseed powder, turmeric, and light curd. Roast with minimal ghee.";
+      }
+
+      openModalSheet(`
+        <h3 style="font-size: 18px; font-weight: 800; color: #1E293B;">${title}</h3>
+        <div style="background: #FFF1F4; border-radius: 10px; padding: 6px 12px; font-size: 11px; font-weight: 800; color: var(--primary); margin: 8px 0 12px;">
+          ${benefits}
+        </div>
+        <div style="font-size: 12px; color: #334155; line-height: 1.6; margin-bottom: 16px;">
+          <strong>Preparation:</strong><br>${recipe}
+        </div>
+        <button class="sheet-action-btn" onclick="closeToolSheet(); showConfetti('Recipe saved to favorites!');">Save to Favorites</button>
+      `);
+    }
+
     // SWITCH TAB (CLUBS, PLANS, HOME, SESSION, MORE)
     function switchTab(tabId) {
       const views = ['home', 'community', 'plans', 'ai', 'more', 'auth'];
