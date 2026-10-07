@@ -81,7 +81,7 @@ def create_5_slide_presentation():
     p.font.color.rgb = RGBColor(226, 232, 240)
     p.space_before = Pt(20)
 
-    hero_img = "/Volumes/DiskD/HACKATHONS/Swasth/assets/reference/15_swasth_hero_mockup.png"
+    hero_img = "/Volumes/DiskD/HACKATHONS/Swasth/website/assets/app_screens/pillar1_1_home_overview.png"
     if os.path.exists(hero_img):
         slide1.shapes.add_picture(hero_img, Inches(7.5), Inches(1.2), Inches(5.2), Inches(5.5))
 
@@ -91,11 +91,11 @@ def create_5_slide_presentation():
     slide2 = prs.slides.add_slide(blank_layout)
     add_slide_header(slide2, "App Information Architecture & Complete User Journey")
 
-    tree_img = "/Volumes/DiskD/HACKATHONS/Swasth/assets/reference/21_app_information_architecture_tree.png"
+    tree_img = "/Volumes/DiskD/HACKATHONS/Swasth/website/assets/app_screens/pillar1_4_home_vitals.png"
     if os.path.exists(tree_img):
         slide2.shapes.add_picture(tree_img, Inches(0.8), Inches(1.8), Inches(5.4), Inches(5.0))
 
-    intent_img = "/Volumes/DiskD/HACKATHONS/Swasth/assets/reference/28_feature_personalized_journey_intent.png"
+    intent_img = "/Volumes/DiskD/HACKATHONS/Swasth/website/assets/app_screens/pillar1_3_home_milestones.png"
     if os.path.exists(intent_img):
         slide2.shapes.add_picture(intent_img, Inches(6.4), Inches(1.8), Inches(3.6), Inches(5.0))
 
@@ -136,11 +136,11 @@ def create_5_slide_presentation():
     slide3 = prs.slides.add_slide(blank_layout)
     add_slide_header(slide3, "Modern Design System: 3D Micro-Interactions & Due Date Setup")
 
-    duedate_img = "/Volumes/DiskD/HACKATHONS/Swasth/assets/reference/29_feature_due_date_estimation_methods.png"
+    duedate_img = "/Volumes/DiskD/HACKATHONS/Swasth/website/assets/app_screens/pillar2_1_plans_toolkit.png"
     if os.path.exists(duedate_img):
         slide3.shapes.add_picture(duedate_img, Inches(0.8), Inches(1.8), Inches(4.5), Inches(5.0))
 
-    growth_img = "/Volumes/DiskD/HACKATHONS/Swasth/assets/reference/25_feature_baby_growth_tracking.png"
+    growth_img = "/Volumes/DiskD/HACKATHONS/Swasth/website/assets/app_screens/pillar2_2_kick_counter.png"
     if os.path.exists(growth_img):
         slide3.shapes.add_picture(growth_img, Inches(5.5), Inches(1.8), Inches(4.5), Inches(5.0))
 
@@ -180,13 +180,13 @@ def create_5_slide_presentation():
     slide4 = prs.slides.add_slide(blank_layout)
     add_slide_header(slide4, "AI Assistant Chat & Signature Experiences (Strictly Non-Clinical)")
 
-    # Left: AI Assistant Chat Screen
-    ai_chat_img = "/Volumes/DiskD/HACKATHONS/Swasth/assets/reference/30_feature_ai_pregnancy_assistant_chat.png"
+    # Left: AI Assistant Chat Screen / Timed Circuit
+    ai_chat_img = "/Volumes/DiskD/HACKATHONS/Swasth/website/assets/app_screens/pillar4_2_timed_circuit.png"
     if os.path.exists(ai_chat_img):
         slide4.shapes.add_picture(ai_chat_img, Inches(0.8), Inches(1.8), Inches(4.2), Inches(5.0))
 
-    # Center: 4 Screen Preview
-    app_preview = "/Volumes/DiskD/HACKATHONS/Swasth/assets/app_design/swasth_app_design_preview.png"
+    # Center: Signature Experiences & Nutrition
+    app_preview = "/Volumes/DiskD/HACKATHONS/Swasth/website/assets/app_screens/pillar4_4_nutrition_recipes.png"
     if os.path.exists(app_preview):
         slide4.shapes.add_picture(app_preview, Inches(5.2), Inches(1.8), Inches(5.0), Inches(5.0))
 
@@ -228,7 +228,7 @@ def create_5_slide_presentation():
     add_slide_header(slide5, "Enterprise Architecture, Data Protection & 60-90 Day Impact")
 
     # Left: Settings & Data Protection image
-    settings_img = "/Volumes/DiskD/HACKATHONS/Swasth/assets/reference/31_feature_settings_preferences_data_protection.png"
+    settings_img = "/Volumes/DiskD/HACKATHONS/Swasth/website/assets/app_screens/pillar5_2_abha_privacy.png"
     if os.path.exists(settings_img):
         slide5.shapes.add_picture(settings_img, Inches(0.8), Inches(1.8), Inches(3.8), Inches(5.0))
 
